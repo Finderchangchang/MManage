@@ -37,4 +37,5 @@ dependencies {
     compile project(':mvvm2')
     compile project(':readidcard')
     kapt 'com.android.databinding:compiler:3.0.0'
+    compile 'com.jaeger.statusbaruitl:library:1.0.0'//设置状态栏
 }

@@ -16,6 +16,7 @@ import android.content.Context
 import android.os.SystemClock
 import gd.mmanage.service.LongRunningService
 import android.content.Intent
+import com.jaeger.library.StatusBarUtil
 
 
 class LoginActivity : BaseActivity<ActivityLoginBinding>(), AbsModule.OnCallback {
@@ -33,6 +34,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(), AbsModule.OnCallback
 
     override fun init(savedInstanceState: Bundle?) {
         super.init(savedInstanceState)
+        StatusBarUtil.setTransparent(this)
         getModule(LoginModule::class.java, this).user_login("liu", "pwd")
         val intent = Intent(this, LongRunningService::class.java)
         startService(intent)
