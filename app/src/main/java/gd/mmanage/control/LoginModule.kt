@@ -12,6 +12,6 @@ class LoginModule : BaseModule {
     constructor(context: Context?) : super(context)
 
     fun user_login(name: String, password: String) {
-        callback(1100,"登录成功")
+        callback(1000,"登录成功")
     }
 }

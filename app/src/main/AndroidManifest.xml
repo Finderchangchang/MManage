@@ -35,7 +35,8 @@
 
         <receiver android:name=".service.AlarmReceiver" />
 
-        <activity android:name=".ui.MainActivity"></activity>
+        <activity android:name=".ui.MainActivity" />
+        <activity android:name=".ui.SetIpActivity"></activity>
     </application>
 
 </manifest>

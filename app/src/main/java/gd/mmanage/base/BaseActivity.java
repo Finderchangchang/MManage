@@ -3,6 +3,7 @@ package gd.mmanage.base;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.widget.Toast;
 
 import com.arialyy.frame.core.AbsActivity;
 
@@ -12,6 +13,16 @@ import com.arialyy.frame.core.AbsActivity;
  */
 public abstract class BaseActivity<VB extends ViewDataBinding> extends AbsActivity<VB> {
     Toolbar mBar;
+    Toast toast;
+
+    public void toast(String msg) {
+        if (toast == null) {
+            toast = Toast.makeText(this, msg, Toast.LENGTH_SHORT);
+        } else {
+            toast.setText(msg);
+        }
+        toast.show();
+    }
 
     @Override
     protected void init(Bundle savedInstanceState) {
