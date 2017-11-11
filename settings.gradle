@@ -1,1 +1,1 @@
-include ':app',':mvvm2', ':readidcard'
+include ':app',':mvvm2', ':readidcard',':easydialog',':afinal'

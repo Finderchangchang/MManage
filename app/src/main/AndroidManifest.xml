@@ -27,7 +27,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.AddEmployeeActivity"
+            android:name=".ui.employee.AddEmployeeActivity"
             android:label="@string/title_activity_add_employee"
             android:theme="@style/AppTheme.NoActionBar" />
 
@@ -35,7 +35,7 @@
 
         <receiver android:name=".service.AlarmReceiver" />
 
-        <activity android:name=".ui.MainActivity" />
+        <activity android:name=".ui.main.MainActivity" />
         <activity android:name=".ui.SetIpActivity"></activity>
     </application>
 

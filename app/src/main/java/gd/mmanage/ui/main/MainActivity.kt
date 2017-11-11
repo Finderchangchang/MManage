@@ -1,4 +1,4 @@
-package gd.mmanage.ui
+package gd.mmanage.ui.main
 
 import android.Manifest
 import android.bluetooth.BluetoothAdapter
@@ -8,10 +8,12 @@ import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.text.TextUtils
 import gd.mmanage.R
+import gd.mmanage.adapter.MainAdapter
 import gd.mmanage.base.BaseActivity
 import gd.mmanage.config.inten
 import gd.mmanage.databinding.ActivityMainBinding
 import gd.mmanage.method.Utils
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : BaseActivity<ActivityMainBinding>() {
     /**
@@ -24,7 +26,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     var mBluetoothAdapter: BluetoothAdapter? = null
     override fun init(savedInstanceState: Bundle?) {
         super.init(savedInstanceState)
-
+        var mAdapter = MainAdapter(supportFragmentManager)
+        tab_pager.adapter = mAdapter
+        //预加载页面的个数
+        tab_pager!!.offscreenPageLimit = 3
+        alphaIndicator!!.setViewPager(tab_pager)
         if (!TextUtils.isEmpty(Utils.getCache(inten.blue_tooth))) {
             mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
             if (!mBluetoothAdapter!!.isEnabled) {

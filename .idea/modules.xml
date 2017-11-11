@@ -3,7 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/MManage.iml" filepath="$PROJECT_DIR$/MManage.iml" />
+      <module fileurl="file://$PROJECT_DIR$/afinal/afinal.iml" filepath="$PROJECT_DIR$/afinal/afinal.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/easydialog/easydialog.iml" filepath="$PROJECT_DIR$/easydialog/easydialog.iml" />
       <module fileurl="file://$PROJECT_DIR$/mvvm2/mvvm2.iml" filepath="$PROJECT_DIR$/mvvm2/mvvm2.iml" />
       <module fileurl="file://$PROJECT_DIR$/readidcard/readidcard.iml" filepath="$PROJECT_DIR$/readidcard/readidcard.iml" />
     </modules>
