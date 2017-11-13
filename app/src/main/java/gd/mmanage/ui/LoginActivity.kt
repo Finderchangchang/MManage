@@ -12,9 +12,9 @@ import android.content.Intent
 import android.text.TextUtils
 import com.jaeger.library.StatusBarUtil
 import gd.mmanage.model.NormalRequest
-import gd.mmanage.ui.main.MainActivity
 import com.jiangyy.easydialog.LoadingDialog
 import gd.mmanage.ui.config.DownHotelActivity
+import gd.mmanage.ui.main.HomeActivity
 
 
 class LoginActivity : BaseActivity<ActivityLoginBinding>(), AbsModule.OnCallback {
@@ -50,7 +50,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(), AbsModule.OnCallback
                 success as NormalRequest<String>
                 when (success.code) {
                     1 -> {//跳转到主页
-                        startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                        startActivity(Intent(this@LoginActivity, HomeActivity::class.java))
                         finish()
                     }
                     2 -> {//跳转到绑定code页面

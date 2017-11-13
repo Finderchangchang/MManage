@@ -2,17 +2,16 @@ package gd.mmanage.ui.main
 
 import android.os.Bundle
 import android.widget.Button
-
 import butterknife.BindView
 import gd.mmanage.R
 import gd.mmanage.base.BaseFragment
-import gd.mmanage.databinding.FragMainBinding
+import gd.mmanage.databinding.FragUserBinding
 
 /**
  * Created by Administrator on 2017/11/11.
  */
 
-class MainFragment : BaseFragment<FragMainBinding>() {
+class UserFragment : BaseFragment<FragUserBinding>() {
     override fun init(savedInstanceState: Bundle?) {
 
     }
@@ -28,7 +27,7 @@ class MainFragment : BaseFragment<FragMainBinding>() {
     }
 
     override fun setLayoutId(): Int {
-        return R.layout.frag_main
+        return R.layout.frag_user
     }
 
 
@@ -37,9 +36,9 @@ class MainFragment : BaseFragment<FragMainBinding>() {
     }
 
     companion object {
-        fun newInstance(): MainFragment {
+        fun newInstance(): UserFragment {
             val args = Bundle()
-            val fragment = MainFragment()
+            val fragment = UserFragment()
             fragment.arguments = args
             return fragment
         }

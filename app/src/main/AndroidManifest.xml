@@ -19,7 +19,13 @@
         <activity
             android:name=".ui.LoginActivity"
             android:label="@string/title_activity_login"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".ui.employee.AddEmployeeActivity"
             android:label="@string/title_activity_add_employee"
@@ -29,17 +35,19 @@
 
         <receiver android:name=".service.AlarmReceiver" />
 
-        <activity android:name=".ui.main.MainActivity" />
+        <activity android:name=".ui.main.MainActivity">
+
+        </activity>
         <activity android:name=".ui.SetIpActivity" />
         <activity android:name=".ui.car_manage.AddCarActivity">
 
         </activity>
         <activity android:name=".ui.car_manage.AddPersonActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+        </activity>
+        <activity android:name=".ui.SetIpActivity" />
+        <activity android:name=".ui.main.HomeActivity">
+
         </activity>
     </application>
 

@@ -274,7 +274,7 @@
                 <Button
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:src="成功" />
+                    android:text="成功" />
 
                 <ImageView
                     android:layout_width="0dp"
