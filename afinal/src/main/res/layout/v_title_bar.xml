@@ -14,8 +14,8 @@
             android:id="@+id/left_iv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="17dp"
-            android:paddingRight="17dp"
+            android:paddingLeft="19dp"
+            android:paddingRight="19dp"
             android:src="@mipmap/fanhui"
             android:layout_centerInParent="true"
             android:visibility="visible" />

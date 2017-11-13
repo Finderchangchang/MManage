@@ -13,12 +13,14 @@ import gd.mmanage.databinding.FragMainBinding
  */
 
 class MainFragment : BaseFragment<FragMainBinding>() {
+    override fun init(savedInstanceState: Bundle?) {
+
+    }
+
     @BindView(R.id.ll1)
     internal var mUseModule1: Button? = null
 
-    override fun init(savedInstanceState: Bundle) {
 
-    }
 
     /**
      * 延时加载
