@@ -53,8 +53,10 @@ public abstract class AbsFragment<VB extends ViewDataBinding> extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mBind = DataBindingUtil.inflate(inflater, setLayoutId(), container, false);
-        initFragment();
         mRootView = mBind.getRoot();
+        load_view(mRootView);
+        initFragment();
+        ButterKnife.bind(this, mRootView);
         return mRootView;
     }
 
@@ -62,7 +64,6 @@ public abstract class AbsFragment<VB extends ViewDataBinding> extends Fragment
         TAG = StringUtil.getClassName(this);
         mProxy = IOCProxy.newInstance(this);
         mModuleF = ModuleFactory.newInstance();
-        ButterKnife.bind(this, mBind.getRoot());
         if (useTempView) {
             mTempView = new TempView(getContext());
             mTempView.setBtListener(this);
@@ -117,6 +118,8 @@ public abstract class AbsFragment<VB extends ViewDataBinding> extends Fragment
     }
 
     protected abstract void init(Bundle savedInstanceState);
+
+    protected abstract void load_view(View view);
 
     /**
      * 是否使用填充界面

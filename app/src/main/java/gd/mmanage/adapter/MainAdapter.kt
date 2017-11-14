@@ -4,24 +4,37 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import gd.mmanage.ui.main.MainFragment
+import gd.mmanage.ui.main.MainFragments
 import gd.mmanage.ui.main.UserFragment
+import java.util.ArrayList
 
 /**
  * Created by Administrator on 2017/11/11.
  */
 
 class MainAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
-    private var fragment = arrayOf<Fragment>(MainFragment(), MainFragment(), UserFragment())
+    internal var list: MutableList<Fragment> = ArrayList()
 
+    init {
+        list.add(MainFragment())
+        list.add(MainFragment())
+        list.add(UserFragment.newInstance())
+
+    }
+
+    /**
+     * Return the Fragment associated with a specified position.
+     *
+     * @param position
+     */
     override fun getItem(position: Int): Fragment {
-        return fragment[position]
+        return list[position]
     }
 
+    /**
+     * Return the number of views available.
+     */
     override fun getCount(): Int {
-        return fragment.size
-    }
-
-    override fun getPageTitle(position: Int): CharSequence {
-        return ""
+        return list.size
     }
 }

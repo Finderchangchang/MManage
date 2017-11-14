@@ -16,9 +16,10 @@ import gd.mmanage.method.Utils
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : BaseActivity<ActivityMainBinding>() {
-    /**
-     * 设置资源布局
-     */
+    companion object {
+        var main: MainActivity? = null
+    }
+
     override fun setLayoutId(): Int {
         return R.layout.activity_main
     }
@@ -26,6 +27,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     var mBluetoothAdapter: BluetoothAdapter? = null
     override fun init(savedInstanceState: Bundle?) {
         super.init(savedInstanceState)
+        main = this
         var mAdapter = MainAdapter(supportFragmentManager)
         tab_pager.adapter = mAdapter
         //预加载页面的个数
@@ -72,4 +74,5 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         }
     }
+
 }

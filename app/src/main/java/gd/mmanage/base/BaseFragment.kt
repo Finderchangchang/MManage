@@ -1,5 +1,6 @@
 package gd.mmanage.base
 
+import android.annotation.SuppressLint
 import android.databinding.ViewDataBinding
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -10,13 +11,16 @@ import com.arialyy.frame.core.AbsFragment
 /**
  * Created by Administrator on 2017/11/11.
  */
-abstract class BaseFragment<VB: ViewDataBinding> : AbsFragment<VB>() {
+abstract class BaseFragment<VB : ViewDataBinding> : AbsFragment<VB>() {
 
     protected var isFragmentVisible: Boolean? = false
 
     private var isReuseView: Boolean? = false
     private var isFirstVisible: Boolean? = false
     private var rootView: View? = null
+    override fun init(savedInstanceState: Bundle?) {
+
+    }
 
     //setUserVisibleHint()在Fragment创建时会先被调用一次，传入isVisibleToUser = false
     //如果当前Fragment可见，那么setUserVisibleHint()会再次被调用一次，传入isVisibleToUser = true

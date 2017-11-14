@@ -1,8 +1,9 @@
 package gd.mmanage.ui.main
 
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
-import butterknife.BindView
+import butterknife.Bind
 import gd.mmanage.R
 import gd.mmanage.base.BaseFragment
 import gd.mmanage.databinding.FragUserBinding
@@ -12,11 +13,15 @@ import gd.mmanage.databinding.FragUserBinding
  */
 
 class UserFragment : BaseFragment<FragUserBinding>() {
+    override fun load_view(view: View?) {
+
+    }
+
     override fun init(savedInstanceState: Bundle?) {
 
     }
 
-    @BindView(R.id.ll1)
+    @Bind(R.id.ll1)
     internal var mUseModule1: Button? = null
 
     /**
