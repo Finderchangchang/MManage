@@ -45,10 +45,12 @@
         <activity android:name=".ui.car_manage.AddPersonActivity">
 
         </activity>
-        <activity android:name=".ui.SetIpActivity" />
-        <activity android:name=".ui.main.HomeActivity">
 
-        </activity>
+        <activity android:name=".ui.main.HomeActivity" />
+        <activity android:name=".ui.employee.SearchEmployeeActivity" />
+        <activity android:name=".ui.parts.SearchPartsActivity" />
+        <activity android:name=".ui.parts.AddPartsActivity" />
+
     </application>
 
 </manifest>

@@ -8,7 +8,6 @@ import gd.mmanage.R
 import gd.mmanage.base.BaseActivity
 import gd.mmanage.databinding.ActivityAddCarBinding
 import gd.mmanage.databinding.ActivityAddPartsBinding
-import kotlinx.android.synthetic.main.activity_add_car.*
 
 class AddCarActivity : BaseActivity<ActivityAddCarBinding>() {
 
@@ -19,19 +18,7 @@ class AddCarActivity : BaseActivity<ActivityAddCarBinding>() {
         list.add("奔腾-京Q123456")
         list.add("奔腾-京Q123456")
         list.add("奔腾-京Q123456")
-        id_card_read_btn.setOnClickListener {
-            user_detail_ll.visibility = View.VISIBLE
-            read_btn_ll.visibility = View.GONE
-            if (list.size > 0) {
-                var builder = AlertDialog.Builder(this);
-                builder.setTitle("已存在车辆");
-                builder.setItems(arrayOf("奔腾-京Q123456", "奔腾-京Q123456", "奔腾-京Q123456")) { a, b ->
-                    card_read_ll.visibility = View.GONE
-                    card_detail_ll.visibility = View.VISIBLE
-                }
-                builder.show();
-            }
-        }
+
     }
 
     /**

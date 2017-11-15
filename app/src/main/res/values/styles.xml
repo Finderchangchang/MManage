@@ -5,7 +5,7 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">@color/deep_lab</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -37,6 +37,13 @@
         <item name="android:layout_marginLeft">15dp</item>
         <item name="android:layout_marginRight">15dp</item>
         <item name="android:background">@color/line_bg</item>
+    </style>
+
+    <style name="add_et">
+        <item name="android:orientation">horizontal</item>
+        <item name="android:paddingBottom">9dp</item>
+        <item name="android:paddingTop">9dp</item>
+        <item name="android:paddingLeft">15dp</item>
     </style>
 
     <style name="center_ll">

@@ -1,8 +1,6 @@
 package gd.mmanage.ui.car_manage
 
 import android.os.Bundle
-import android.support.v7.app.AlertDialog
-import android.view.View
 import gd.mmanage.R
 import gd.mmanage.base.BaseActivity
 import gd.mmanage.databinding.ActivityAddCarBinding
@@ -10,7 +8,7 @@ import gd.mmanage.databinding.ActivityAddCarBinding
 /**
  *
  * */
-class AddServiceActivity : BaseActivity<ActivityAddCarBinding>() {
+class AddDubiousCarActivity : BaseActivity<ActivityAddCarBinding>() {
 
     override fun init(savedInstanceState: Bundle?) {
         super.init(savedInstanceState)

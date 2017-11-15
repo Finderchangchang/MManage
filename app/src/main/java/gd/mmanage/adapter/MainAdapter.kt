@@ -4,7 +4,6 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import gd.mmanage.ui.main.MainFragment
-import gd.mmanage.ui.main.MainFragments
 import gd.mmanage.ui.main.UserFragment
 import java.util.ArrayList
 
