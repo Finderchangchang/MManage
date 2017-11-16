@@ -9,16 +9,13 @@ import gd.mmanage.base.BaseActivity
 import gd.mmanage.databinding.ActivityAddCarBinding
 import gd.mmanage.databinding.ActivityAddPartsBinding
 
+/**
+ * 添加车辆信息
+ * */
 class AddCarActivity : BaseActivity<ActivityAddCarBinding>() {
 
     override fun init(savedInstanceState: Bundle?) {
         super.init(savedInstanceState)
-        //身份证阅读器读卡
-        var list: ArrayList<String> = ArrayList()
-        list.add("奔腾-京Q123456")
-        list.add("奔腾-京Q123456")
-        list.add("奔腾-京Q123456")
-
     }
 
     /**

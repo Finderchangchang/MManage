@@ -13,6 +13,7 @@ import gd.mmanage.base.BaseFragment
 import gd.mmanage.base.BaseFragments
 import gd.mmanage.databinding.FragMainBinding
 import gd.mmanage.method.GlideImageLoader
+import gd.mmanage.ui.car_manage.AddDubiousCarActivity
 import gd.mmanage.ui.car_manage.AddPersonActivity
 import gd.mmanage.ui.employee.SearchEmployeeActivity
 import gd.mmanage.ui.parts.SearchPartsActivity
@@ -75,6 +76,10 @@ class MainFragment : BaseFragment<FragMainBinding>() {
         //车辆承接
         ll5!!.setOnClickListener {
             startActivity(Intent(context, AddPersonActivity::class.java))
+        }
+        //可疑车辆登记
+        ll6!!.setOnClickListener {
+            startActivity(Intent(context, AddDubiousCarActivity::class.java))
         }
     }
 

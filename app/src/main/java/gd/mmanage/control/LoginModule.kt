@@ -1,25 +1,28 @@
 package gd.mmanage.control
 
 import android.content.Context
-import com.arialyy.frame.module.AbsModule
 import gd.mmanage.base.BaseModule
+import gd.mmanage.config.command
+import gd.mmanage.model.CodeModel
 import gd.mmanage.model.NormalRequest
 
 /**
  * Created by Finder丶畅畅 on 2017/11/4 21:25
  * QQ群481606175
  */
-class LoginModule : BaseModule {
-    constructor(context: Context?) : super(context)
+class LoginModule(context: Context?) : BaseModule(context) {
 
     fun user_login(name: String, password: String) {
-        callback(1000, NormalRequest<String>(1, true, "登录成功"))
+        var code = "http://192.168.1.115:3334/Api/Enterprise/GetCode?codeName=Code_Region"
+        HttpUtils<String>().post(code, command.login, this)
     }
 
     /**
      * 检查更新
      * */
     fun check_version() {
-        callback(10001, NormalRequest<String>(true, "更新提示"))
+        var code = "http://192.168.1.115:3334/Api/Enterprise/GetCode?codeName=Code_Region"
+        HttpUtils<String>().post(code, command.login + 1, this)
     }
+
 }

@@ -5,4 +5,5 @@ package gd.mmanage.config
  */
 object inten {
     var blue_tooth="blue_tooth"
+
 }

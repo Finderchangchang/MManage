@@ -13,6 +13,7 @@ import android.text.TextUtils
 import com.jaeger.library.StatusBarUtil
 import gd.mmanage.model.NormalRequest
 import com.jiangyy.easydialog.LoadingDialog
+import gd.mmanage.config.command
 import gd.mmanage.ui.config.DownHotelActivity
 import gd.mmanage.ui.main.HomeActivity
 
@@ -46,8 +47,8 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(), AbsModule.OnCallback
      * */
     override fun onSuccess(result: Int, success: Any?) {
         when (result) {
-            1000 -> {//登录接口
-                success as NormalRequest<String>
+            command.login -> {//登录接口
+                success as NormalRequest<String>//强转
                 when (success.code) {
                     1 -> {//跳转到主页
                         startActivity(Intent(this@LoginActivity, HomeActivity::class.java))
@@ -59,10 +60,10 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(), AbsModule.OnCallback
                 }
                 toast(success.obj)
             }
-            10001 -> {
+            command.login + 1 -> {//检查版本更新
                 success as NormalRequest<String>
                 if (success.result) {//提示更新
-
+                    toast(success.obj)
                 }
             }
         }

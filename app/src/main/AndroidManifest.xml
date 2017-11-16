@@ -50,7 +50,7 @@
         <activity android:name=".ui.employee.SearchEmployeeActivity" />
         <activity android:name=".ui.parts.SearchPartsActivity" />
         <activity android:name=".ui.parts.AddPartsActivity" />
-
+        <activity android:name=".ui.car_manage.AddDubiousCarActivity" />
     </application>
 
 </manifest>

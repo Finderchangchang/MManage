@@ -122,7 +122,7 @@ public class AbsModule {
    * @param result 返回码
    * @param data 回调数据
    */
-  protected void callback(final int result, final Object data) {
+  public void callback(final int result, final Object data) {
     if (mCallback != null) {
       successCallback(result, data);
       return;

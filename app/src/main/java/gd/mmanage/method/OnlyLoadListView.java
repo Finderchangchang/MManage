@@ -11,7 +11,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import net.tsz.afinal.R;
+import gd.mmanage.R;
 
 /**
  * Created by Administrator on 2017/2/10.
