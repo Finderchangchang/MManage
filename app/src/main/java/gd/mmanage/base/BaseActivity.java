@@ -2,6 +2,7 @@ package gd.mmanage.base;
 
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
@@ -14,6 +15,7 @@ import com.arialyy.frame.core.AbsActivity;
 public abstract class BaseActivity<VB extends ViewDataBinding> extends AbsActivity<VB> {
     Toolbar mBar;
     Toast toast;
+    public AlertDialog.Builder builder;
 
     public void toast(String msg) {
         if (toast == null) {
@@ -27,6 +29,7 @@ public abstract class BaseActivity<VB extends ViewDataBinding> extends AbsActivi
     @Override
     protected void init(Bundle savedInstanceState) {
         super.init(savedInstanceState);
+        builder = new AlertDialog.Builder(this);
     }
 
     @Override

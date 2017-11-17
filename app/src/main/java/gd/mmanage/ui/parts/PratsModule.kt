@@ -17,13 +17,13 @@ class PratsModule : BaseModule {
      * @param model配件信息集合
      * */
     fun add_prat(model: PartsModel) {
-        callback(11000, NormalRequest<String>(true, "添加成功"))
+        //callback(11000, NormalRequest<String>(true, "添加成功"))
     }
 
     /**
      * 根据条件查询配件信息集合
      * */
     fun search_parts(page_index: Int, choice: String) {
-        callback(11001, NormalRequest<String>(true, "查询成功"))
+        //callback(11001, NormalRequest<String>(true, "查询成功"))
     }
 }

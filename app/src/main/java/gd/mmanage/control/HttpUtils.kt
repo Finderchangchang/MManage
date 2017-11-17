@@ -26,20 +26,52 @@ class HttpUtils<T> {
      * @param back_id 请求码
      * @param list post过去的参数
      * */
-    fun post(url: String, back_id: Int, list: List<String>?, control: BaseModule) {
-        OkGo.post(url)
-                .execute(object : JsonCallback<LzyResponse<T>>() {
-                    override fun onSuccess(t: LzyResponse<T>, call: okhttp3.Call?, response: okhttp3.Response?) {
-                        if (t.Success) {
-                            control.callback(back_id, NormalRequest<T>(0, t.Data))
-                        } else {
-                            control.callback(back_id, NormalRequest<T>(1, t.Data))
-                        }
-                    }
+    fun post(url: String, back_id: Int, map: HashMap<String, String>?, control: BaseModule) {
+        var go = OkGo.post(url)
+        for (model in map!!) {
+            go.params(model.key, model.value)
+        }
+        go.execute(object : JsonCallback<LzyResponse<T>>() {
+            override fun onSuccess(t: LzyResponse<T>, call: okhttp3.Call?, response: okhttp3.Response?) {
+                if (t.Success) {
+                    control.callback(back_id, NormalRequest<T>(0, t.Message, t.Data))
+                } else {
+                    control.callback(back_id, NormalRequest<T>(1, t.Message, t.Data))
+                }
+            }
 
-                    override fun onError(call: Call?, response: Response?, e: Exception?) {
-                        control.callback(back_id, NormalRequest<T>(2, null))
-                    }
-                })
+            override fun onError(call: Call?, response: Response?, e: Exception?) {
+                control.callback(back_id, NormalRequest<T>(2, "未知错误：" + e.toString(), null))
+            }
+        })
+    }
+    fun get(url: String, back_id: Int, control: BaseModule) {
+        get(url, back_id, null, control)
+    }
+
+    /**
+     * @param url 网络访问路径
+     * @param model 需要解析的model
+     * @param back_id 请求码
+     * @param list post过去的参数
+     * */
+    fun get(url: String, back_id: Int, map: HashMap<String, String>?, control: BaseModule) {
+        var go = OkGo.get(url)
+        for (model in map!!) {
+            go.params(model.key, model.value)
+        }
+        go.execute(object : JsonCallback<LzyResponse<T>>() {
+            override fun onSuccess(t: LzyResponse<T>, call: okhttp3.Call?, response: okhttp3.Response?) {
+                if (t.Success) {
+                    control.callback(back_id, NormalRequest<T>(0, t.Message, t.Data))
+                } else {
+                    control.callback(back_id, NormalRequest<T>(1, t.Message, t.Data))
+                }
+            }
+
+            override fun onError(call: Call?, response: Response?, e: Exception?) {
+                control.callback(back_id, NormalRequest<T>(2, "未知错误：" + e.toString(), null))
+            }
+        })
     }
 }

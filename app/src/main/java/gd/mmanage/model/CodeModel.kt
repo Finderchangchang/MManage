@@ -5,6 +5,14 @@ package gd.mmanage.model
  */
 
 class CodeModel {
+
+    constructor(ID: String, Name: String) {
+        this.ID = ID
+        this.Name = Name
+    }
+
+    constructor()
+
     /**
      * ID : 01
      * Name : 汉族

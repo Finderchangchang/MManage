@@ -3,12 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="model"
+            type="gd.mmanage.model.EmployeeModel" />
+    </data>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
         <net.tsz.afinal.view.TitleBar
+            android:id="@+id/title_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
@@ -30,12 +38,13 @@
                 android:layout_height="wrap_content"
                 android:text="编        号" />
 
-            <EditText
-                android:id="@+id/et1"
+            <TextView
+                android:id="@+id/tv1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
-                android:background="@null" />
+                android:background="@null"
+                android:text="@={model.employeeId}" />
         </LinearLayout>
 
         <View
@@ -58,17 +67,18 @@
                 android:text="姓        名" />
 
             <EditText
-                android:id="@+id/tv2"
+                android:id="@+id/et2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_weight="1"
-                android:background="@null" />
+                android:background="@null"
+                android:text="@={model.employeeName}" />
 
             <Button
                 android:id="@+id/read_card_btn"
                 android:layout_width="80dp"
-                android:layout_height="30dp"
+                android:layout_height="32dp"
                 android:layout_marginRight="20dp"
                 android:background="@drawable/bg_button"
                 android:text="读取"
@@ -96,7 +106,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:text="@{model.setSex()}" />
 
             <ImageView
                 android:layout_width="20dp"
@@ -126,7 +137,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
-                android:background="@null" />
+                android:background="@null"
+                android:text="@={model.employeeCertNumber}" />
         </LinearLayout>
 
         <View
@@ -176,12 +188,19 @@
                 android:layout_height="wrap_content"
                 android:text="文化程度" />
 
-            <EditText
+            <TextView
                 android:id="@+id/et6"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
+                android:layout_weight="1"
                 android:background="@null" />
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginRight="20dp"
+                android:src="@mipmap/ic_launcher" />
         </LinearLayout>
 
         <View
@@ -249,5 +268,4 @@
                 android:textSize="16sp" />
         </LinearLayout>
     </LinearLayout>
-
 </layout>

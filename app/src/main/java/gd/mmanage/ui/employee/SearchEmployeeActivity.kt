@@ -1,5 +1,6 @@
 package gd.mmanage.ui.employee
 
+import android.content.Intent
 import android.os.Bundle
 import com.arialyy.frame.module.AbsModule
 import gd.mmanage.R
@@ -18,7 +19,8 @@ import java.util.ArrayList
 class SearchEmployeeActivity : BaseActivity<ActivitySearchEmployeeBinding>(), AbsModule.OnCallback {
     var adapter: CommonAdapter<EmployeeModel>? = null//资讯
     var answer_list = ArrayList<EmployeeModel>()
-
+    var page_index = 1//当前页码数
+    var choice = HashMap<String, String>()//查询的条件
     override fun init(savedInstanceState: Bundle?) {
         super.init(savedInstanceState)
         adapter = object : CommonAdapter<EmployeeModel>(this, answer_list, R.layout.item_employee) {
@@ -51,10 +53,22 @@ class SearchEmployeeActivity : BaseActivity<ActivitySearchEmployeeBinding>(), Ab
         }
         //添加从业人员
         add_btn.setOnClickListener {
-
+            startActivityForResult(Intent(this@SearchEmployeeActivity, AddEmployeeActivity::class.java)
+                    .putExtra("model", EmployeeModel()), 11)
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (resultCode) {
+            1 -> {//查询
+                page_index = 1
+            }
+            2 -> {//添加或者修改
+
+            }
+        }
+    }
 
     override fun setLayoutId(): Int {
         return R.layout.activity_search_employee

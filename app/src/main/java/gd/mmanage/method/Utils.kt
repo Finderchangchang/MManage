@@ -21,10 +21,6 @@ import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.LinearLayout
-import android.widget.ListAdapter
-import android.widget.ListView
-import android.widget.PopupWindow
 
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
@@ -47,13 +43,25 @@ import java.util.regex.Pattern
 
 import android.content.Context.MODE_PRIVATE
 import android.support.v7.app.AlertDialog
+import android.text.TextUtils
+import android.widget.*
 import gd.mmanage.base.BaseApplication
 
 /**
  * Created by Administrator on 2016/5/19.
  */
 object Utils {
-
+    /**
+     * 判断输入的内容是否为空
+     * @param et 文本输入框
+     * @return true:空 false:不是空
+     * */
+    fun etIsNull(et: EditText): Boolean {
+        if (TextUtils.isEmpty(et.text.toString().trim())) {
+            return true
+        }
+        return false
+    }
 
     /***
      * MD5加码 生成32位md5码

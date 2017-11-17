@@ -2,6 +2,8 @@ package gd.mmanage.control
 
 import android.content.Context
 import gd.mmanage.base.BaseModule
+import gd.mmanage.config.command
+import gd.mmanage.config.url
 import gd.mmanage.model.EmployeeModel
 
 /**
@@ -13,19 +15,11 @@ class EmployeeModule : BaseModule {
     constructor(context: Context?) : super(context)
 
     /**
-     * 加载当前用户信息
-     * */
-    fun get_user_info() {
-        var str: List<String>? = null
-        callback(77, str)
-    }
-
-    /**
      * 添加，修改从业人员信息
-     * @param model 从业人员信息
+     * @param map 从业人员信息
      * */
-    fun add_employee(model: EmployeeModel) {
-
+    fun add_employee(map: HashMap<String, String>) {
+        HttpUtils<String>().post(url.employee, command.employee + 1, map, this)
     }
 
     /**
@@ -33,13 +27,15 @@ class EmployeeModule : BaseModule {
      * @param id 从业人d
      * */
     fun del_employee(id: String) {
-
+        var map = HashMap<String, String>()
+        map.put("e_id", id)
+        HttpUtils<String>().post(url.employee, command.employee + 1, map, this)
     }
 
     /**
      * 根据指定的条件获得从业人员信息
      * */
-    fun get_employees() {
-
+    fun get_employees(map: HashMap<String, String>) {
+        HttpUtils<String>().post(url.employee, command.employee + 2, map, this)
     }
 }

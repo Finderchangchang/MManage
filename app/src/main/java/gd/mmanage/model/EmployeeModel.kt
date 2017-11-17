@@ -1,10 +1,12 @@
 package gd.mmanage.model
 
+import java.io.Serializable
+
 /**
  * Created by Administrator on 2017/11/5.
  */
 
-class EmployeeModel {
+class EmployeeModel : Serializable {
     /// <summary>
     /// 人员编码
     /// </summary>
@@ -75,4 +77,11 @@ class EmployeeModel {
     /// 最后修改时间
     /// </summary>
     var EmployeeLastTime = ""
+
+    fun setSex(): String {
+        when (EmployeeSex) {
+            "2" -> return "女"
+            else -> return "男"
+        }
+    }
 }

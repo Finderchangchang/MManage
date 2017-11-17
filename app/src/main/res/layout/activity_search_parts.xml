@@ -37,7 +37,7 @@
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
             android:background="@drawable/bg_button"
-            android:text="添加从业人员"
+            android:text="添加配件信息"
             android:textColor="@color/white"
             android:textSize="16sp" />
     </LinearLayout>
