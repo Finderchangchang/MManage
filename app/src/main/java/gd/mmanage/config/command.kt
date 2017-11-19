@@ -10,4 +10,5 @@ object command {
     var employee = 12000//从业人员
     var car_manage = 13000//车辆管理
     var user = 14000//用户管理
+    var config = 15000//配置信息
 }

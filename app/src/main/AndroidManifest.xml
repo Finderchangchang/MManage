@@ -35,22 +35,22 @@
 
         <receiver android:name=".service.AlarmReceiver" />
 
-        <activity android:name=".ui.main.MainActivity">
-
-        </activity>
+        <activity android:name=".ui.main.MainActivity" />
         <activity android:name=".ui.SetIpActivity" />
-        <activity android:name=".ui.car_manage.AddCarActivity">
-
-        </activity>
-        <activity android:name=".ui.car_manage.AddPersonActivity">
-
-        </activity>
-
+        <activity android:name=".ui.car_manage.AddCarActivity" />
+        <activity android:name=".ui.car_manage.AddPersonActivity" />
         <activity android:name=".ui.main.HomeActivity" />
         <activity android:name=".ui.employee.SearchEmployeeActivity" />
         <activity android:name=".ui.parts.SearchPartsActivity" />
         <activity android:name=".ui.parts.AddPartsActivity" />
         <activity android:name=".ui.car_manage.AddDubiousCarActivity" />
+
+        <service
+            android:name=".service.DownConfigService"
+            android:enabled="true"
+            android:exported="true" />
+
+        <activity android:name=".ui.SearchActivity"></activity>
     </application>
 
 </manifest>

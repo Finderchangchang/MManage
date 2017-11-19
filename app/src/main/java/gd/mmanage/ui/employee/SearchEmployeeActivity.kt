@@ -3,14 +3,18 @@ package gd.mmanage.ui.employee
 import android.content.Intent
 import android.os.Bundle
 import com.arialyy.frame.module.AbsModule
+import com.jiangyy.easydialog.LoadingDialog
 import gd.mmanage.R
 import gd.mmanage.base.BaseActivity
+import gd.mmanage.config.command
+import gd.mmanage.control.EmployeeModule
 import gd.mmanage.databinding.ActivitySearchEmployeeBinding
 import gd.mmanage.method.CommonAdapter
 import gd.mmanage.method.CommonViewHolder
 import gd.mmanage.model.EmployeeModel
 import kotlinx.android.synthetic.main.activity_search_employee.*
 import gd.mmanage.method.OnlyLoadListView
+import gd.mmanage.model.NormalRequest
 import java.util.ArrayList
 
 /**
@@ -21,8 +25,13 @@ class SearchEmployeeActivity : BaseActivity<ActivitySearchEmployeeBinding>(), Ab
     var answer_list = ArrayList<EmployeeModel>()
     var page_index = 1//当前页码数
     var choice = HashMap<String, String>()//查询的条件
+    var control: EmployeeModule? = null
+    var dialog: LoadingDialog.Builder? = null
+
     override fun init(savedInstanceState: Bundle?) {
         super.init(savedInstanceState)
+        dialog = LoadingDialog.Builder(this).setTitle("正在加载...")//初始化dialog
+        control = getModule(EmployeeModule::class.java, this)
         adapter = object : CommonAdapter<EmployeeModel>(this, answer_list, R.layout.item_employee) {
             override fun convert(holder: CommonViewHolder, model: EmployeeModel, position: Int) {
                 holder.setText(R.id.name_tv, model.EmployeeName)
@@ -56,6 +65,15 @@ class SearchEmployeeActivity : BaseActivity<ActivitySearchEmployeeBinding>(), Ab
             startActivityForResult(Intent(this@SearchEmployeeActivity, AddEmployeeActivity::class.java)
                     .putExtra("model", EmployeeModel()), 11)
         }
+        main_srl.setOnRefreshListener {
+            load_data()
+        }
+        load_data()
+    }
+
+    fun load_data() {
+        dialog!!.show()
+        control!!.get_employees(choice)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -75,10 +93,22 @@ class SearchEmployeeActivity : BaseActivity<ActivitySearchEmployeeBinding>(), Ab
     }
 
     override fun onSuccess(result: Int, success: Any?) {
-
+        close()
+        when (result) {
+            command.employee + 2 -> {
+                success as NormalRequest<List<EmployeeModel>>
+                adapter!!.refresh(success.obj)
+            }
+        }
+        main_srl.isRefreshing = false
     }
 
     override fun onError(result: Int, error: Any?) {
+        close()
+    }
 
+    fun close() {
+        main_srl.isRefreshing = false
+        dialog!!.dismiss()
     }
 }

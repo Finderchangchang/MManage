@@ -17,7 +17,7 @@ class MainAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
     init {
         list.add(MainFragment())
         list.add(MainFragment())
-        list.add(UserFragment.newInstance())
+        list.add(UserFragment())
 
     }
 

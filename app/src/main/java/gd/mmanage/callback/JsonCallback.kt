@@ -1,16 +1,27 @@
 package wai.gr.cla.callback
 
+import android.text.TextUtils
 import com.google.gson.stream.JsonReader
 import com.lzy.okgo.callback.AbsCallback
 import com.lzy.okgo.request.BaseRequest
 import gd.mmanage.callback.Convert
 import gd.mmanage.callback.LzyResponse
 import gd.mmanage.callback.SimpleResponse
+import gd.mmanage.config.sp
+import gd.mmanage.method.Utils
 
 import java.lang.reflect.ParameterizedType
 
 import okhttp3.Response
 import java.security.MessageDigest
+import com.arialyy.frame.util.show.T
+import gd.mmanage.method.Sha1
+import java.io.UnsupportedEncodingException
+import java.security.NoSuchAlgorithmException
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.experimental.and
+
 
 /**
  * Created by Finder丶畅畅 on 2017/5/13 00:00
@@ -21,18 +32,22 @@ abstract class JsonCallback<T> : AbsCallback<T>() {
 
     override fun onBefore(request: BaseRequest<*>?) {
         super.onBefore(request)
-        var key = "o*5aX+Hl56Ys@.-z"
-        var millis = System.currentTimeMillis()
-        var md5_num = string2MD5(key + millis + key)
-        request!!.params("auth_md5", md5_num)//
-                .params("auth_sec", millis)
+        var token = Utils.getCache(sp.token)
+        if (TextUtils.isEmpty(token)) {
+            request!!.params("Token", token)//令牌
+        }
+        val df = SimpleDateFormat("yyyyMMddHHmmss")//设置日期格式
+        var TimeStamp = df.format(Date())// new Date()为获取当前系统时间
+        request!!.params("AccountId", Utils.getCache(sp.user_id))//账号id
+                .params("AccountSecret", Sha1.getSha1(Utils.getCache(sp.pwd) + "_" + TimeStamp))
+                .params("TimeStamp", TimeStamp)
     }
 
     fun string2MD5(inStr: String): String {
         var md5: MessageDigest? = null
         try {
             md5 = MessageDigest.getInstance("MD5")
-        } catch (e: Exception) {
+        } catch (e: java.lang.Exception) {
             println(e.toString())
             e.printStackTrace()
             return ""

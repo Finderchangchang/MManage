@@ -14,7 +14,10 @@ import com.jaeger.library.StatusBarUtil
 import gd.mmanage.model.NormalRequest
 import com.jiangyy.easydialog.LoadingDialog
 import gd.mmanage.config.command
+import gd.mmanage.config.sp
+import gd.mmanage.method.Utils
 import gd.mmanage.model.CodeModel
+import gd.mmanage.service.DownConfigService
 import gd.mmanage.ui.config.DownHotelActivity
 import gd.mmanage.ui.main.HomeActivity
 
@@ -43,6 +46,10 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(), AbsModule.OnCallback
             }
         }
         control!!.check_version()//检查更新
+        //标志不存在，执行下载配置信息操作
+        //if (TextUtils.isEmpty(Utils.getCache(sp.down_all))) {
+            startService(Intent(this, DownConfigService::class.java))
+        //}
     }
 
     /**
@@ -66,9 +73,9 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(), AbsModule.OnCallback
                 }
             }
             command.login + 1 -> {//检查版本更新
-                success as NormalRequest<String>
+                success as NormalRequest<List<CodeModel>>
                 if (success.result) {//提示更新
-                    toast(success.obj)
+                    //toast(success.obj)
                 }
             }
         }

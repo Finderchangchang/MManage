@@ -4,6 +4,7 @@ import android.content.Context
 import gd.mmanage.base.BaseModule
 import gd.mmanage.config.command
 import gd.mmanage.config.url
+import gd.mmanage.model.CodeModel
 
 /**
  * Created by Finder丶畅畅 on 2017/11/4 21:25
@@ -22,6 +23,6 @@ class LoginModule(context: Context?) : BaseModule(context) {
      * 检查更新
      * */
     fun check_version() {
-        //HttpUtils<String>().post(url.check_version, command.login + 1, this)
+        HttpUtils<List<CodeModel>>().post(url.get_code + "Code_Region", command.login + 1, this)
     }
 }

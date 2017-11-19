@@ -1,6 +1,7 @@
 package gd.mmanage.control
 
 import android.content.Context
+import android.text.TextUtils
 import gd.mmanage.base.BaseModule
 import gd.mmanage.config.command
 import gd.mmanage.config.url
@@ -19,7 +20,13 @@ class EmployeeModule : BaseModule {
      * @param map 从业人员信息
      * */
     fun add_employee(map: HashMap<String, String>) {
-        HttpUtils<String>().post(url.employee, command.employee + 1, map, this)
+        //空是添加，不空为更新
+        var normal_url = if (TextUtils.isEmpty(map["user_id"])) {
+            url.get_employee + "AddEmployee"
+        } else {
+            url.get_employee + "UpdateEmployee"
+        }
+        HttpUtils<String>().post(normal_url, command.employee + 1, map, this)
     }
 
     /**
@@ -29,13 +36,13 @@ class EmployeeModule : BaseModule {
     fun del_employee(id: String) {
         var map = HashMap<String, String>()
         map.put("e_id", id)
-        HttpUtils<String>().post(url.employee, command.employee + 1, map, this)
+        HttpUtils<String>().get(url.get_employee + "SearchEmployee", command.employee + 1, map, this)
     }
 
     /**
      * 根据指定的条件获得从业人员信息
      * */
     fun get_employees(map: HashMap<String, String>) {
-        HttpUtils<String>().post(url.employee, command.employee + 2, map, this)
+        HttpUtils<List<EmployeeModel>>().post(url.get_employee + "SearchEmployee", command.employee + 2, map, this)
     }
 }
