@@ -2,7 +2,9 @@ package gd.mmanage.ui.employee
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.TextUtils
 import com.arialyy.frame.module.AbsModule
+import com.arialyy.frame.util.show.T
 import com.jiangyy.easydialog.LoadingDialog
 import gd.mmanage.R
 import gd.mmanage.base.BaseActivity
@@ -16,6 +18,12 @@ import kotlinx.android.synthetic.main.activity_search_employee.*
 import gd.mmanage.method.OnlyLoadListView
 import gd.mmanage.model.NormalRequest
 import java.util.ArrayList
+import com.google.gson.JsonElement
+import com.google.gson.JsonArray
+import com.google.gson.JsonParser
+import com.google.gson.Gson
+import gd.mmanage.model.PageModel
+
 
 /**
  * 从业人员信息管理
@@ -34,8 +42,17 @@ class SearchEmployeeActivity : BaseActivity<ActivitySearchEmployeeBinding>(), Ab
         control = getModule(EmployeeModule::class.java, this)
         adapter = object : CommonAdapter<EmployeeModel>(this, answer_list, R.layout.item_employee) {
             override fun convert(holder: CommonViewHolder, model: EmployeeModel, position: Int) {
+                if (TextUtils.isEmpty(model.EmployeeName)) {
+                    model.EmployeeName = ""
+                }
                 holder.setText(R.id.name_tv, model.EmployeeName)
+                if (TextUtils.isEmpty(model.EmployeeCertNumber)) {
+                    model.EmployeeCertNumber = "未知"
+                }
                 holder.setText(R.id.id_card_tv, model.EmployeeCertNumber)
+                if (TextUtils.isEmpty(model.EmployeeAddress)) {
+                    model.EmployeeAddress = "暂无"
+                }
                 holder.setText(R.id.address_tv, model.EmployeeAddress)
                 //修改操作
                 holder.setOnClickListener(R.id.update_ll) {
@@ -95,13 +112,22 @@ class SearchEmployeeActivity : BaseActivity<ActivitySearchEmployeeBinding>(), Ab
     override fun onSuccess(result: Int, success: Any?) {
         close()
         when (result) {
-            command.employee + 2 -> {
-                success as NormalRequest<List<EmployeeModel>>
-                adapter!!.refresh(success.obj)
+            command.employee + 3 -> {
+                success as NormalRequest<JsonElement>
+                if (page_index == 1) {
+                    answer_list = ArrayList()
+                }
+                var mode: PageModel<*> = Gson().fromJson<PageModel<*>>(success.obj, PageModel::class.java)
+                mode.data as List<EmployeeModel>
+                var em = JsonParser().parse(success.obj.toString()).asJsonObject.getAsJsonArray("data")//解析data里面的数据
+                em.map { Gson().fromJson<EmployeeModel>(it, EmployeeModel::class.java) }
+                        .forEach { answer_list.add(it) }
+                adapter!!.refresh(answer_list)
+                main_lv.getIndex(page_index, 20, mode.ItemCount)
             }
         }
-        main_srl.isRefreshing = false
     }
+
 
     override fun onError(result: Int, error: Any?) {
         close()
@@ -111,4 +137,5 @@ class SearchEmployeeActivity : BaseActivity<ActivitySearchEmployeeBinding>(), Ab
         main_srl.isRefreshing = false
         dialog!!.dismiss()
     }
+
 }

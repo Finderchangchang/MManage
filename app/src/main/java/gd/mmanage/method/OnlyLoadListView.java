@@ -86,9 +86,9 @@ public class OnlyLoadListView extends ListView implements AbsListView.OnScrollLi
                 && this.getChildAt(0).getTop() >= this.getPaddingTop()) {
             //解决滑动冲突，当滑动到第一个item，下拉刷新才起作用
 //            isValid.setSwipeEnabledTrue();
-            srl.setRefreshing(true);
+            srl.setEnabled(true);
         } else {
-            srl.setRefreshing(false);
+            srl.setEnabled(false);
 //            if (isValid != null) {
 //                isValid.setSwipeEnabledFalse();
 //            }

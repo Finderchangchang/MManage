@@ -45,6 +45,7 @@ import android.content.Context.MODE_PRIVATE
 import android.support.v7.app.AlertDialog
 import android.text.TextUtils
 import android.widget.*
+import com.google.gson.JsonArray
 import gd.mmanage.base.BaseApplication
 
 /**
