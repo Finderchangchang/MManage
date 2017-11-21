@@ -38,7 +38,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(), AbsModule.OnCallback
                 TextUtils.isEmpty(name) -> toast("请输入用户名")
                 TextUtils.isEmpty(pwd) -> toast("请输入密码")
                 else -> {
-                    dialog!!.show()
+                    //dialog!!.show()
                     //control!!.user_login(name, pwd)//登录操作
                     startActivity(Intent(this@LoginActivity, HomeActivity::class.java))
                     finish()
@@ -60,7 +60,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(), AbsModule.OnCallback
             command.login -> {//登录接口
                 success as NormalRequest<ArrayList<CodeModel>>//强转
                 when (success.code) {
-                    1 -> {//跳转到主页
+                    1 ->        {//跳转到主页
                         startActivity(Intent(this@LoginActivity, HomeActivity::class.java))
                         finish()
                     }

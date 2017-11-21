@@ -15,9 +15,11 @@ import com.arialyy.frame.core.AbsActivity;
 public abstract class BaseActivity<VB extends ViewDataBinding> extends AbsActivity<VB> {
     Toolbar mBar;
     Toast toast;
+    String [] s;
     public AlertDialog.Builder builder;
 
     public void toast(String msg) {
+        s=new String[10];
         if (toast == null) {
             toast = Toast.makeText(this, msg, Toast.LENGTH_SHORT);
         } else {

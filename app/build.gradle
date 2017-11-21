@@ -24,6 +24,11 @@ android {
     dataBinding {
         enabled = true
     }
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
 }
 kapt {
     generateStubs = true

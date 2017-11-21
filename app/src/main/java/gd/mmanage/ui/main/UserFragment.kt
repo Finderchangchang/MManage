@@ -1,8 +1,10 @@
 package gd.mmanage.ui.main
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.ImageView
 import butterknife.Bind
 import com.arialyy.frame.module.AbsModule
 import com.google.gson.Gson
@@ -15,12 +17,14 @@ import gd.mmanage.control.UserModule
 import gd.mmanage.databinding.FragUserBinding
 import gd.mmanage.model.EnterpriseModel
 import gd.mmanage.model.NormalRequest
+import gd.mmanage.ui.config.SetActivity
 
 /**
  * Created by Administrator on 2017/11/11.
  */
 
 class UserFragment : BaseFragment<FragUserBinding>(), AbsModule.OnCallback {
+    var set_iv: ImageView? = null
     override fun onSuccess(result: Int, success: Any?) {
         when (result) {
             command.user -> {
@@ -42,7 +46,8 @@ class UserFragment : BaseFragment<FragUserBinding>(), AbsModule.OnCallback {
     }
 
     override fun load_view(view: View?) {
-
+        set_iv = view!!.findViewById(R.id.set_iv) as ImageView
+        set_iv!!.setOnClickListener { startActivity(Intent(HomeActivity.context, SetActivity::class.java)) }
     }
 
     private var control: UserModule? = null

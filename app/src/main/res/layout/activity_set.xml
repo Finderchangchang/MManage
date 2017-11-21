@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <net.tsz.afinal.view.TitleBar
+            android:id="@+id/title_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            app:center_tv="系统设置" />
+
+        <net.tsz.afinal.view.MenuView
+            android:id="@+id/blue_set_mv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:menu_left_tv="蓝牙选择" />
+    </LinearLayout>
+</layout>

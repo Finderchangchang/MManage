@@ -28,6 +28,7 @@
                 android:src="@mipmap/ic_launcher" />
 
             <ImageView
+                android:id="@+id/set_iv"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_alignParentRight="true"
