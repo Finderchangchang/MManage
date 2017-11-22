@@ -4,6 +4,10 @@ import android.Manifest
 import android.app.ProgressDialog
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -20,6 +24,7 @@ import com.zkteco.android.IDReader.WLTService
 import com.zkteco.id3xx.IDCardReader
 import com.zkteco.id3xx.meta.IDCardInfo
 import gd.mmanage.R
+import gd.mmanage.R.id.textView
 import gd.mmanage.base.BaseActivity
 import gd.mmanage.config.command
 import gd.mmanage.control.EmployeeModule
@@ -83,15 +88,12 @@ class AddEmployeeActivity : BaseActivity<ActivityAddEmployeeBinding>(), AbsModul
         title_bar.setLeftClick { finish() }
         //读卡操作
         read_card_btn.setOnClickListener {
-            if (Utils.getCache("BlueToothAddress") == "") {
-                toast("请检查蓝牙读卡设备设置！")
-            } else {
-                var progressDialog = ProgressDialog.show(this, "", "正在读取身份证信息...", true, false)
-                progressDialog!!.setCancelable(true)
-                progressDialog.setCanceledOnTouchOutside(true)
-                //progressDialog.show()
-                OnBnRead()
-            }
+            //            if (Utils.getCache("BlueToothAddress") == "") {
+//                toast("请检查蓝牙读卡设备设置！")
+//            } else {
+
+            OnBnRead()
+//            }
         }
         //性别选择
         ll3.setOnClickListener {
@@ -122,53 +124,99 @@ class AddEmployeeActivity : BaseActivity<ActivityAddEmployeeBinding>(), AbsModul
                 control!!.add_employee(UtilControl.change(binding.model))
             }
         }
+        init_blue()
     }
 
     internal var idCardReader: IDCardReader? = null
     private var workThread: WorkThread? = null
-    var isRead = false
+    public var isRead = false
     internal var mBluetoothAdapter: BluetoothAdapter? = null
     //设备连接
     fun OnBnRead() {
-        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
-        val device = mBluetoothAdapter!!.getRemoteDevice(Utils.getCache("BlueToothAddress"))
-        try {
-            connect(device)
-
-        } catch (e: Exception) {
-            Toast.makeText(this, "连接失败", Toast.LENGTH_SHORT).show()
+        if (null == idCardReader) {
+            Toast.makeText(this@AddEmployeeActivity, "请先连接设备", Toast.LENGTH_SHORT).show()
+            return
         }
-
+        isRead = true
+        workThread = WorkThread()
+        workThread!!.start()// 线程启动
 
     }
 
+
+    fun init_blue() {
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
+        if (!mBluetoothAdapter!!.isEnabled()) {
+            mBluetoothAdapter!!.enable()
+        }
+        var mFilter = IntentFilter(BluetoothDevice.ACTION_FOUND)
+        registerReceiver(mReceiver, mFilter)
+        // 注册搜索完时的receiver
+        mFilter = IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)
+        registerReceiver(mReceiver, mFilter)
+        if (mBluetoothAdapter!!.isDiscovering()) {
+            mBluetoothAdapter!!.cancelDiscovery()
+        }
+        mBluetoothAdapter!!.startDiscovery()
+    }
+
+    //搜索结果处理
+    private val mReceiver = object : BroadcastReceiver() {
+        override fun onReceive(arg0: Context, arg1: Intent) {
+            val action = arg1.action
+            if (action == BluetoothDevice.ACTION_FOUND) {
+                val device = arg1.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
+                if (device.address == "DC:0D:30:05:CD:28") {//DC:0D:30:04:20:D9
+                    try {
+                        connect(device)
+                    } catch (e: Exception) {
+                        Toast.makeText(this@AddEmployeeActivity, "连接失败", Toast.LENGTH_SHORT).show()
+                    }
+
+                }
+            } else if (action == BluetoothAdapter.ACTION_DISCOVERY_FINISHED) {
+                // setProgressBarIndeterminateVisibility(false);
+                title = "搜索蓝牙设备"
+            }
+        }
+    }
+
+    //搜索设备操作
+    fun OnBnSearch() {
+
+        //dialog.show();
+    }
+
+    //设备版本
+    fun OnBnFirmVer(view: View) {
+        if (null != idCardReader) {
+            val strFirmVersion = idCardReader!!.getFirmwareVersion()
+            Toast.makeText(this@AddEmployeeActivity, "设备版本：" + strFirmVersion, Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    //联网操作
     private fun connect(device: BluetoothDevice) {
         try {
             idCardReader = IDCardReader()
             idCardReader!!.setDevice(device.address)
             var ret = idCardReader!!.openDevice()
             if (IDCardReader.ERROR_SUCC == ret) {
-//                textView.setText(bluetooth)
-//                dialog.dismiss()
-                Toast.makeText(this, "连接成功", Toast.LENGTH_SHORT).show()
-                if (null == idCardReader) {
-                    Toast.makeText(this@AddEmployeeActivity, "请先连接设备", Toast.LENGTH_SHORT).show()
-                    return
-                }
-                workThread = WorkThread()
-                workThread!!.start()// 线程启动
-                isRead = true
+                //textView.setText(bluetooth)
+                //dialog.dismiss()
+                Toast.makeText(this@AddEmployeeActivity, "连接成功", Toast.LENGTH_SHORT).show()
             } else {
                 idCardReader = null
-                Toast.makeText(this, "连接失败，错误码:" + ret, Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@AddEmployeeActivity, "连接失败，错误码:" + ret, Toast.LENGTH_SHORT).show()
             }
         } catch (e: Exception) {
             // TODO: handle exception
             idCardReader = null
-            Toast.makeText(this, "连接失败", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this@AddEmployeeActivity, "连接失败", Toast.LENGTH_SHORT).show()
         }
 
     }
+
 
     private inner class WorkThread : Thread() {
         override fun run() {
@@ -176,18 +224,15 @@ class AddEmployeeActivity : BaseActivity<ActivityAddEmployeeBinding>(), AbsModul
             if (isRead) {
                 if (!ReadCardInfo()) {
                     //textView.post(Runnable { textView.setText("请放卡...") })
-                    var s = ""
                 } else {
-                    //textView.post(Runnable { textView.setText("读卡成功，请放入下一张卡") })
-                    var s = ""
-
+//                    textView.post(Runnable { textView.setText("读卡成功，请放入下一张卡") })
                 }
             }
         }
     }
 
     //读卡操作
-    private fun ReadCardInfo(): Boolean {
+    fun ReadCardInfo(): Boolean {
         if (!idCardReader!!.sdtFindCard()) {
             return false
         } else {
@@ -196,7 +241,8 @@ class AddEmployeeActivity : BaseActivity<ActivityAddEmployeeBinding>(), AbsModul
             }
         }
         runOnUiThread {
-
+            //textView.setText("正在读卡...")
+            //resetContent()
         }
         val idCardInfo = IDCardInfo()
         if (idCardReader!!.sdtReadCard(1, idCardInfo)) {
@@ -204,6 +250,11 @@ class AddEmployeeActivity : BaseActivity<ActivityAddEmployeeBinding>(), AbsModul
             val mCalendar = Calendar.getInstance()
             mCalendar.timeInMillis = time
             runOnUiThread {
+                employee!!.EmployeeName = idCardInfo.name
+                employee!!.EmployeeCertNumber = idCardInfo.id
+                employee!!.EmployeeSex = idCardInfo.sex
+                employee!!.EmployeeAddress = idCardInfo.address
+                binding.model = employee
                 //                infoName.setText(idCardInfo.name)
 //                infoSex.setText(idCardInfo.sex)
 //                infoNation.setText(idCardInfo.nation)
@@ -233,6 +284,24 @@ class AddEmployeeActivity : BaseActivity<ActivityAddEmployeeBinding>(), AbsModul
         //textView.post(Runnable { textView.setText("读卡失败...") })
 
         return false
+    }
+
+
+    //断开连接
+    fun OnBnDisconn() {
+        if (null == idCardReader) {
+            return
+        }
+        try {
+            Thread.sleep(1000)
+        } catch (e: InterruptedException) {
+            e.printStackTrace()
+        }
+
+        idCardReader!!.closeDevice()
+        idCardReader = null
+        Toast.makeText(this@AddEmployeeActivity, "断开设备成功", Toast.LENGTH_SHORT).show()
+        //textView.setText("")
     }
 
     //检测权限
@@ -279,5 +348,12 @@ class AddEmployeeActivity : BaseActivity<ActivityAddEmployeeBinding>(), AbsModul
 
     override fun setLayoutId(): Int {
         return R.layout.activity_add_employee
+    }
+
+    //页面关闭处理
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(mReceiver)
+        OnBnDisconn()
     }
 }
