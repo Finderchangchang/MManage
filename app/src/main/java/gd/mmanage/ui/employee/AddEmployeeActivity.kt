@@ -214,7 +214,6 @@ class AddEmployeeActivity : BaseActivity<ActivityAddEmployeeBinding>(), AbsModul
             idCardReader = null
             Toast.makeText(this@AddEmployeeActivity, "连接失败", Toast.LENGTH_SHORT).show()
         }
-
     }
 
 
@@ -226,6 +225,49 @@ class AddEmployeeActivity : BaseActivity<ActivityAddEmployeeBinding>(), AbsModul
                     //textView.post(Runnable { textView.setText("请放卡...") })
                 } else {
 //                    textView.post(Runnable { textView.setText("读卡成功，请放入下一张卡") })
+                }
+            }
+        }
+    }
+
+    var index = 0
+
+    inner class WorkThread1 : Thread() {
+        override fun run() {
+            super.run()
+            while (index < 10) {
+                runOnUiThread {
+                    if (!ReadCardInfo()) {
+                        index++
+                        if (index == 9) {
+                            index = 0
+                            if (idCardReader != null) {
+                                idCardReader!!.closeDevice()
+                                idCardReader = null
+                            }
+//                            reg_person_read.isEnabled = true
+//                            progressDialog!!.dismiss()
+                            //mHandler.sendMessage(mHandler.obtainMessage(1, "读卡失败"))
+                        } else {
+                            //Toast.makeText(AddEmployeeActivity.this,"请放卡...",Toast.LENGTH_SHORT);
+                        }
+                    } else {
+                        index = 11
+                        if (idCardReader != null) {
+                            idCardReader!!.closeDevice()
+                            idCardReader = null
+                        }
+//                        progressDialog!!.dismiss()
+//                        reg_person_read.isEnabled = true
+                        //read!!.closeDevice()
+                        //mHandler.sendMessage(mHandler.obtainMessage(1, "读卡成功"))
+                    }
+                }
+
+                try {
+                    Thread.sleep(500)
+                } catch (e: InterruptedException) {
+                    e.printStackTrace()
                 }
             }
         }
@@ -334,7 +376,7 @@ class AddEmployeeActivity : BaseActivity<ActivityAddEmployeeBinding>(), AbsModul
                 toast("姓名不能为空")
                 false
             }
-            Utils.etIsNull(et4) -> {
+            Utils.etIsNull(et2) -> {
                 toast("身份证号不能为空")
                 false
             }
