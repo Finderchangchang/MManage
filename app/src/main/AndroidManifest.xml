@@ -24,9 +24,11 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
     <uses-feature
         android:name="android.hardware.bluetooth_le"
-        android:required="false"/>
+        android:required="false" />
+
     <application
         android:name=".base.BaseApplication"
         android:allowBackup="true"
@@ -45,7 +47,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".ui.employee.AddEmployeeActivity"
             android:label="@string/title_activity_add_employee"
@@ -64,13 +65,15 @@
         <activity android:name=".ui.parts.SearchPartsActivity" />
         <activity android:name=".ui.parts.AddPartsActivity" />
         <activity android:name=".ui.car_manage.AddDubiousCarActivity" />
-        <activity android:name=".ui.config.SetActivity"/>
+        <activity android:name=".ui.config.SetActivity" />
+
         <service
             android:name=".service.DownConfigService"
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".ui.SearchActivity"></activity>
+        <activity android:name=".ui.SearchActivity" />
+        <activity android:name=".ui.inbound.AddInBoundActivity"></activity>
     </application>
 
 </manifest>

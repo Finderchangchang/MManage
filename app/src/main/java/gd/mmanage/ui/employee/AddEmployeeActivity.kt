@@ -128,7 +128,7 @@ class AddEmployeeActivity : BaseActivity<ActivityAddEmployeeBinding>(), AbsModul
     }
 
     internal var idCardReader: IDCardReader? = null
-    private var workThread: WorkThread? = null
+    private var workThread: WorkThread1? = null
     public var isRead = false
     internal var mBluetoothAdapter: BluetoothAdapter? = null
     //设备连接
@@ -138,7 +138,7 @@ class AddEmployeeActivity : BaseActivity<ActivityAddEmployeeBinding>(), AbsModul
             return
         }
         isRead = true
-        workThread = WorkThread()
+        workThread = WorkThread1()
         workThread!!.start()// 线程启动
 
     }
@@ -154,7 +154,7 @@ class AddEmployeeActivity : BaseActivity<ActivityAddEmployeeBinding>(), AbsModul
         // 注册搜索完时的receiver
         mFilter = IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)
         registerReceiver(mReceiver, mFilter)
-        if (mBluetoothAdapter!!.isDiscovering()) {
+        if (mBluetoothAdapter!!.isDiscovering) {
             mBluetoothAdapter!!.cancelDiscovery()
         }
         mBluetoothAdapter!!.startDiscovery()
@@ -197,6 +197,7 @@ class AddEmployeeActivity : BaseActivity<ActivityAddEmployeeBinding>(), AbsModul
 
     //联网操作
     private fun connect(device: BluetoothDevice) {
+
         try {
             idCardReader = IDCardReader()
             idCardReader!!.setDevice(device.address)
