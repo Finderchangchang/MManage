@@ -9,5 +9,7 @@ object url {
     var get_code = normal + "Code/GetCode?codeName="
     var get_enterprise = normal + "Enterprise/"
     var get_employee = normal + "Employee/"
+    var get_parts = normal + "VehicleParts/"//配件Storage
+    var get_storage = normal + "Storage/"//配件Storage
     var check_version = normal + "Enterprise/GetCode?codeName=Code_Region"
 }

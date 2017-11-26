@@ -1,11 +1,13 @@
 package gd.mmanage.model
 
+import java.io.Serializable
+
 /**
  * 配件Model
  * Created by Administrator on 2017/11/16.
  */
 
-class PartsModel {
+class PartsModel : Serializable {
 
     /// <summary>
     /// 配件编号

@@ -25,7 +25,9 @@
             <gd.mmanage.method.OnlyLoadListView
                 android:id="@+id/main_lv"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:divider="@null"
+                android:dividerHeight="0dp"/>
 
         </android.support.v4.widget.SwipeRefreshLayout>
 

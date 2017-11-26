@@ -40,13 +40,7 @@
         <activity
             android:name=".ui.LoginActivity"
             android:label="@string/title_activity_login"
-            android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".ui.employee.AddEmployeeActivity"
             android:label="@string/title_activity_add_employee"
@@ -56,7 +50,14 @@
 
         <receiver android:name=".service.AlarmReceiver" />
 
-        <activity android:name=".ui.main.MainActivity" />
+        <activity android:name=".ui.inbound.AddInBoundActivity" />
+        <activity android:name=".ui.main.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name=".ui.SetIpActivity" />
         <activity android:name=".ui.car_manage.AddCarActivity" />
         <activity android:name=".ui.car_manage.AddPersonActivity" />
@@ -64,6 +65,7 @@
         <activity android:name=".ui.employee.SearchEmployeeActivity" />
         <activity android:name=".ui.parts.SearchPartsActivity" />
         <activity android:name=".ui.parts.AddPartsActivity" />
+        <activity android:name=".ui.parts.PartDetailActivity" />
         <activity android:name=".ui.car_manage.AddDubiousCarActivity" />
         <activity android:name=".ui.config.SetActivity" />
 
@@ -73,7 +75,8 @@
             android:exported="true" />
 
         <activity android:name=".ui.SearchActivity" />
-        <activity android:name=".ui.inbound.AddInBoundActivity"></activity>
+        <activity android:name=".ui.inbound.SearchInBoundsActivity"></activity>
+
     </application>
 
 </manifest>

@@ -1,4 +1,4 @@
-package gd.mmanage.ui.parts
+package gd.mmanage.ui.inbound
 
 import android.content.Context
 import android.text.TextUtils
@@ -7,15 +7,13 @@ import gd.mmanage.config.command
 import gd.mmanage.config.url
 import gd.mmanage.control.HttpUtils
 import gd.mmanage.method.UtilControl
-import gd.mmanage.model.EmployeeModel
-import gd.mmanage.model.NormalRequest
 import gd.mmanage.model.PartsModel
 
 /**
  * 配件管理
  * Created by Administrator on 2017/11/14.
  */
-class PratsModule : BaseModule {
+class InBoundsModule : BaseModule {
     constructor(context: Context?) : super(context)
 
     /**

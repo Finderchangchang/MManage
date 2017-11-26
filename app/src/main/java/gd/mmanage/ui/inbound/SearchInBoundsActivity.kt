@@ -1,6 +1,7 @@
-package gd.mmanage.ui.parts
+package gd.mmanage.ui.inbound
 
 import android.content.Intent
+import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import com.arialyy.frame.module.AbsModule
 import com.google.gson.Gson
@@ -9,21 +10,29 @@ import com.google.gson.JsonParser
 import gd.mmanage.R
 import gd.mmanage.base.BaseActivity
 import gd.mmanage.config.command
-import gd.mmanage.databinding.ActivityAddEmployeeBinding
-import gd.mmanage.databinding.ActivityAddPartsBinding
-import gd.mmanage.databinding.ActivitySearchPartsBinding
+import gd.mmanage.databinding.ActivitySearchInBoundsBinding
 import gd.mmanage.method.CommonAdapter
 import gd.mmanage.method.CommonViewHolder
-import gd.mmanage.model.EmployeeModel
 import gd.mmanage.model.NormalRequest
 import gd.mmanage.model.PageModel
 import gd.mmanage.model.PartsModel
-import kotlinx.android.synthetic.main.activity_search_parts.*
+import gd.mmanage.ui.parts.AddPartsActivity
+import gd.mmanage.ui.parts.PartDetailActivity
+import gd.mmanage.ui.parts.PratsModule
+import gd.mmanage.ui.parts.SearchPartsActivity
+import kotlinx.android.synthetic.main.activity_search_in_bounds.*
 
 /**
- * 查询配件信息
+ * 入库查询
  * */
-class SearchPartsActivity : BaseActivity<ActivitySearchPartsBinding>(), AbsModule.OnCallback {
+class SearchInBoundsActivity : BaseActivity<ActivitySearchInBoundsBinding>(), AbsModule.OnCallback {
+    /**
+     * 设置资源布局
+     */
+    override fun setLayoutId(): Int {
+        return R.layout.activity_search_in_bounds
+    }
+
     override fun onSuccess(result: Int, success: Any?) {
         main_srl.isRefreshing = false
         when (result) {
@@ -62,7 +71,7 @@ class SearchPartsActivity : BaseActivity<ActivitySearchPartsBinding>(), AbsModul
                 holder.setText(R.id.count_tv, model.PartsNumber)
                 //修改操作
                 holder.setOnClickListener(R.id.update_ll) {
-                    startActivityForResult(Intent(this@SearchPartsActivity, AddPartsActivity::class.java)
+                    startActivityForResult(Intent(this@SearchInBoundsActivity, AddPartsActivity::class.java)
                             .putExtra("model", model), 11)
                 }
             }
@@ -86,9 +95,14 @@ class SearchPartsActivity : BaseActivity<ActivitySearchPartsBinding>(), AbsModul
             startActivity(Intent(this, PartDetailActivity::class.java)
                     .putExtra("id", answer_list[position].PartsId))
         }
+        //入库单添加
+        add_in_bound_btn.setOnClickListener {
+            startActivityForResult(Intent(this@SearchInBoundsActivity, AddInBoundActivity::class.java)
+                    .putExtra("model", PartsModel()), 11)
+        }
         //添加配件信息
-        add_btn.setOnClickListener {
-            startActivityForResult(Intent(this@SearchPartsActivity, AddPartsActivity::class.java)
+        add_pj_btn.setOnClickListener {
+            startActivityForResult(Intent(this@SearchInBoundsActivity, SearchPartsActivity::class.java)
                     .putExtra("model", PartsModel()), 11)
         }
         control!!.get_prats(choice)
@@ -106,7 +120,5 @@ class SearchPartsActivity : BaseActivity<ActivitySearchPartsBinding>(), AbsModul
 
     var control: PratsModule? = null
     var page_index = 1
-    override fun setLayoutId(): Int {
-        return R.layout.activity_search_parts
-    }
+
 }

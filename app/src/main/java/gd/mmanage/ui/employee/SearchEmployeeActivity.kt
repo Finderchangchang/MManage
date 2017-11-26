@@ -58,10 +58,6 @@ class SearchEmployeeActivity : BaseActivity<ActivitySearchEmployeeBinding>(), Ab
                 holder.setOnClickListener(R.id.update_ll) {
 
                 }
-                //删除操作
-                holder.setOnClickListener(R.id.del_ll) {
-
-                }
             }
         }
         title_bar.setLeftClick { finish() }

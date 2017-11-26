@@ -31,7 +31,7 @@ public abstract class BaseActivity<VB extends ViewDataBinding> extends AbsActivi
     @Override
     protected void init(Bundle savedInstanceState) {
         super.init(savedInstanceState);
-        builder = new AlertDialog.Builder(this);
+        builder = new AlertDialog.Builder(this).setTitle("正在加载...");
     }
 
     @Override

@@ -16,6 +16,7 @@ import gd.mmanage.method.GlideImageLoader
 import gd.mmanage.ui.car_manage.AddDubiousCarActivity
 import gd.mmanage.ui.car_manage.AddPersonActivity
 import gd.mmanage.ui.employee.SearchEmployeeActivity
+import gd.mmanage.ui.inbound.SearchInBoundsActivity
 import gd.mmanage.ui.parts.SearchPartsActivity
 import kotlinx.android.synthetic.main.frag_main.view.*
 
@@ -61,9 +62,9 @@ class MainFragment : BaseFragment<FragMainBinding>() {
         ll1!!.setOnClickListener {
             startActivity(Intent(context, SearchEmployeeActivity::class.java))
         }
-        //配件管理
+        //配件管理(入库单)
         ll2!!.setOnClickListener {
-            startActivity(Intent(context, SearchPartsActivity::class.java))
+            startActivity(Intent(context, SearchInBoundsActivity::class.java))
         }
         //维修业务
         ll3!!.setOnClickListener {

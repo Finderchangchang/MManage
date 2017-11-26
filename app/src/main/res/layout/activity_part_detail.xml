@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
-            app:center_tv="配件添加" />
+            app:center_tv="配件详情" />
 
         <ScrollView
             android:layout_width="match_parent"
@@ -48,7 +48,7 @@
                         android:layout_height="wrap_content"
                         android:text="配件名称" />
 
-                    <EditText
+                    <TextView
                         android:id="@+id/name_et"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -74,7 +74,7 @@
                         android:layout_height="wrap_content"
                         android:text="配件规格" />
 
-                    <EditText
+                    <TextView
                         android:id="@+id/gg_et"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -109,12 +109,6 @@
                         android:layout_weight="1"
                         android:background="@null"
                         android:text="@={model.partsSpecifications}" />
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_marginRight="20dp"
-                        android:src="@mipmap/ic_launcher" />
                 </LinearLayout>
 
                 <View
@@ -133,7 +127,7 @@
                         android:layout_height="wrap_content"
                         android:text="配件单价" />
 
-                    <EditText
+                    <TextView
                         android:id="@+id/price_tv"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -159,7 +153,7 @@
                         android:layout_height="wrap_content"
                         android:text="配件数量" />
 
-                    <EditText
+                    <TextView
                         android:id="@+id/count_et"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -185,7 +179,7 @@
                         android:layout_height="wrap_content"
                         android:text="配件厂家" />
 
-                    <EditText
+                    <TextView
                         android:id="@+id/company_et"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -218,7 +212,7 @@
                         android:layout_height="wrap_content"
                         android:text="联  系  人" />
 
-                    <EditText
+                    <TextView
                         android:id="@+id/user_et"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -243,7 +237,7 @@
                         android:layout_height="wrap_content"
                         android:text="联系电话" />
 
-                    <EditText
+                    <TextView
                         android:id="@+id/phone_et"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -266,39 +260,18 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="备          注" />
+                        android:text="备         注" />
 
-                    <EditText
+                    <TextView
                         android:id="@+id/remark_et"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
                         android:background="@null"
-                        android:lines="3"
                         android:text="@={model.partsComment}" />
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="65dp"
-            android:background="@color/line_bg">
-
-            <Button
-                android:id="@+id/save_btn"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_alignParentBottom="true"
-                android:layout_marginBottom="10dp"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
-                android:background="@drawable/bg_button"
-                android:text="保存"
-                android:textColor="@color/white"
-                android:textSize="16sp" />
-        </RelativeLayout>
-
     </LinearLayout>
 
 </layout>

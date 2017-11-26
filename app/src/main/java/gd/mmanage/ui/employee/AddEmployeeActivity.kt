@@ -217,20 +217,6 @@ class AddEmployeeActivity : BaseActivity<ActivityAddEmployeeBinding>(), AbsModul
         }
     }
 
-
-    private inner class WorkThread : Thread() {
-        override fun run() {
-            super.run()
-            if (isRead) {
-                if (!ReadCardInfo()) {
-                    //textView.post(Runnable { textView.setText("请放卡...") })
-                } else {
-//                    textView.post(Runnable { textView.setText("读卡成功，请放入下一张卡") })
-                }
-            }
-        }
-    }
-
     var index = 0
 
     inner class WorkThread1 : Thread() {
