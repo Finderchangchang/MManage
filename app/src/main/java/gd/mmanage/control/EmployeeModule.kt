@@ -22,7 +22,7 @@ class EmployeeModule : BaseModule {
     fun add_employee(map: HashMap<String, String>) {
         var cmd = command.employee
         //空是添加，不空为更新
-        var normal_url = if (TextUtils.isEmpty(map["user_id"])) {
+        var normal_url = if (TextUtils.isEmpty(map["employeeid"])) {
             url.get_employee + "AddEmployee"
         } else {
             cmd = command.employee + 1

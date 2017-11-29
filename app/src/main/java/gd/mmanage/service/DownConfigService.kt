@@ -35,12 +35,14 @@ class DownConfigService : Service() {
      * @param lists 需要存的数据信息
      * */
     fun save_down(cmd: Int, lists: List<CodeModel>) {
+        var cmd = cmd
         var code_name = cmd_name(cmd)
         val thread = Thread(Runnable {
             for (model in lists) {
                 model.CodeName = code_name
                 db!!.save(model)
             }
+            cmd = cmd + 1
             if (cmd == command.config + 2) {
                 //全部下载完成
                 Utils.putCache(sp.down_all, "1")
@@ -59,6 +61,7 @@ class DownConfigService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         db = FinalDb.create(this)
+        db!!.deleteAll(CodeModel::class.java)
         down_config(command.config)
         return super.onStartCommand(intent, flags, startId)
     }
@@ -80,7 +83,7 @@ class DownConfigService : Service() {
                 .execute(object : JsonCallback<LzyResponse<List<CodeModel>>>() {
                     override fun onSuccess(t: LzyResponse<List<CodeModel>>, call: okhttp3.Call?, response: okhttp3.Response?) {
                         if (t.Success) {
-                            save_down(cmd + 1, t.Data!!)
+                            save_down(cmd, t.Data!!)
                         } else {
                             //更新字典失败
                         }

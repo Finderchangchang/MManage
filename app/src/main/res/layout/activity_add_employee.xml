@@ -8,6 +8,14 @@
         <variable
             name="model"
             type="gd.mmanage.model.EmployeeModel" />
+
+        <variable
+            name="nation"
+            type="String" />
+
+        <variable
+            name="state"
+            type="String" />
     </data>
 
     <LinearLayout
@@ -42,8 +50,7 @@
                     android:id="@+id/ll1"
                     style="@style/add_et"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:visibility="gone">
+                    android:layout_height="wrap_content">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -80,11 +87,13 @@
 
                     <EditText
                         android:id="@+id/et2"
+                        style="@style/et_style"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
                         android:layout_weight="1"
                         android:background="@null"
+
                         android:text="@={model.employeeName}" />
 
 
@@ -143,7 +152,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
                         android:layout_weight="1"
-                        android:text="@{model.setSex()}" />
+                        android:text="@{nation}" />
 
                     <ImageView
                         android:layout_width="20dp"
@@ -183,11 +192,13 @@
 
             <EditText
                 android:id="@+id/et5"
+                style="@style/et_style"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_weight="1"
                 android:background="@null"
+
                 android:text="@={model.employeeCertNumber}" />
 
             <Button
@@ -218,6 +229,7 @@
 
             <EditText
                 android:id="@+id/et6"
+                style="@style/et_style"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
@@ -244,10 +256,12 @@
 
             <EditText
                 android:id="@+id/et7"
+                style="@style/et_style"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:background="@null"
+
                 android:text="@={model.employeePhone}" />
         </LinearLayout>
 
@@ -269,12 +283,13 @@
                 android:text="人员状态" />
 
             <TextView
-                android:id="@+id/et8"
+                android:id="@+id/tv8"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_weight="1"
-                android:background="@null" />
+                android:background="@null"
+                android:text="@{state}" />
 
             <ImageView
                 android:layout_width="20dp"
@@ -300,11 +315,15 @@
                 android:layout_height="wrap_content"
                 android:text="入职时间" />
 
-            <TextView
-                android:id="@+id/tv9"
+            <EditText
+                android:id="@+id/et9"
+                style="@style/et_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp" />
+                android:layout_marginLeft="20dp"
+                android:background="@null"
+                android:enabled="false"
+                android:text="@={model.employeeCreateTime}" />
         </LinearLayout>
 
         <View

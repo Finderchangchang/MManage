@@ -56,7 +56,8 @@ class SearchEmployeeActivity : BaseActivity<ActivitySearchEmployeeBinding>(), Ab
                 holder.setText(R.id.address_tv, model.EmployeeAddress)
                 //修改操作
                 holder.setOnClickListener(R.id.update_ll) {
-
+                    startActivityForResult(Intent(this@SearchEmployeeActivity, AddEmployeeActivity::class.java)
+                            .putExtra("model", answer_list[position]), 11)
                 }
             }
         }

@@ -13,6 +13,7 @@ import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityCompat
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.text.TextUtils
 import android.view.View
@@ -33,12 +34,15 @@ import gd.mmanage.databinding.ActivityAddEmployeeBinding
 import gd.mmanage.databinding.ActivityLoginBinding
 import gd.mmanage.method.UtilControl
 import gd.mmanage.method.Utils
+import gd.mmanage.model.CodeModel
 import gd.mmanage.model.EmployeeModel
 import gd.mmanage.model.NormalRequest
 
 import kotlinx.android.synthetic.main.activity_add_employee.*
 import net.tsz.afinal.FinalDb
+import net.tsz.afinal.view.DatePickerDialog
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * 添加从业人员信息
@@ -47,6 +51,8 @@ class AddEmployeeActivity : BaseActivity<ActivityAddEmployeeBinding>(), AbsModul
     private var control: EmployeeModule? = null
     var is_add = true//true:添加。false：删除
     var employee: EmployeeModel? = null//传递过来的从业人员信息
+    var datePickerDialog: DatePickerDialog? = null
+
     override fun onSuccess(result: Int, success: Any?) {
         //添加
         success as NormalRequest<*>
@@ -79,10 +85,11 @@ class AddEmployeeActivity : BaseActivity<ActivityAddEmployeeBinding>(), AbsModul
         employee = intent.getSerializableExtra("model") as EmployeeModel
         is_add = employee != null
         if (is_add) ll1.visibility = View.GONE//添加隐藏编号
-        employee!!.EmployeeCertType = "1"
-        employee!!.EmployeePhone = "17093215800"
-        employee!!.EmployeeState = "1"
-        employee!!.EmployeeEntryDate = "2017-11-12"
+//        employee!!.EmployeeCertType = "1"
+//        employee!!.EmployeePhone = "17093215800"
+//        employee!!.EmployeeState = "1"
+//        employee!!.EmployeeEntryDate = "2017-11-12"
+
         binding.model = employee//数据绑定操作
         control = getModule(EmployeeModule::class.java, this)
         title_bar.setLeftClick { finish() }
@@ -95,36 +102,93 @@ class AddEmployeeActivity : BaseActivity<ActivityAddEmployeeBinding>(), AbsModul
             OnBnRead()
 //            }
         }
-        //性别选择
-        ll3.setOnClickListener {
-            builder.setItems(arrayOf("男", "女")) { _, position ->
-                employee!!.EmployeeSex = position.toString()
-                when (position) {
-                    1 -> tv3.text = "女"
-                    else -> tv3.text = "男"
-                }
-            }
-            builder.show()
-        }
-        //户籍选择
-        ll5.setOnClickListener {
-
-        }
-        //文化程度选择
-        ll6.setOnClickListener {
-
-        }
         //入职时间选择
-        ll8.setOnClickListener {
-
+        ll9.setOnClickListener {
+            datePickerDialog = DatePickerDialog(this, "")
+            datePickerDialog!!.datePickerDialog(et9)
         }
+        //性别选择
+        ll3.setOnClickListener { dialog(arrayOf("男", "女"), 1) }
+        //人员状态
+        ll8.setOnClickListener { dialog(zt_array!!, 2) }
         //添加从业人员
         save_btn.setOnClickListener {
             if (check_null()) {
                 control!!.add_employee(UtilControl.change(binding.model))
             }
         }
+        ll4.setOnClickListener {
+            dialog(mz_array!!, 3)
+        }
         init_blue()
+        initNation()
+    }
+
+    var mz_array: Array<String?>? = null//民族的集合
+    var zt_array: Array<String?>? = null//人员状态的集合
+
+    /**
+     * 加载民族的字典
+     * */
+    fun initNation() {
+        var nation_id = "01"
+        if (!TextUtils.isEmpty(employee!!.EmployeeNation)) {
+            nation_id = employee!!.EmployeeNation
+        }
+        var zt_id = "01"
+        if (!TextUtils.isEmpty(employee!!.EmployeeState)) {
+            zt_id = employee!!.EmployeeState
+        }
+        nation_list = db!!.findAllByWhere(CodeModel::class.java, " CodeName='Code_Nation'")
+        zt_list = db!!.findAllByWhere(CodeModel::class.java, " CodeName='Code_EmployeeState'")
+        zt_array = arrayOfNulls(zt_list!!.size)
+        for (id in 0 until zt_array!!.size) {
+            var model = zt_list!![id]
+            zt_array!![id] = model.Name
+            if (zt_id == model.ID) {
+                binding.state = model.Name
+            }
+        }
+        mz_array = arrayOfNulls(nation_list!!.size)
+        for (id in 0 until nation_list!!.size) {
+            var model = nation_list!![id]
+            mz_array!![id] = model.Name
+            if (nation_id == model.ID) {
+                binding.nation = model.Name
+            }
+        }
+    }
+
+    var nation_list: List<CodeModel>? = null
+    var zt_list: List<CodeModel>? = null
+
+    /**
+     * 弹出的列表选择框
+     * */
+    fun dialog(key: Array<String?>, method: Int) {
+        //dialog参数设置
+        val builder = AlertDialog.Builder(this)  //先得到构造器
+        builder.setItems(key) { dialog, which ->
+            when (method) {
+                1 -> {//性别
+                    employee!!.EmployeeSex = which.toString()
+                    when (which) {
+                        1 -> tv3.text = "女"
+                        else -> tv3.text = "男"
+                    }
+                }
+                2 -> {//人员状态
+                    employee!!.EmployeeState = zt_list!![which].ID
+                    tv8.text = zt_list!![which].Name
+                }
+                3 -> {//民族
+                    employee!!.EmployeeNation = nation_list!![which].ID
+                    binding.nation = nation_list!![which].Name
+                }
+            }
+            dialog.dismiss()
+        }
+        builder.create().show()
     }
 
     internal var idCardReader: IDCardReader? = null
@@ -363,11 +427,11 @@ class AddEmployeeActivity : BaseActivity<ActivityAddEmployeeBinding>(), AbsModul
                 toast("姓名不能为空")
                 false
             }
-            Utils.etIsNull(et2) -> {
+            Utils.etIsNull(et5) -> {
                 toast("身份证号不能为空")
                 false
             }
-            Utils.etIsNull(et7) -> {
+            Utils.etIsNull(et6) -> {
                 toast("详细地址不能为空")
                 false
             }

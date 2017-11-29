@@ -45,12 +45,18 @@
         <item name="android:paddingTop">9dp</item>
         <item name="android:paddingLeft">15dp</item>
     </style>
+
     <style name="user_et">
         <item name="android:orientation">horizontal</item>
         <item name="android:paddingBottom">9dp</item>
         <item name="android:paddingTop">9dp</item>
         <item name="android:paddingLeft">15dp</item>
     </style>
+
+    <style name="et_style">
+        <item name="android:textSize">14sp</item>
+    </style>
+
     <style name="center_ll">
         <item name="android:orientation">horizontal</item>
         <item name="android:paddingBottom">7dp</item>

@@ -23,7 +23,7 @@ class InBoundsModule : BaseModule {
     fun add_prat(model: PartsModel) {
         var u = "AddVehicleParts"
         if (!TextUtils.isEmpty(model.PartsId)) u = "UpdateVehicleParts"
-        HttpUtils<PartsModel>().post(url.get_parts + u, command.parts + 1, UtilControl.change(model), this)
+        HttpUtils<PartsModel>().post(url.get_storage + u, command.parts + 1, UtilControl.change(model), this)
     }
 
     /**
@@ -31,13 +31,13 @@ class InBoundsModule : BaseModule {
      * @param id 配件id
      * */
     fun get_partById(id: String) {
-        HttpUtils<PartsModel>().post(url.get_parts + "GetVehicleParts?vehiclePartsId=" + id, command.parts + 2, null, this)
+        HttpUtils<PartsModel>().post(url.get_storage + "GetVehicleParts?vehiclePartsId=" + id, command.parts + 2, null, this)
     }
 
     /**
-     * 根据条件查询配件信息集合
+     * 根据条件查询入库信息集合
      * */
-    fun get_prats(map: HashMap<String, String>) {
-        HttpUtils<List<PartsModel>>().post(url.get_parts + "SearchVehicleParts", command.parts + 3, map, this)
+    fun get_in_bounds(map: HashMap<String, String>) {
+        HttpUtils<List<PartsModel>>().post(url.get_storage + "SearchStorage", command.parts + 3, map, this)
     }
 }

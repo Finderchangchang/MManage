@@ -15,7 +15,7 @@ import gd.mmanage.method.CommonAdapter
 import gd.mmanage.method.CommonViewHolder
 import gd.mmanage.model.NormalRequest
 import gd.mmanage.model.PageModel
-import gd.mmanage.model.PartsModel
+import gd.mmanage.model.InBoundModel
 import gd.mmanage.ui.parts.AddPartsActivity
 import gd.mmanage.ui.parts.PartDetailActivity
 import gd.mmanage.ui.parts.PratsModule
@@ -42,9 +42,9 @@ class SearchInBoundsActivity : BaseActivity<ActivitySearchInBoundsBinding>(), Ab
                     answer_list = java.util.ArrayList()
                 }
                 var mode: PageModel<*> = Gson().fromJson<PageModel<*>>(success.obj, PageModel::class.java)
-                mode.data as List<PartsModel>
+                mode.data as List<InBoundModel>
                 var em = JsonParser().parse(success.obj.toString()).asJsonObject.getAsJsonArray("data")//解析data里面的数据
-                em.map { Gson().fromJson<PartsModel>(it, PartsModel::class.java) }
+                em.map { Gson().fromJson<InBoundModel>(it, InBoundModel::class.java) }
                         .forEach { answer_list.add(it) }
                 adapter!!.refresh(answer_list)
                 main_lv.getIndex(page_index, 20, mode.ItemCount)
@@ -56,24 +56,19 @@ class SearchInBoundsActivity : BaseActivity<ActivitySearchInBoundsBinding>(), Ab
         main_srl.isRefreshing = false
     }
 
-    var adapter: CommonAdapter<PartsModel>? = null//资讯
-    var answer_list = ArrayList<PartsModel>()
+    var adapter: CommonAdapter<InBoundModel>? = null//资讯
+    var answer_list = ArrayList<InBoundModel>()
     var choice = HashMap<String, String>()//查询的条件
 
     override fun init(savedInstanceState: Bundle?) {
         super.init(savedInstanceState)//http://192.168.1.115:3334/Api/Storage/SearchStorage
-        control = getModule(PratsModule::class.java, this)//初始化数据访问层
-        adapter = object : CommonAdapter<PartsModel>(this, answer_list, R.layout.item_part) {
-            override fun convert(holder: CommonViewHolder, model: PartsModel, position: Int) {
-                holder.setText(R.id.name_tv, model.PartsName + "  " + model.PartsSpecifications)
-                holder.setText(R.id.price_tv, "￥" + model.PartesPrice)
-                holder.setText(R.id.company_type_tv, model.PartsManufacturer + "件")
-                holder.setText(R.id.count_tv, model.PartsNumber)
-                //修改操作
-                holder.setOnClickListener(R.id.update_ll) {
-                    startActivityForResult(Intent(this@SearchInBoundsActivity, AddPartsActivity::class.java)
-                            .putExtra("model", model), 11)
-                }
+        control = getModule(InBoundsModule::class.java, this)//初始化数据访问层
+        adapter = object : CommonAdapter<InBoundModel>(this, answer_list, R.layout.item_in_bound) {
+            override fun convert(holder: CommonViewHolder, model: InBoundModel, position: Int) {
+                holder.setText(R.id.name_tv, model.StoragePartsId)
+                holder.setText(R.id.price_tv, model.StorageTime)
+                holder.setText(R.id.company_type_tv, model.StorageUser)
+                holder.setText(R.id.count_tv, model.StorageNumber)
             }
         }
         title_bar.setLeftClick { finish() }
@@ -84,28 +79,28 @@ class SearchInBoundsActivity : BaseActivity<ActivitySearchInBoundsBinding>(), Ab
         //加载数据
         main_lv.setInterface {
             page_index++
-            control!!.get_prats(choice)
+            control!!.get_in_bounds(choice)
         }
         main_srl.setOnRefreshListener {
             choice.put("PartsEnterpriseId", "")
-            control!!.get_prats(choice)
+            control!!.get_in_bounds(choice)
         }
         //item点击事件
         main_lv.setOnItemClickListener { parent, view, position, id ->
-            startActivity(Intent(this, PartDetailActivity::class.java)
-                    .putExtra("id", answer_list[position].PartsId))
+//            startActivity(Intent(this, PartDetailActivity::class.java)
+//                    .putExtra("id", answer_list[position].StorageId))
         }
         //入库单添加
         add_in_bound_btn.setOnClickListener {
             startActivityForResult(Intent(this@SearchInBoundsActivity, AddInBoundActivity::class.java)
-                    .putExtra("model", PartsModel()), 11)
+                    .putExtra("model", InBoundModel()), 11)
         }
         //添加配件信息
         add_pj_btn.setOnClickListener {
             startActivityForResult(Intent(this@SearchInBoundsActivity, SearchPartsActivity::class.java)
-                    .putExtra("model", PartsModel()), 11)
+                    .putExtra("model", InBoundModel()), 11)
         }
-        control!!.get_prats(choice)
+        control!!.get_in_bounds(choice)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -113,12 +108,12 @@ class SearchInBoundsActivity : BaseActivity<ActivitySearchInBoundsBinding>(), Ab
         when (resultCode) {
             12 -> {//刷新数据
                 choice.put("page_index", page_index.toString())
-                control!!.get_prats(choice)
+                control!!.get_in_bounds(choice)
             }
         }
     }
 
-    var control: PratsModule? = null
+    var control: InBoundsModule? = null
     var page_index = 1
 
 }

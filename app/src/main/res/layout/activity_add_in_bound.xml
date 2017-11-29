@@ -2,12 +2,14 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
     <data>
 
         <variable
             name="model"
             type="gd.mmanage.model.EmployeeModel" />
     </data>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -141,19 +143,21 @@
                             android:layout_height="wrap_content"
                             android:text="入  库  人" />
 
-                        <TextView
-                            android:id="@+id/tv4"
+                        <EditText
+                            android:id="@+id/et4"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="20dp"
                             android:layout_weight="1"
+                            android:background="@null"
                             android:text="@{model.setSex()}" />
 
                         <ImageView
                             android:layout_width="20dp"
                             android:layout_height="20dp"
                             android:layout_marginRight="20dp"
-                            android:src="@mipmap/ic_launcher" />
+                            android:src="@mipmap/ic_launcher"
+                            android:visibility="gone" />
                     </LinearLayout>
                 </LinearLayout>
 

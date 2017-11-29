@@ -40,7 +40,13 @@
         <activity
             android:name=".ui.LoginActivity"
             android:label="@string/title_activity_login"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".ui.employee.AddEmployeeActivity"
             android:label="@string/title_activity_add_employee"
@@ -52,11 +58,7 @@
 
         <activity android:name=".ui.inbound.AddInBoundActivity" />
         <activity android:name=".ui.main.MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".ui.SetIpActivity" />
         <activity android:name=".ui.car_manage.AddCarActivity" />
