@@ -1,4 +1,4 @@
-package gd.mmanage.ui.car_manage
+package gd.mmanage.ui.vehicle
 
 import android.content.Intent
 import android.os.Bundle

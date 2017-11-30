@@ -23,6 +23,7 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonParser
 import com.google.gson.Gson
 import gd.mmanage.model.PageModel
+import java.io.File
 
 
 /**
@@ -59,8 +60,10 @@ class SearchEmployeeActivity : BaseActivity<ActivitySearchEmployeeBinding>(), Ab
                     startActivityForResult(Intent(this@SearchEmployeeActivity, AddEmployeeActivity::class.java)
                             .putExtra("model", answer_list[position]), 11)
                 }
+
             }
         }
+
         title_bar.setLeftClick { finish() }
         title_bar.setRightClick { }
         main_lv.adapter = adapter

@@ -24,4 +24,10 @@ class InBoundModel : Serializable {
     var StoragePerson: String = ""
     var StorageUser: String = ""
     var StorageNumber: String = ""
+    var PartsEnterpriseId: String = ""
+    var PartsName: String = ""
+    var PartsType: String = ""
+    var PartsTypeName: String = ""
+    var PartsSpecifications: String = ""
+    var PartsManufacturer: String = ""
 }

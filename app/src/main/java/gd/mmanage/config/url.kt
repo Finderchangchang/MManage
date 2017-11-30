@@ -11,5 +11,6 @@ object url {
     var get_employee = normal + "Employee/"
     var get_parts = normal + "VehicleParts/"//配件Storage
     var get_storage = normal + "Storage/"//配件Storage
+    var get_vehicle = normal + "Vehicle/"//车辆承接
     var check_version = normal + "Enterprise/GetCode?codeName=Code_Region"
 }

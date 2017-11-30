@@ -3,22 +3,18 @@ package gd.mmanage.ui.main
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
 import android.widget.LinearLayout
 
-import butterknife.Bind
 import com.youth.banner.Banner
 import gd.mmanage.R
 import gd.mmanage.base.BaseFragment
-import gd.mmanage.base.BaseFragments
 import gd.mmanage.databinding.FragMainBinding
 import gd.mmanage.method.GlideImageLoader
 import gd.mmanage.ui.car_manage.AddDubiousCarActivity
-import gd.mmanage.ui.car_manage.AddPersonActivity
+import gd.mmanage.ui.vehicle.AddPersonActivity
 import gd.mmanage.ui.employee.SearchEmployeeActivity
 import gd.mmanage.ui.inbound.SearchInBoundsActivity
-import gd.mmanage.ui.parts.SearchPartsActivity
-import kotlinx.android.synthetic.main.frag_main.view.*
+import gd.mmanage.ui.vehicle.SearchVehicleActivity
 
 /**
  * Created by Administrator on 2017/11/11.
@@ -76,7 +72,7 @@ class MainFragment : BaseFragment<FragMainBinding>() {
         }
         //车辆承接
         ll5!!.setOnClickListener {
-            startActivity(Intent(context, AddPersonActivity::class.java))
+            startActivity(Intent(context, SearchVehicleActivity::class.java))
         }
         //可疑车辆登记
         ll6!!.setOnClickListener {
