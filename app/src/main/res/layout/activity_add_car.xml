@@ -70,10 +70,14 @@
                         android:text="行驶证基本信息" />
 
                     <TextView
+                        android:id="@+id/cars_tv"
                         android:layout_width="wrap_content"
-                        android:layout_height="20dp"
+                        android:layout_height="match_parent"
                         android:layout_marginRight="20dp"
-                        android:text="在修"
+                        android:gravity="center"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="20dp"
+                        android:text="0辆"
                         android:textColor="@color/colorPrimary" />
                 </LinearLayout>
 

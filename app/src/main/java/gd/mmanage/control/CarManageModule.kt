@@ -1,4 +1,4 @@
-package gd.mmanage.ui.car_manage
+package gd.mmanage.control
 
 import android.content.Context
 import android.text.TextUtils
@@ -38,5 +38,21 @@ class CarManageModule : BaseModule {
      * */
     fun get_vehicles(map: HashMap<String, String>) {
         HttpUtils<List<VehicleModel>>().post(url.get_vehicle + "SearchVehicle", command.car_manage + 3, map, this)
+    }
+
+    /**
+     * 根据车牌号获得车辆历史信息
+     * @param id 车牌号
+     * */
+    fun get_vehicleByCarId(id: String) {
+        HttpUtils<VehicleModel>().post(url.get_vehicle + "GetVehicleByVehicleNumber?vehicleNumber=" + id, command.car_manage + 4, null, this)
+    }
+
+    /**
+     * 根据身份证号码获得车辆历史信息
+     * @param id 身份证号
+     * */
+    fun get_vehicleByIdCard(id: String) {
+        HttpUtils<VehicleModel>().post(url.get_vehicle + "GetVehicleByCertNumber?certNumber=" + id, command.car_manage + 5, null, this)
     }
 }

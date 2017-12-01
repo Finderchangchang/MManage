@@ -7,13 +7,10 @@ import com.google.gson.JsonElement
 import gd.mmanage.R
 import gd.mmanage.base.BaseActivity
 import gd.mmanage.config.command
-import gd.mmanage.databinding.ActivityPartDetailBinding
 import gd.mmanage.databinding.ActivityVehicleDetailBinding
 import gd.mmanage.model.NormalRequest
-import gd.mmanage.model.PartsModel
 import gd.mmanage.model.VehicleModel
-import gd.mmanage.ui.car_manage.CarManageModule
-import gd.mmanage.ui.parts.PratsModule
+import gd.mmanage.control.CarManageModule
 import kotlinx.android.synthetic.main.activity_vehicle_detail.*
 
 /**

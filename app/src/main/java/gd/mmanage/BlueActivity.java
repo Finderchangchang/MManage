@@ -41,8 +41,10 @@ import java.util.Calendar;
  */
 
 public class BlueActivity extends AppCompatActivity {
+    ArrayList<String> list;
     ArrayAdapter<String> mAdapter;
     BluetoothAdapter mBluetoothAdapter;
+    ListView mList;
     AlertDialog dialog;
     ProgressDialog pDialog;
 
@@ -66,6 +68,7 @@ public class BlueActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main1);
+        LogHelper.setLevel(Log.VERBOSE);
         initUI();
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (!mBluetoothAdapter.isEnabled()) {
@@ -79,6 +82,7 @@ public class BlueActivity extends AppCompatActivity {
         pDialog = new ProgressDialog(BlueActivity.this);
         pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         pDialog.setTitle("正在读卡……");
+
         View view = LayoutInflater.from(BlueActivity.this).inflate(R.layout.dialog, null);
         dialog = new AlertDialog.Builder(BlueActivity.this).setTitle("蓝牙列表").setView(view).setCancelable(false)
                 .setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -88,6 +92,25 @@ public class BlueActivity extends AppCompatActivity {
                         dialog.dismiss();
                     }
                 }).create();
+        mList = (ListView) view.findViewById(R.id.list);
+        mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+                if (mBluetoothAdapter.isDiscovering()) {
+                    mBluetoothAdapter.cancelDiscovery();
+                }
+                String text = list.get(arg2);
+                int a = text.indexOf("|");
+                String mac = text.substring(a + 1);
+                BluetoothDevice device = mBluetoothAdapter.getRemoteDevice("00:13:04:84:00:64");
+                try {
+                    connect(device, text.split("\\|")[0]);
+                } catch (Exception e) {
+                    Toast.makeText(BlueActivity.this, "连接失败", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     public void onResume() {
@@ -120,17 +143,17 @@ public class BlueActivity extends AppCompatActivity {
 
     //搜索结果处理
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+
         @Override
         public void onReceive(Context arg0, Intent arg1) {
+            // TODO Auto-generated method stub
             String action = arg1.getAction();
             if (action.equals(BluetoothDevice.ACTION_FOUND)) {
                 BluetoothDevice device = arg1.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                if (device.getAddress().equals("DC:0D:30:04:20:D9")) {
-                    try {
-                        connect(device, "");
-                    } catch (Exception e) {
-                        Toast.makeText(BlueActivity.this, "连接失败", Toast.LENGTH_SHORT).show();
-                    }
+                String te = device.getName() + "|" + device.getAddress();
+                if (!list.contains(te)) {
+                    list.add(te);
+                    mAdapter.notifyDataSetChanged();
                 }
             } else if (action.equals(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)) {
                 // setProgressBarIndeterminateVisibility(false);
@@ -141,11 +164,20 @@ public class BlueActivity extends AppCompatActivity {
 
     //搜索设备操作
     public void OnBnSearch(View view) {
+        list = new ArrayList<>();
         if (mBluetoothAdapter.isDiscovering()) {
             mBluetoothAdapter.cancelDiscovery();
         }
         mBluetoothAdapter.startDiscovery();
+        mAdapter = new ArrayAdapter<>(getApplicationContext(), R.layout.tv, list);
+        mList.setAdapter(mAdapter);
         //dialog.show();
+        BluetoothDevice device = mBluetoothAdapter.getRemoteDevice("00:13:04:84:00:64");
+        try {
+            connect(device, "");
+        } catch (Exception e) {
+            Toast.makeText(BlueActivity.this, "连接失败", Toast.LENGTH_SHORT).show();
+        }
     }
 
     //设备版本
@@ -165,6 +197,9 @@ public class BlueActivity extends AppCompatActivity {
             if (IDCardReader.ERROR_SUCC == (ret = idCardReader.openDevice())) {
                 textView.setText(bluetooth);
                 dialog.dismiss();
+                workThread = new WorkThread();
+                workThread.start();// 线程启动
+                isRead = true;
                 Toast.makeText(BlueActivity.this, "连接成功" + bluetooth, Toast.LENGTH_SHORT).show();
             } else {
                 idCardReader = null;
@@ -297,17 +332,25 @@ public class BlueActivity extends AppCompatActivity {
 
     //设备连接
     public void OnBnRead(View view) {
+
         if (null == idCardReader) {
-            Toast.makeText(BlueActivity.this, "请先连接设备", Toast.LENGTH_SHORT).show();
-            return;
+            BluetoothDevice device = mBluetoothAdapter.getRemoteDevice("00:13:04:84:00:64");
+            try {
+                connect(device, "");
+            } catch (Exception e) {
+                Toast.makeText(BlueActivity.this, "连接失败", Toast.LENGTH_SHORT).show();
+            }
+            //return;
+        } else {
+            workThread = new WorkThread();
+            workThread.start();// 线程启动
+            isRead = true;
         }
-        workThread = new WorkThread();
-        workThread.start();// 线程启动
-        isRead = true;
+
     }
 
     //断开连接
-    public void OnBnDisconn() {
+    public void OnBnDisconn(View view) {
         if (null == idCardReader) {
             return;
         }
@@ -327,8 +370,6 @@ public class BlueActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         unregisterReceiver(mReceiver);
-        OnBnDisconn();
     }
-
 }
 

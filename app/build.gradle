@@ -41,7 +41,7 @@ dependencies {
     compile 'com.android.support:design:25.3.0'
     compile project(':mvvm2')
     compile project(':easydialog')
-    compile project(':readidcard')
+    //compile project(':readidcard')
     compile project(':afinal')
     kapt "com.android.databinding:compiler:$kpt_version"
     compile 'com.jaeger.statusbaruitl:library:1.0.0'//设置状态栏

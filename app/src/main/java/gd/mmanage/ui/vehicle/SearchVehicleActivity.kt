@@ -9,17 +9,13 @@ import com.google.gson.JsonParser
 import gd.mmanage.R
 import gd.mmanage.base.BaseActivity
 import gd.mmanage.config.command
-import gd.mmanage.databinding.ActivitySearchPartsBinding
 import gd.mmanage.databinding.ActivitySearchVehicleBinding
 import gd.mmanage.method.CommonAdapter
 import gd.mmanage.method.CommonViewHolder
 import gd.mmanage.model.NormalRequest
 import gd.mmanage.model.PageModel
 import gd.mmanage.model.VehicleModel
-import gd.mmanage.ui.car_manage.CarManageModule
-import gd.mmanage.ui.parts.AddPartsActivity
-import gd.mmanage.ui.parts.PartDetailActivity
-import gd.mmanage.ui.parts.PratsModule
+import gd.mmanage.control.CarManageModule
 import kotlinx.android.synthetic.main.activity_search_vehicle.*
 
 /**

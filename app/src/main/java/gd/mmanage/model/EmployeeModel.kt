@@ -31,7 +31,7 @@ class EmployeeModel : Serializable {
     /// <summary>
     /// 人员证件类型
     /// </summary>
-    var EmployeeCertType = ""
+    var EmployeeCertType = "01"
     //企业编码
     var EnterpriseId = ""
 

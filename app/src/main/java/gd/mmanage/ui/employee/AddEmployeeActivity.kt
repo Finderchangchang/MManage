@@ -9,6 +9,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.Snackbar
@@ -19,6 +20,7 @@ import android.text.TextUtils
 import android.view.View
 import android.widget.Toast
 import com.arialyy.frame.module.AbsModule
+import com.google.gson.Gson
 import com.google.gson.JsonElement
 import com.zkteco.android.IDReader.IDPhotoHelper
 import com.zkteco.android.IDReader.WLTService
@@ -36,13 +38,16 @@ import gd.mmanage.method.UtilControl
 import gd.mmanage.method.Utils
 import gd.mmanage.model.CodeModel
 import gd.mmanage.model.EmployeeModel
+import gd.mmanage.model.FileModel
 import gd.mmanage.model.NormalRequest
 
 import kotlinx.android.synthetic.main.activity_add_employee.*
 import net.tsz.afinal.FinalDb
 import net.tsz.afinal.view.DatePickerDialog
+import java.io.*
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 /**
  * 添加从业人员信息
@@ -62,6 +67,7 @@ class AddEmployeeActivity : BaseActivity<ActivityAddEmployeeBinding>(), AbsModul
                     command.employee -> toast("添加成功")
                     command.employee + 1 -> toast("修改成功")
                 }
+                setResult(2)
                 finish()
             }
             else -> toast(success.message)
@@ -114,7 +120,22 @@ class AddEmployeeActivity : BaseActivity<ActivityAddEmployeeBinding>(), AbsModul
         //添加从业人员
         save_btn.setOnClickListener {
             if (check_null()) {
-                control!!.add_employee(UtilControl.change(binding.model))
+                var map = HashMap<String, String>()
+                var model = binding.model
+                map = UtilControl.change(model)
+                var img_list = ArrayList<FileModel>()
+                var bytt = bitmap_to_bytes()
+                var data = arrayOfNulls<Int>(bytt!!.size);
+                for (i in 0 until bytt!!.size) {
+                    if (bytt[i] < 0) {
+                        data[i] = bytt[i] + 256
+                    } else {
+                        data[i] = bytt[i].toInt()
+                    }
+                }
+                img_list.add(FileModel(data, "111", "01", model.EmployeeId))
+                map.put("files", Gson().toJson(img_list))
+                control!!.add_employee(map)
             }
         }
         ll4.setOnClickListener {
@@ -126,6 +147,28 @@ class AddEmployeeActivity : BaseActivity<ActivityAddEmployeeBinding>(), AbsModul
 
     var mz_array: Array<String?>? = null//民族的集合
     var zt_array: Array<String?>? = null//人员状态的集合
+    fun File2byte(filePath: String): ByteArray? {
+        var buffer: ByteArray? = null
+        try {
+            val file = File(filePath)
+            val fis = FileInputStream(file)
+            val bos = ByteArrayOutputStream()
+            val b = ByteArray(1024)
+            var n: Int = fis.read(b)
+            while (n != -1) {
+                bos.write(b, 0, n)
+            }
+            fis.close()
+            bos.close()
+            buffer = bos.toByteArray()
+        } catch (e: FileNotFoundException) {
+            e.printStackTrace()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+
+        return buffer
+    }
 
     /**
      * 加载民族的字典
@@ -192,19 +235,23 @@ class AddEmployeeActivity : BaseActivity<ActivityAddEmployeeBinding>(), AbsModul
     }
 
     internal var idCardReader: IDCardReader? = null
-    private var workThread: WorkThread1? = null
+    private var workThread: WorkThread? = null
     public var isRead = false
     internal var mBluetoothAdapter: BluetoothAdapter? = null
     //设备连接
     fun OnBnRead() {
         if (null == idCardReader) {
-            Toast.makeText(this@AddEmployeeActivity, "请先连接设备", Toast.LENGTH_SHORT).show()
-            return
+            val device = mBluetoothAdapter!!.getRemoteDevice("00:13:04:84:00:64")
+            try {
+                connect(device)
+            } catch (e: Exception) {
+                Toast.makeText(this@AddEmployeeActivity, "连接失败", Toast.LENGTH_SHORT).show()
+            }
+        } else {
+            isRead = true
+            workThread = WorkThread()
+            workThread!!.start()// 线程启动
         }
-        isRead = true
-        workThread = WorkThread1()
-        workThread!!.start()// 线程启动
-
     }
 
 
@@ -230,7 +277,8 @@ class AddEmployeeActivity : BaseActivity<ActivityAddEmployeeBinding>(), AbsModul
             val action = arg1.action
             if (action == BluetoothDevice.ACTION_FOUND) {
                 val device = arg1.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
-                if (device.address == "DC:0D:30:05:CD:28") {//DC:0D:30:04:20:D9
+                if (device.address == "00:13:04:84:00:64") {//DC:0D:30:04:20:D9
+                    //0064 00:13:04:84:00:64
                     try {
                         connect(device)
                     } catch (e: Exception) {
@@ -269,6 +317,9 @@ class AddEmployeeActivity : BaseActivity<ActivityAddEmployeeBinding>(), AbsModul
             if (IDCardReader.ERROR_SUCC == ret) {
                 //textView.setText(bluetooth)
                 //dialog.dismiss()
+                workThread = WorkThread()
+                workThread!!.start()// 线程启动
+                isRead = true
                 Toast.makeText(this@AddEmployeeActivity, "连接成功", Toast.LENGTH_SHORT).show()
             } else {
                 idCardReader = null
@@ -282,6 +333,21 @@ class AddEmployeeActivity : BaseActivity<ActivityAddEmployeeBinding>(), AbsModul
     }
 
     var index = 0
+
+    private inner class WorkThread : Thread() {
+        override fun run() {
+            super.run()
+            if (isRead) {
+                if (!ReadCardInfo()) {
+                    //textView.post(Runnable { textView.setText("请放卡...") })
+
+                } else {
+                    //textView.post(Runnable { textView.setText("读卡成功，请放入下一张卡") })
+
+                }
+            }
+        }
+    }
 
     inner class WorkThread1 : Thread() {
         override fun run() {
@@ -326,7 +392,8 @@ class AddEmployeeActivity : BaseActivity<ActivityAddEmployeeBinding>(), AbsModul
 
     //读卡操作
     fun ReadCardInfo(): Boolean {
-        if (!idCardReader!!.sdtFindCard()) {
+
+        if (idCardReader != null && !idCardReader!!.sdtFindCard()) {
             return false
         } else {
             if (!idCardReader!!.sdtSelectCard()) {
@@ -345,7 +412,14 @@ class AddEmployeeActivity : BaseActivity<ActivityAddEmployeeBinding>(), AbsModul
             runOnUiThread {
                 employee!!.EmployeeName = idCardInfo.name
                 employee!!.EmployeeCertNumber = idCardInfo.id
-                employee!!.EmployeeSex = idCardInfo.sex
+                when (idCardInfo.sex) {
+                    "男" -> {
+                        employee!!.EmployeeSex = "1"
+                    }
+                    else -> {
+                        employee!!.EmployeeSex = "2"
+                    }
+                }
                 employee!!.EmployeeAddress = idCardInfo.address
                 binding.model = employee
                 //                infoName.setText(idCardInfo.name)
@@ -363,10 +437,9 @@ class AddEmployeeActivity : BaseActivity<ActivityAddEmployeeBinding>(), AbsModul
             if (idCardInfo.photo != null) {
                 val buf = ByteArray(WLTService.imgLength)
                 if (1 == WLTService.wlt2Bmp(idCardInfo.photo, buf)) {
-                    val bitmap = IDPhotoHelper.Bgr2Bitmap(buf)
-                    if (null != bitmap) {
-                        //image.post(Runnable { image.setImageBitmap(bitmap) })
-
+                    user_bitmap = IDPhotoHelper.Bgr2Bitmap(buf)
+                    if (null != user_bitmap) {
+                        user_iv.post(Runnable { user_iv.setImageBitmap(user_bitmap) })
                     }
                 }
             }
@@ -379,6 +452,12 @@ class AddEmployeeActivity : BaseActivity<ActivityAddEmployeeBinding>(), AbsModul
         return false
     }
 
+    var user_bitmap: Bitmap? = null
+    fun bitmap_to_bytes(): ByteArray? {
+        var baos: ByteArrayOutputStream = ByteArrayOutputStream();
+        user_bitmap!!.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        return baos.toByteArray()
+    }
 
     //断开连接
     fun OnBnDisconn() {

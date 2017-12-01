@@ -100,7 +100,7 @@ class SearchEmployeeActivity : BaseActivity<ActivitySearchEmployeeBinding>(), Ab
                 page_index = 1
             }
             2 -> {//添加或者修改
-
+                load_data()
             }
         }
     }
