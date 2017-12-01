@@ -43,7 +43,6 @@ class HttpUtils<T> {
                 var t = Gson().fromJson(str, LzyResponse::class.java)
                 if (t.Success) {
                     try {
-                        //t.Data as LinkedTreeMap<String, String>
                         var em = JsonParser().parse(str).asJsonObject.get("Data")
                         control.callback(back_id, NormalRequest(0, t.Message, em))
                     } catch (e: Exception) {
@@ -83,7 +82,7 @@ class HttpUtils<T> {
                 var t = Gson().fromJson(str, LzyResponse::class.java)
                 if (t.Success) {
                     try {
-                        t.Data as LinkedTreeMap<String, String>
+                        //t.Data as LinkedTreeMap<String, String>
                         var em = JsonParser().parse(str).asJsonObject.get("Data")
                         control.callback(back_id, NormalRequest(0, t.Message, em))
                     } catch (e: Exception) {

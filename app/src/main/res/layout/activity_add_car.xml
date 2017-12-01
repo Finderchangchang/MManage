@@ -3,6 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="model"
+            type="gd.mmanage.model.VehicleModel" />
+    </data>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -58,8 +65,8 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:paddingBottom="5dp"
-                    android:paddingTop="5dp">
+                    android:paddingBottom="3dp"
+                    android:paddingTop="3dp">
 
                     <TextView
                         style="@style/Top_lab"
@@ -119,13 +126,15 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="所   有   人" />
+                        android:text="所  有   人" />
 
-                    <TextView
+                    <EditText
                         android:id="@+id/tv2"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp" />
+                        android:layout_marginLeft="20dp"
+                        android:background="@null"
+                        android:text="@={model.vehicleOwner}" />
                 </LinearLayout>
 
                 <TextView
@@ -142,13 +151,15 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="车  牌  号" />
+                        android:text="车  牌   号" />
 
-                    <TextView
+                    <EditText
                         android:id="@+id/tv3"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp" />
+                        android:layout_marginLeft="20dp"
+                        android:background="@null"
+                        android:text="@={model.vehicleNumber}" />
                 </LinearLayout>
 
                 <TextView
@@ -167,11 +178,13 @@
                         android:layout_height="wrap_content"
                         android:text="车辆品牌" />
 
-                    <TextView
+                    <EditText
                         android:id="@+id/tv4"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp" />
+                        android:layout_marginLeft="20dp"
+                        android:background="@null"
+                        android:text="@={model.vehicleBrand}" />
                 </LinearLayout>
 
                 <TextView
@@ -190,11 +203,13 @@
                         android:layout_height="wrap_content"
                         android:text="车  架   号" />
 
-                    <TextView
+                    <EditText
                         android:id="@+id/tv5"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp" />
+                        android:layout_marginLeft="20dp"
+                        android:background="@null"
+                        android:text="@={model.vehicleFrameNumber}" />
                 </LinearLayout>
 
                 <TextView
@@ -213,11 +228,13 @@
                         android:layout_height="wrap_content"
                         android:text="发动机号" />
 
-                    <TextView
+                    <EditText
                         android:id="@+id/tv6"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp" />
+                        android:layout_marginLeft="20dp"
+                        android:background="@null"
+                        android:text="@={model.vehicleEngine}" />
                 </LinearLayout>
 
                 <TextView
@@ -254,11 +271,13 @@
                             android:layout_height="wrap_content"
                             android:text="送  车  人" />
 
-                        <TextView
+                        <EditText
                             android:id="@+id/tv7"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="20dp" />
+                            android:layout_marginLeft="20dp"
+                            android:background="@null"
+                            android:text="@={model.vehiclePerson}" />
                     </LinearLayout>
 
                     <TextView
@@ -277,11 +296,13 @@
                             android:layout_height="wrap_content"
                             android:text="送车电话" />
 
-                        <TextView
+                        <EditText
                             android:id="@+id/tv8"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="20dp" />
+                            android:layout_marginLeft="20dp"
+                            android:background="@null"
+                            android:text="@={model.vehiclePersonPhone}" />
                     </LinearLayout>
 
                     <TextView
@@ -302,9 +323,10 @@
 
                         <TextView
                             android:id="@+id/tv9"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="20dp" />
+                            android:layout_marginLeft="20dp"
+                            android:text="@={model.vehicleReceivePerson}" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -320,15 +342,17 @@
 
                         <TextView
                             android:id="@+id/tv10"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="20dp" />
+                            android:layout_marginLeft="20dp"
+                            android:text="@={model.vehicleReceiveTime}" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>
 
         <Button
+            android:id="@+id/save_btn"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"

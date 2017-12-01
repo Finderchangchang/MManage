@@ -20,8 +20,8 @@ class CarManageModule : BaseModule {
      * @param model配件信息集合
      * */
     fun add_prat(model: VehicleModel) {
-        var u = "AddVehicleParts"
-        if (!TextUtils.isEmpty(model.VehicleId)) u = "UpdateVehicleParts"
+        var u = "AddVehicle"
+        if (!TextUtils.isEmpty(model.VehicleId)) u = "UpdateVehicle"
         HttpUtils<VehicleModel>().post(url.get_vehicle + u, command.car_manage + 1, UtilControl.change(model), this)
     }
 
@@ -45,7 +45,7 @@ class CarManageModule : BaseModule {
      * @param id 车牌号
      * */
     fun get_vehicleByCarId(id: String) {
-        HttpUtils<VehicleModel>().post(url.get_vehicle + "GetVehicleByVehicleNumber?vehicleNumber=" + id, command.car_manage + 4, null, this)
+        HttpUtils<VehicleModel>().get(url.get_vehicle + "GetVehicleByVehicleNumber?vehicleNumber=" + id, command.car_manage + 4, null, this)
     }
 
     /**
@@ -53,6 +53,6 @@ class CarManageModule : BaseModule {
      * @param id 身份证号
      * */
     fun get_vehicleByIdCard(id: String) {
-        HttpUtils<VehicleModel>().post(url.get_vehicle + "GetVehicleByCertNumber?certNumber=" + id, command.car_manage + 5, null, this)
+        HttpUtils<VehicleModel>().get(url.get_vehicle + "GetVehicleByCertNumber?certNumber=" + id, command.car_manage + 5, null, this)
     }
 }

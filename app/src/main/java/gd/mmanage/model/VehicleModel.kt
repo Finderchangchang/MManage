@@ -42,7 +42,7 @@ class VehicleModel : Serializable {
 
     var VehicleReceiveTime = ""
     var VehicleId = ""
-    var EnterpriseId = ""
+    var EnterpriseId = "C021306020001"
     var VehicleOwner = ""
     var VehicleType = ""
     var VehicleBrand = ""
@@ -59,7 +59,7 @@ class VehicleModel : Serializable {
     var VehiclePersonCompare = ""
     var VehicleReceivePerson = ""
     var VehicleReceiveUser = ""
-    var VehicleTakeState = ""
+    var VehicleTakeState = "01"
     var VehicleTakePerson: Any? = null
     var VehicleTakePersonNation: Any? = null
     var VehicleTakePersonCertType: Any? = null
@@ -68,4 +68,5 @@ class VehicleModel : Serializable {
     var VehicleTakePersonCompare: Int = 0
     var VehicleTakeTime: Any? = null
     var VehicleComment: Any? = null
+    var files = ""
 }
