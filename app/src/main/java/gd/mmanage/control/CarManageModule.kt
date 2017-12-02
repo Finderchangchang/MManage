@@ -7,6 +7,7 @@ import gd.mmanage.config.command
 import gd.mmanage.config.url
 import gd.mmanage.control.HttpUtils
 import gd.mmanage.method.UtilControl
+import gd.mmanage.model.SuspiciousModel
 import gd.mmanage.model.VehicleModel
 
 /**
@@ -54,5 +55,13 @@ class CarManageModule : BaseModule {
      * */
     fun get_vehicleByIdCard(id: String) {
         HttpUtils<VehicleModel>().get(url.get_vehicle + "GetVehicleByCertNumber?certNumber=" + id, command.car_manage + 5, null, this)
+    }
+
+    /**
+     * 添加报警信息
+     * @param model 报警数据
+     * */
+    fun save_warn(model: SuspiciousModel) {
+        HttpUtils<VehicleModel>().post(url.get_suspicious + "AddSuspicious", command.car_manage + 6, UtilControl.change(model), this)
     }
 }

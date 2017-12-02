@@ -1,5 +1,6 @@
 package gd.mmanage.model
 
+import net.tsz.afinal.sqlite.Id
 import java.io.Serializable
 
 /**
@@ -7,6 +8,8 @@ import java.io.Serializable
  */
 
 class EmployeeModel : Serializable {
+    @Id
+    var ids = 0
     /// <summary>
     /// 人员编码
     /// </summary>

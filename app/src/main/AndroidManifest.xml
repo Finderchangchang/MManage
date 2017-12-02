@@ -70,6 +70,7 @@
         <activity android:name=".ui.parts.SearchPartsActivity" />
         <activity android:name=".ui.parts.AddPartsActivity" />
         <activity android:name=".ui.parts.PartDetailActivity" />
+        <activity android:name=".ui.car_manage.AddServiceActivity" />
         <activity android:name=".ui.car_manage.AddDubiousCarActivity" />
         <activity android:name=".ui.config.SetActivity" />
 

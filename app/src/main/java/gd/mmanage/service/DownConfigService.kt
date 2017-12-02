@@ -43,7 +43,7 @@ class DownConfigService : Service() {
                 db!!.save(model)
             }
             cmd = cmd + 1
-            if (cmd == command.config + 2) {
+            if (cmd == command.config + 5) {
                 //全部下载完成
                 Utils.putCache(sp.down_all, "1")
             } else {
@@ -102,9 +102,9 @@ class DownConfigService : Service() {
     fun cmd_name(cmd: Int): String {
         return when (cmd) {
             command.config -> "Code_EmployeeState"
-            command.config + 1 -> "Code_Nation"
-            command.config + 2 -> "Code_Nation"
-            command.config + 3 -> "Code_Nation"
+            command.config + 1 -> "Code_SuspiciousType"
+            command.config + 2 -> "Code_RepairType"
+            command.config + 3 -> "Code_RepairReasonType"
             command.config + 4 -> "Code_Nation"
             command.config + 5 -> "Code_Nation"
             else -> "Code_Nation"
