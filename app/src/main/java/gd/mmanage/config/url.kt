@@ -12,6 +12,7 @@ object url {
     var get_parts = normal + "VehicleParts/"//配件Storage
     var get_storage = normal + "Storage/"//配件Storage
     var get_vehicle = normal + "Vehicle/"//车辆承接Suspicious
-    var get_suspicious = normal + "Suspicious/"//车辆承接
+    var get_suspicious = normal + "Suspicious/"//车辆承接Repair
+    var get_repair = normal + "Repair/"//车辆维修
     var check_version = normal + "Enterprise/GetCode?codeName=Code_Region"
 }

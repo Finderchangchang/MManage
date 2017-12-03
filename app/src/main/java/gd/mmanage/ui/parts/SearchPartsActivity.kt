@@ -2,6 +2,7 @@ package gd.mmanage.ui.parts
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import com.arialyy.frame.module.AbsModule
 import com.google.gson.Gson
 import com.google.gson.JsonElement
@@ -24,6 +25,7 @@ import kotlinx.android.synthetic.main.activity_search_parts.*
  * 查询配件信息
  * */
 class SearchPartsActivity : BaseActivity<ActivitySearchPartsBinding>(), AbsModule.OnCallback {
+    var only_selected = false//仅仅是选择
     override fun onSuccess(result: Int, success: Any?) {
         main_srl.isRefreshing = false
         when (result) {
@@ -53,6 +55,7 @@ class SearchPartsActivity : BaseActivity<ActivitySearchPartsBinding>(), AbsModul
 
     override fun init(savedInstanceState: Bundle?) {
         super.init(savedInstanceState)//http://192.168.1.115:3334/Api/Storage/SearchStorage
+        only_selected = intent.getBooleanExtra("only_selected", false)
         control = getModule(PratsModule::class.java, this)//初始化数据访问层
         adapter = object : CommonAdapter<PartsModel>(this, answer_list, R.layout.item_part) {
             override fun convert(holder: CommonViewHolder, model: PartsModel, position: Int) {
@@ -60,6 +63,7 @@ class SearchPartsActivity : BaseActivity<ActivitySearchPartsBinding>(), AbsModul
                 holder.setText(R.id.price_tv, "￥" + model.PartesPrice)
                 holder.setText(R.id.company_type_tv, model.PartsManufacturer + "件")
                 holder.setText(R.id.count_tv, model.PartsNumber)
+                holder.setVisible(R.id.update_ll, only_selected)
                 //修改操作
                 holder.setOnClickListener(R.id.update_ll) {
                     startActivityForResult(Intent(this@SearchPartsActivity, AddPartsActivity::class.java)
@@ -67,6 +71,8 @@ class SearchPartsActivity : BaseActivity<ActivitySearchPartsBinding>(), AbsModul
                 }
             }
         }
+        //控制添加按钮显示隐藏
+        if (only_selected) add_btn.visibility = View.GONE else add_btn.visibility = View.VISIBLE
         title_bar.setLeftClick { finish() }
         title_bar.setRightClick { }
         main_lv.adapter = adapter

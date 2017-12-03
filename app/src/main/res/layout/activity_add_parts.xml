@@ -8,6 +8,10 @@
         <variable
             name="model"
             type="gd.mmanage.model.PartsModel" />
+
+        <variable
+            name="part_type"
+            type="String" />
     </data>
 
     <LinearLayout
@@ -108,7 +112,7 @@
                         android:layout_marginLeft="20dp"
                         android:layout_weight="1"
                         android:background="@null"
-                        android:text="@={model.partsSpecifications}" />
+                        android:text="@{part_type}" />
 
                     <ImageView
                         android:layout_width="20dp"

@@ -7,6 +7,7 @@ import gd.mmanage.config.command
 import gd.mmanage.config.url
 import gd.mmanage.control.HttpUtils
 import gd.mmanage.method.UtilControl
+import gd.mmanage.model.RepairModel
 import gd.mmanage.model.SuspiciousModel
 import gd.mmanage.model.VehicleModel
 
@@ -63,5 +64,13 @@ class CarManageModule : BaseModule {
      * */
     fun save_warn(model: SuspiciousModel) {
         HttpUtils<VehicleModel>().post(url.get_suspicious + "AddSuspicious", command.car_manage + 6, UtilControl.change(model), this)
+    }
+
+    /**
+     * 添加维修业务
+     * @param model 维修数据
+     * */
+    fun save_repair(model: RepairModel) {
+        HttpUtils<VehicleModel>().post(url.get_repair + "AddRepair", command.car_manage + 7, UtilControl.change(model), this)
     }
 }

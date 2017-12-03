@@ -1,6 +1,7 @@
 package gd.mmanage.ui.parts
 
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.text.TextUtils
 import com.arialyy.frame.module.AbsModule
 import com.google.gson.JsonElement
@@ -8,9 +9,11 @@ import gd.mmanage.R
 import gd.mmanage.base.BaseActivity
 import gd.mmanage.databinding.ActivityAddEmployeeBinding
 import gd.mmanage.databinding.ActivityAddPartsBinding
+import gd.mmanage.model.CodeModel
 import gd.mmanage.model.NormalRequest
 import gd.mmanage.model.PartsModel
 import kotlinx.android.synthetic.main.activity_add_parts.*
+import net.tsz.afinal.FinalDb
 
 /**
  * 添加配件
@@ -20,9 +23,13 @@ class AddPartsActivity : BaseActivity<ActivityAddPartsBinding>(), AbsModule.OnCa
     var control: PratsModule? = null
     var model: PartsModel? = null
     var is_add = false//true：添加 false:修改
+    var db: FinalDb? = null
+    var xm_list: List<CodeModel> = ArrayList<CodeModel>()
+    var xm_array: Array<String?>? = null//配件类型集合
     override fun init(savedInstanceState: Bundle?) {
         super.init(savedInstanceState)
         model = intent.getSerializableExtra("model") as PartsModel
+        db = FinalDb.create(this)
         is_add = TextUtils.isEmpty(model!!.PartsId)//判断是添加还是修改
         if (!is_add) title_bar.setCentertv("配件修改")
         control = getModule(PratsModule::class.java, this)
@@ -31,11 +38,31 @@ class AddPartsActivity : BaseActivity<ActivityAddPartsBinding>(), AbsModule.OnCa
         //保存数据操作
         save_btn.setOnClickListener {
             model = binding.model
-
-            model!!.PartsType = "1"
             //model!!.PartsEnterpriseId="C021306020001"
             control!!.add_prat(model!!)
             //builder.show()
+        }
+        init_data()
+        type_ll.setOnClickListener {
+            val builder = AlertDialog.Builder(this)  //先得到构造器
+            builder.setItems(xm_array) { dialog, which ->
+                binding.partType = xm_list[which].Name
+                model!!.PartsType = xm_list[which].ID
+            }
+            builder.create().show()
+        }
+    }
+
+    //初始化字典数据
+    fun init_data() {
+        xm_list = db!!.findAllByWhere(CodeModel::class.java, " CodeName='Code_PartsType'")//Code_RepairReasonType
+        xm_array = arrayOfNulls(xm_list!!.size)
+        for (id in 0 until xm_array!!.size) {
+            var m = xm_list[id]
+            xm_array!![id] = m.Name
+            if (m.ID == model!!.PartsType) {
+                binding.partType = m.Name
+            }
         }
     }
 

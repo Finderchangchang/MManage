@@ -36,7 +36,7 @@ class SearchInBoundsActivity : BaseActivity<ActivitySearchInBoundsBinding>(), Ab
     override fun onSuccess(result: Int, success: Any?) {
         main_srl.isRefreshing = false
         when (result) {
-            command.parts + 3 -> {
+            command.parts + 1 -> {//查询结果
                 success as NormalRequest<JsonElement>
                 if (page_index == 1) {
                     answer_list = java.util.ArrayList()
