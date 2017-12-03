@@ -39,7 +39,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(), AbsModule.OnCallback
                 TextUtils.isEmpty(pwd) -> toast("请输入密码")
                 else -> {
                     //dialog!!.show()
-                    //control!!.user_login(name, pwd)//登录操作
+                    control!!.user_login(name, pwd)//登录操作
                     startActivity(Intent(this@LoginActivity, HomeActivity::class.java))
                     finish()
                 }

@@ -15,8 +15,12 @@ import java.lang.reflect.ParameterizedType
 import okhttp3.Response
 import java.security.MessageDigest
 import com.arialyy.frame.util.show.T
+import com.google.gson.Gson
+import com.google.gson.JsonIOException
+import com.google.gson.JsonSyntaxException
 import gd.mmanage.method.Sha1
 import java.io.UnsupportedEncodingException
+import java.lang.reflect.Type
 import java.security.NoSuchAlgorithmException
 import java.text.SimpleDateFormat
 import java.util.*

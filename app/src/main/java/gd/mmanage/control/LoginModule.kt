@@ -5,6 +5,7 @@ import gd.mmanage.base.BaseModule
 import gd.mmanage.config.command
 import gd.mmanage.config.url
 import gd.mmanage.model.CodeModel
+import gd.mmanage.model.NormalRequest
 
 /**
  * Created by Finder丶畅畅 on 2017/11/4 21:25
@@ -17,6 +18,8 @@ class LoginModule(context: Context?) : BaseModule(context) {
         map.put("name", name)
         map.put("password", password)
         //HttpUtils<String>().post(url.login, command.login, map, this)
+        var s=NormalRequest<CodeModel>()
+        HttpUtils<NormalRequest<CodeModel>>.posts(NormalRequest<CodeModel>)
     }
 
     /**
