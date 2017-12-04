@@ -25,6 +25,20 @@ class HttpUtils<T> {
         post(url, back_id, null, control)
     }
 
+    fun posts(cla: Class<T>) {
+        var s = cla
+        var s1 = ""
+        OkGo.post("").execute(object : JsonCallback<LzyResponse<T>>() {
+            override fun onSuccess(t: LzyResponse<T>?, call: Call?, response: Response?) {
+
+            }
+
+            override fun onError(call: Call?, response: Response?, e: Exception?) {
+                super.onError(call, response, e)
+            }
+        })
+    }
+
     /**
      * @param url 网络访问路径
      * @param model 需要解析的model
