@@ -82,6 +82,8 @@ class EmployeeModel : Serializable {
     /// 最后修改时间
     /// </summary>
     var EmployeeLastTime = ""
+    var EntryDateBegin = ""//入职起始时间
+    var EntryDateEnd = ""//入职结束时间
 
     fun setSex(): String {
         when (EmployeeSex) {

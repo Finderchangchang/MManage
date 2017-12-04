@@ -9,6 +9,7 @@ import gd.mmanage.control.HttpUtils
 import gd.mmanage.method.UtilControl
 import gd.mmanage.model.EmployeeModel
 import gd.mmanage.model.NormalRequest
+import gd.mmanage.model.PartsBusinessModel
 import gd.mmanage.model.PartsModel
 
 /**
@@ -41,5 +42,13 @@ class PratsModule : BaseModule {
      * */
     fun get_prats(map: HashMap<String, String>) {
         HttpUtils<List<PartsModel>>().post(url.get_parts + "SearchVehicleParts", command.parts + 3, map, this)
+    }
+
+    /**
+     * 添加配件业务
+     * @param model配件业务
+     * */
+    fun add_service_prat(model: PartsBusinessModel) {
+        HttpUtils<PartsModel>().post(url.get_parts_business + "AddPartsBusiness", command.parts, UtilControl.change(model), this)
     }
 }

@@ -27,12 +27,12 @@ class AddServiceActivity : BaseActivity<ActivityAddServiceCarBinding>(), AbsModu
 
     override fun onSuccess(result: Int, success: Any?) {
         success as NormalRequest<JsonElement>
-        when (success.code) {
-            0 -> {
-                finish()
-            }
+        if (success.code == 0) {
+            finish()
+            toast("添加成功")
+        } else {
+            toast(success.message)
         }
-        toast(success.message)
     }
 
     override fun onError(result: Int, error: Any?) {

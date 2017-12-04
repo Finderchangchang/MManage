@@ -9,17 +9,24 @@ import gd.mmanage.databinding.ActivityLoginBinding
 
 import kotlinx.android.synthetic.main.activity_login.*
 import android.content.Intent
+import android.databinding.repacked.apache.commons.codec.digest.DigestUtils
 import android.text.TextUtils
 import com.jaeger.library.StatusBarUtil
 import gd.mmanage.model.NormalRequest
 import com.jiangyy.easydialog.LoadingDialog
 import gd.mmanage.config.command
 import gd.mmanage.config.sp
+import gd.mmanage.method.Sha1
 import gd.mmanage.method.Utils
 import gd.mmanage.model.CodeModel
 import gd.mmanage.service.DownConfigService
 import gd.mmanage.ui.config.DownHotelActivity
 import gd.mmanage.ui.main.HomeActivity
+import kotlinx.android.synthetic.main.activity_add_parts.*
+import java.io.UnsupportedEncodingException
+import java.security.MessageDigest
+import java.security.NoSuchAlgorithmException
+import kotlin.experimental.and
 
 
 class LoginActivity : BaseActivity<ActivityLoginBinding>(), AbsModule.OnCallback {
@@ -38,17 +45,14 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(), AbsModule.OnCallback
                 TextUtils.isEmpty(name) -> toast("请输入用户名")
                 TextUtils.isEmpty(pwd) -> toast("请输入密码")
                 else -> {
-                    //dialog!!.show()
-                    //control!!.user_login(name, pwd)//登录操作
-                    startActivity(Intent(this@LoginActivity, HomeActivity::class.java))
-                    finish()
+                    control!!.user_login(name, Sha1.getSha1(pwd))//登录操作
                 }
             }
         }
         control!!.check_version()//检查更新
         //标志不存在，执行下载配置信息操作
         //if (TextUtils.isEmpty(Utils.getCache(sp.down_all))) {
-            startService(Intent(this, DownConfigService::class.java))
+        startService(Intent(this, DownConfigService::class.java))
         //}
     }
 
@@ -58,18 +62,13 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(), AbsModule.OnCallback
     override fun onSuccess(result: Int, success: Any?) {
         when (result) {
             command.login -> {//登录接口
-                success as NormalRequest<ArrayList<CodeModel>>//强转
-                when (success.code) {
-                    1 ->        {//跳转到主页
-                        startActivity(Intent(this@LoginActivity, HomeActivity::class.java))
-                        finish()
-                    }
-                    2 -> {//跳转到绑定code页面
-                        startActivity(Intent(this@LoginActivity, DownHotelActivity::class.java))
-                    }
-                }
-                if (TextUtils.isEmpty(success.message)) {
-                    toast(success.message)
+                success as NormalRequest<String>
+                if (success.code == 0) {
+                    startActivity(Intent(this@LoginActivity, HomeActivity::class.java))
+                    finish()
+                    Utils.putCache(sp.user_id, name_et.text.toString().trim())//姓名
+                } else {
+                    if (!TextUtils.isEmpty(success.message)) toast(success.message)
                 }
             }
             command.login + 1 -> {//检查版本更新

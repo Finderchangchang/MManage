@@ -67,8 +67,8 @@ class SearchInBoundsActivity : BaseActivity<ActivitySearchInBoundsBinding>(), Ab
             override fun convert(holder: CommonViewHolder, model: InBoundModel, position: Int) {
                 holder.setText(R.id.name_tv, model.PartsName)
                 holder.setText(R.id.price_tv, model.StorageTime)
-                holder.setText(R.id.company_type_tv, model.StorageUser)
-                holder.setText(R.id.count_tv, model.StorageNumber)
+                holder.setText(R.id.company_type_tv, model.StoragePerson)
+                holder.setText(R.id.count_tv, model.StorageNumber + "件")
             }
         }
         title_bar.setLeftClick { finish() }
@@ -93,7 +93,7 @@ class SearchInBoundsActivity : BaseActivity<ActivitySearchInBoundsBinding>(), Ab
         //入库单添加
         add_in_bound_btn.setOnClickListener {
             startActivityForResult(Intent(this@SearchInBoundsActivity, AddInBoundActivity::class.java)
-                    .putExtra("model", InBoundModel()), 11)
+                    .putExtra("storagePartsId", "5A1B6BFF32BF500270AA0A16"), 11)
         }
         //添加配件信息
         add_pj_btn.setOnClickListener {

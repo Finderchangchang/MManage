@@ -22,6 +22,7 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonArray
 import com.google.gson.JsonParser
 import com.google.gson.Gson
+import gd.mmanage.method.UtilControl
 import gd.mmanage.model.PageModel
 import java.io.File
 
@@ -33,10 +34,9 @@ class SearchEmployeeActivity : BaseActivity<ActivitySearchEmployeeBinding>(), Ab
     var adapter: CommonAdapter<EmployeeModel>? = null//资讯
     var answer_list = ArrayList<EmployeeModel>()
     var page_index = 1//当前页码数
-    var choice = HashMap<String, String>()//查询的条件
     var control: EmployeeModule? = null
     var dialog: LoadingDialog.Builder? = null
-
+    var chice_model: EmployeeModel = EmployeeModel()
     override fun init(savedInstanceState: Bundle?) {
         super.init(savedInstanceState)
         dialog = LoadingDialog.Builder(this).setTitle("正在加载...")//初始化dialog
@@ -60,18 +60,21 @@ class SearchEmployeeActivity : BaseActivity<ActivitySearchEmployeeBinding>(), Ab
                     startActivityForResult(Intent(this@SearchEmployeeActivity, AddEmployeeActivity::class.java)
                             .putExtra("model", answer_list[position]), 11)
                 }
-
             }
         }
 
         title_bar.setLeftClick { finish() }
-        title_bar.setRightClick { }
+        title_bar.setRightClick {
+            startActivityForResult(Intent(this@SearchEmployeeActivity, ChoiceEmployeeActivity::class.java)
+                    .putExtra("model", chice_model), 11)
+        }
         main_lv.adapter = adapter
         //解决listview和srl冲突问题
         main_lv.setSRL(main_srl)
         //加载数据
         main_lv.setInterface {
-
+            page_index++
+            load_data()
         }
         //item点击事件
         main_lv.setOnItemClickListener { parent, view, position, id ->
@@ -83,6 +86,7 @@ class SearchEmployeeActivity : BaseActivity<ActivitySearchEmployeeBinding>(), Ab
                     .putExtra("model", EmployeeModel()), 11)
         }
         main_srl.setOnRefreshListener {
+            page_index = 1
             load_data()
         }
         load_data()
@@ -90,7 +94,9 @@ class SearchEmployeeActivity : BaseActivity<ActivitySearchEmployeeBinding>(), Ab
 
     fun load_data() {
         dialog!!.show()
-        control!!.get_employees(choice)
+        var map = UtilControl.change(chice_model)
+        map.put("page_index", page_index.toString())
+        control!!.get_employees(map)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -98,8 +104,11 @@ class SearchEmployeeActivity : BaseActivity<ActivitySearchEmployeeBinding>(), Ab
         when (resultCode) {
             1 -> {//查询
                 page_index = 1
+                chice_model = data!!.getSerializableExtra("model") as EmployeeModel
+                load_data()
             }
             2 -> {//添加或者修改
+                page_index = 1
                 load_data()
             }
         }

@@ -42,7 +42,7 @@ class UserFragment : BaseFragment<FragUserBinding>(), AbsModule.OnCallback {
 
     override fun init(savedInstanceState: Bundle?) {
         control = getModule(UserModule::class.java, this)
-        control!!.get_user_info("C021306020001")
+        control!!.get_company_info("C021306020001")
     }
 
     override fun load_view(view: View?) {

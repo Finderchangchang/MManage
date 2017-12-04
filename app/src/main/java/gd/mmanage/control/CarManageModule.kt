@@ -8,6 +8,7 @@ import gd.mmanage.config.url
 import gd.mmanage.control.HttpUtils
 import gd.mmanage.method.UtilControl
 import gd.mmanage.model.RepairModel
+import gd.mmanage.model.StorageModel
 import gd.mmanage.model.SuspiciousModel
 import gd.mmanage.model.VehicleModel
 

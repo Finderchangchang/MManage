@@ -4,17 +4,18 @@ import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import com.arialyy.frame.module.AbsModule
-import com.google.gson.Gson
-import com.google.gson.JsonElement
-import com.google.gson.JsonObject
-import com.google.gson.JsonParser
+import com.google.gson.*
 import gd.mmanage.R
 import gd.mmanage.adapter.MainAdapter
 import gd.mmanage.base.BaseActivity
 import gd.mmanage.config.command
+import gd.mmanage.config.sp
 import gd.mmanage.control.EmployeeModule
+import gd.mmanage.control.UserModule
 import gd.mmanage.databinding.ActivityMainBinding
+import gd.mmanage.method.Utils
 import gd.mmanage.model.EmployeeModel
+import gd.mmanage.model.EquipmentModel
 import gd.mmanage.model.NormalRequest
 import gd.mmanage.model.PageModel
 import kotlinx.android.synthetic.main.activity_main.*
@@ -23,7 +24,7 @@ import net.tsz.afinal.FinalDb
 class HomeActivity : BaseActivity<ActivityMainBinding>(), AbsModule.OnCallback {
     override fun onSuccess(result: Int, success: Any?) {
         when (result) {
-            command.employee + 3 -> {
+            command.employee + 3 -> {//存储从业人员信息
                 var s = success
                 success as NormalRequest<JsonElement>
                 var mode: PageModel<*> = Gson().fromJson<PageModel<*>>(success.obj, PageModel::class.java)
@@ -39,6 +40,16 @@ class HomeActivity : BaseActivity<ActivityMainBinding>(), AbsModule.OnCallback {
                                 sa = ""
                             }
                         }
+            }
+            command.user + 2 -> {//检测当前设备的蓝牙id
+                success as NormalRequest<JsonElement>
+                var model = success.obj as JsonArray
+                for (i in 0 until model.size()) {
+                    var json: EquipmentModel = Gson().fromJson<EquipmentModel>(model[0], EquipmentModel::class.java)
+                    if (json.equipmentStatus.equals("01")) {//设置读取出的蓝牙的id
+                        Utils.putCache(sp.equipment_id, json.enterpriseId)
+                    }
+                }
             }
         }
     }
@@ -67,5 +78,6 @@ class HomeActivity : BaseActivity<ActivityMainBinding>(), AbsModule.OnCallback {
         tab_pager.offscreenPageLimit = 3
         alphaIndicator!!.setViewPager(tab_pager)
         getModule(EmployeeModule::class.java, this).get_employees(HashMap())
+        getModule(UserModule::class.java, this).get_equipments("C021306020001")
     }
 }

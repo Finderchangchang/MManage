@@ -55,7 +55,7 @@ class SearchPartsActivity : BaseActivity<ActivitySearchPartsBinding>(), AbsModul
 
     override fun init(savedInstanceState: Bundle?) {
         super.init(savedInstanceState)//http://192.168.1.115:3334/Api/Storage/SearchStorage
-        only_selected = intent.getBooleanExtra("only_selected", false)
+        only_selected = intent.getBooleanExtra("only_selected", true)
         control = getModule(PratsModule::class.java, this)//初始化数据访问层
         adapter = object : CommonAdapter<PartsModel>(this, answer_list, R.layout.item_part) {
             override fun convert(holder: CommonViewHolder, model: PartsModel, position: Int) {
@@ -64,15 +64,21 @@ class SearchPartsActivity : BaseActivity<ActivitySearchPartsBinding>(), AbsModul
                 holder.setText(R.id.company_type_tv, model.PartsManufacturer + "件")
                 holder.setText(R.id.count_tv, model.PartsNumber)
                 holder.setVisible(R.id.update_ll, only_selected)
+                holder.setVisible(R.id.line_view, only_selected)
                 //修改操作
                 holder.setOnClickListener(R.id.update_ll) {
-                    startActivityForResult(Intent(this@SearchPartsActivity, AddPartsActivity::class.java)
-                            .putExtra("model", model), 11)
+                    if (!only_selected) {//仅选择
+                        setResult(13, Intent().putExtra("model", model))
+                        finish()
+                    } else {
+                        startActivityForResult(Intent(this@SearchPartsActivity, AddPartsActivity::class.java)
+                                .putExtra("model", model), 11)
+                    }
                 }
             }
         }
         //控制添加按钮显示隐藏
-        if (only_selected) add_btn.visibility = View.GONE else add_btn.visibility = View.VISIBLE
+        if (only_selected) bottom_ll.visibility = View.VISIBLE else bottom_ll.visibility = View.GONE
         title_bar.setLeftClick { finish() }
         title_bar.setRightClick { }
         main_lv.adapter = adapter
@@ -89,13 +95,24 @@ class SearchPartsActivity : BaseActivity<ActivitySearchPartsBinding>(), AbsModul
         }
         //item点击事件
         main_lv.setOnItemClickListener { parent, view, position, id ->
-            startActivity(Intent(this, PartDetailActivity::class.java)
-                    .putExtra("id", answer_list[position].PartsId))
+            if (!only_selected) {//仅选择
+                var intent = Intent()
+                intent.putExtra("model", answer_list[position])
+                setResult(13, intent)
+                finish()
+            } else {
+                startActivity(Intent(this, PartDetailActivity::class.java)
+                        .putExtra("id", answer_list[position].PartsId))
+            }
         }
         //添加配件信息
         add_btn.setOnClickListener {
             startActivityForResult(Intent(this@SearchPartsActivity, AddPartsActivity::class.java)
                     .putExtra("model", PartsModel()), 11)
+        }
+        add_service_btn.setOnClickListener {
+            startActivity(Intent(this@SearchPartsActivity, AddPartsServiceActivity::class.java)
+                    .putExtra("vehicleId", "C02130602000120171202001"))
         }
         control!!.get_prats(choice)
     }

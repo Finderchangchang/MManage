@@ -20,8 +20,13 @@ import net.tsz.afinal.FinalDb
  * */
 class AddDubiousCarActivity : BaseActivity<ActivityAddDubiousCarBinding>(), AbsModule.OnCallback {
     override fun onSuccess(result: Int, success: Any?) {
-        var s = success as NormalRequest<JsonElement>
-        var s1 = ""
+        success as NormalRequest<JsonElement>
+        if (success.code == 0) {
+            finish()
+            toast("添加成功")
+        }else{
+            toast(success.message)
+        }
     }
 
     override fun onError(result: Int, error: Any?) {
@@ -31,9 +36,9 @@ class AddDubiousCarActivity : BaseActivity<ActivityAddDubiousCarBinding>(), AbsM
     var db: FinalDb? = null
     var ky_state_list: List<CodeModel> = ArrayList<CodeModel>()
     var ky_array: Array<String?>? = null//人员状态的集合
-    var emp_array: Array<String?>? = null//从业人员的集合
     var ky_model: SuspiciousModel = SuspiciousModel()
     var control: CarManageModule? = null
+    var emp_array: Array<String?>? = null//从业人员的集合
     var employees: List<EmployeeModel>? = null//从业人员model
     var vehicleId = ""
     override fun init(savedInstanceState: Bundle?) {
@@ -61,8 +66,8 @@ class AddDubiousCarActivity : BaseActivity<ActivityAddDubiousCarBinding>(), AbsM
         }
         save_btn.setOnClickListener {
             ky_model.SuspiciousRemarks = ky_desc_et.text.toString().trim()
-            ky_model.VehicleId=vehicleId
-            ky_model.SuspiciousTime="2017-11-12"
+            ky_model.VehicleId = vehicleId
+            ky_model.SuspiciousTime = "2017-11-12"
             control!!.save_warn(ky_model)
         }
     }

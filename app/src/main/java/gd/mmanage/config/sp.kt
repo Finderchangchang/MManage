@@ -8,4 +8,5 @@ object sp {
     var pwd = "pwd"
     var token = "token"
     var down_all = "down_all"
+    var equipment_id = "equipment_id"//设备id
 }
