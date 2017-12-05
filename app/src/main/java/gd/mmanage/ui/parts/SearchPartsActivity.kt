@@ -15,10 +15,12 @@ import gd.mmanage.databinding.ActivityAddPartsBinding
 import gd.mmanage.databinding.ActivitySearchPartsBinding
 import gd.mmanage.method.CommonAdapter
 import gd.mmanage.method.CommonViewHolder
+import gd.mmanage.method.UtilControl
 import gd.mmanage.model.EmployeeModel
 import gd.mmanage.model.NormalRequest
 import gd.mmanage.model.PageModel
 import gd.mmanage.model.PartsModel
+import gd.mmanage.ui.inbound.ChoiceInBoundActivity
 import kotlinx.android.synthetic.main.activity_search_parts.*
 
 /**
@@ -51,7 +53,6 @@ class SearchPartsActivity : BaseActivity<ActivitySearchPartsBinding>(), AbsModul
 
     var adapter: CommonAdapter<PartsModel>? = null//资讯
     var answer_list = ArrayList<PartsModel>()
-    var choice = HashMap<String, String>()//查询的条件
 
     override fun init(savedInstanceState: Bundle?) {
         super.init(savedInstanceState)//http://192.168.1.115:3334/Api/Storage/SearchStorage
@@ -79,19 +80,22 @@ class SearchPartsActivity : BaseActivity<ActivitySearchPartsBinding>(), AbsModul
         }
         //控制添加按钮显示隐藏
         if (only_selected) bottom_ll.visibility = View.VISIBLE else bottom_ll.visibility = View.GONE
-        title_bar.setLeftClick { finish() }
-        title_bar.setRightClick { }
+        title_bar.setRightClick {
+            startActivityForResult(
+                    Intent(this@SearchPartsActivity, ChoiceInBoundActivity::class.java)
+                            .putExtra("model", choice_model), 11)
+        }
         main_lv.adapter = adapter
         //解决listview和srl冲突问题
         main_lv.setSRL(main_srl)
         //加载数据
         main_lv.setInterface {
             page_index++
-            control!!.get_prats(choice)
+            load_data()
         }
         main_srl.setOnRefreshListener {
-            choice.put("PartsEnterpriseId", "")
-            control!!.get_prats(choice)
+            page_index = 1
+            load_data()
         }
         //item点击事件
         main_lv.setOnItemClickListener { parent, view, position, id ->
@@ -114,21 +118,30 @@ class SearchPartsActivity : BaseActivity<ActivitySearchPartsBinding>(), AbsModul
             startActivity(Intent(this@SearchPartsActivity, AddPartsServiceActivity::class.java)
                     .putExtra("vehicleId", "C02130602000120171202001"))
         }
-        control!!.get_prats(choice)
+        load_data()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (resultCode) {
-            12 -> {//刷新数据
-                choice.put("page_index", page_index.toString())
-                control!!.get_prats(choice)
+            12,1 -> {//刷新数据
+                page_index = 1
+                choice_model = data!!.getSerializableExtra("model") as PartsModel
+                load_data()
             }
         }
     }
 
+    fun load_data() {
+        var map = UtilControl.change(choice_model)
+        map.put("page_index", page_index.toString())
+        control!!.get_prats(map)
+
+    }
+
     var control: PratsModule? = null
     var page_index = 1
+    var choice_model: PartsModel = PartsModel()
     override fun setLayoutId(): Int {
         return R.layout.activity_search_parts
     }

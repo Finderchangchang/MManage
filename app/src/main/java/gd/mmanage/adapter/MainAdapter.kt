@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import gd.mmanage.ui.main.MainFragment
 import gd.mmanage.ui.main.UserFragment
+import gd.mmanage.ui.main.VehicleFragment
 import java.util.ArrayList
 
 /**
@@ -16,7 +17,7 @@ class MainAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
 
     init {
         list.add(MainFragment())
-        list.add(MainFragment())
+        list.add(VehicleFragment())
         list.add(UserFragment())
 
     }

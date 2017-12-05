@@ -16,6 +16,7 @@ import gd.mmanage.model.NormalRequest
 import gd.mmanage.model.PageModel
 import gd.mmanage.model.VehicleModel
 import gd.mmanage.control.CarManageModule
+import gd.mmanage.method.UtilControl
 import kotlinx.android.synthetic.main.activity_search_vehicle.*
 
 /**
@@ -48,7 +49,7 @@ class SearchVehicleActivity : BaseActivity<ActivitySearchVehicleBinding>(), AbsM
 
     var adapter: CommonAdapter<VehicleModel>? = null//资讯
     var answer_list = ArrayList<VehicleModel>()
-    var choice = HashMap<String, String>()//查询的条件
+    var choice_model = VehicleModel()//条件查询model
 
     override fun init(savedInstanceState: Bundle?) {
         super.init(savedInstanceState)//http://192.168.1.115:3334/Api/Storage/SearchStorage
@@ -67,18 +68,21 @@ class SearchVehicleActivity : BaseActivity<ActivitySearchVehicleBinding>(), AbsM
             }
         }
         title_bar.setLeftClick { finish() }
-        title_bar.setRightClick { }
+        title_bar.setRightClick {
+            startActivityForResult(Intent(this@SearchVehicleActivity, ChoiceVehicleActivity::class.java)
+                    .putExtra("model", choice_model), 11)
+        }
         main_lv.adapter = adapter
         //解决listview和srl冲突问题
         main_lv.setSRL(main_srl)
         //加载数据
         main_lv.setInterface {
             page_index++
-            control!!.get_vehicles(choice)
+            load_data()
         }
         main_srl.setOnRefreshListener {
-            choice.put("PartsEnterpriseId", "")
-            control!!.get_vehicles(choice)
+            page_index = 1
+            load_data()
         }
         //item点击事件
         main_lv.setOnItemClickListener { parent, view, position, id ->
@@ -88,17 +92,25 @@ class SearchVehicleActivity : BaseActivity<ActivitySearchVehicleBinding>(), AbsM
         //添加配件信息
         add_btn.setOnClickListener {
             startActivityForResult(Intent(this@SearchVehicleActivity, AddPersonActivity::class.java)
-                    .putExtra("model", VehicleModel()), 11)
+                    .putExtra("model", choice_model), 11)
         }
-        control!!.get_vehicles(choice)
+        load_data()
+    }
+
+    fun load_data() {
+        var map = UtilControl.change(choice_model)
+        map.put("page_index", page_index.toString())
+        control!!.get_vehicles(map)
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (resultCode) {
-            12 -> {//刷新数据
-                choice.put("page_index", page_index.toString())
-                control!!.get_vehicles(choice)
+            12, 1 -> {//刷新数据
+                page_index = 1
+                choice_model = data!!.getSerializableExtra("model") as VehicleModel
+                load_data()
             }
         }
     }

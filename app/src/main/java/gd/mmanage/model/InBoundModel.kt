@@ -29,5 +29,6 @@ class InBoundModel : Serializable {
     var PartsType: String = ""
     var PartsTypeName: String = ""
     var PartsSpecifications: String = ""
-    var PartsManufacturer: String = ""
+    var PartsManufacturer: String = ""//配件厂家
+
 }

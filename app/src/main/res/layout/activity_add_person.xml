@@ -10,10 +10,6 @@
             type="gd.mmanage.model.VehicleModel" />
 
         <variable
-            name="sex"
-            type="String" />
-
-        <variable
             name="nation"
             type="String" />
     </data>
@@ -104,26 +100,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp" />
 
-            <LinearLayout
-                android:id="@+id/ll1"
-                style="@style/center_ll"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="姓        名" />
-
-                <EditText
-                    android:id="@+id/name_tv"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:background="@null"
-                    android:text="@={model.vehiclePerson}"
-                    android:textSize="14sp" />
-            </LinearLayout>
 
             <View
                 style="@style/center_line"
@@ -136,35 +112,29 @@
                 android:orientation="horizontal">
 
                 <LinearLayout
-                    android:id="@+id/ll2"
+                    android:id="@+id/ll1"
                     style="@style/center_ll"
                     android:layout_width="0dp"
-                    android:layout_height="35dp"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical">
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.5">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="性        别" />
+                        android:text="姓        名" />
 
-                    <TextView
-                        android:id="@+id/sex_tv"
-                        android:layout_width="0dp"
+                    <EditText
+                        android:id="@+id/name_tv"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
-                        android:layout_weight="1"
-                        android:text="@{sex}"
-                        android:textColor="@color/black" />
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@mipmap/ic_launcher" />
+                        android:background="@null"
+                        android:text="@={model.vehiclePerson}"
+                        android:textSize="14sp" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/ll3"
+                    android:id="@+id/nation_ll"
                     style="@style/center_ll"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -174,13 +144,13 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="民        族" />
+                        android:text="民     族" />
 
                     <TextView
                         android:id="@+id/nation_tv"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
+                        android:layout_marginLeft="10dp"
                         android:layout_weight="1"
                         android:text="@{nation}"
                         android:textColor="@color/black" />

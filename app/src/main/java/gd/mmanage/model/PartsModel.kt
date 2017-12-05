@@ -59,6 +59,7 @@ class PartsModel : Serializable {
     /// 创建时间
     /// </summary>
     var PartsCreateTime = ""
-
+    var CreateTimeBegin = ""//创建时间-起
+    var CreateTimeEnd=""//创建时间-止
 
 }

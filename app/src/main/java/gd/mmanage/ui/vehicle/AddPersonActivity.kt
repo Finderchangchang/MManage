@@ -13,15 +13,20 @@ import gd.mmanage.callback.LzyResponse
 import gd.mmanage.config.command
 import gd.mmanage.control.CarManageModule
 import gd.mmanage.databinding.ActivityAddPersonBinding
+import gd.mmanage.model.CodeModel
 import gd.mmanage.model.NormalRequest
 import gd.mmanage.model.PageModel
 import gd.mmanage.model.VehicleModel
 import kotlinx.android.synthetic.main.activity_add_person.*
+import net.tsz.afinal.FinalDb
 
 /**
  * 人员添加
  * */
 class AddPersonActivity : BaseActivity<ActivityAddPersonBinding>(), AbsModule.OnCallback {
+    var nation_list: List<CodeModel>? = null
+    var mz_array: Array<String?>? = null//民族的集合
+    var db: FinalDb? = null
     override fun onSuccess(result: Int, success: Any?) {
         when (result) {
             command.car_manage + 5 -> {//根据身份证号获得车的记录(解析list然后用dialog的形式展示出来)
@@ -46,7 +51,6 @@ class AddPersonActivity : BaseActivity<ActivityAddPersonBinding>(), AbsModule.On
                     model.VehicleFrameNumber = now_model.VehicleFrameNumber
                     startActivity(Intent(this@AddPersonActivity, AddCarActivity::class.java)
                             .putExtra("model", model))
-                    finish()
                 }
                 builder.show()
             }
@@ -61,6 +65,7 @@ class AddPersonActivity : BaseActivity<ActivityAddPersonBinding>(), AbsModule.On
     var control: CarManageModule? = null
     override fun init(savedInstanceState: Bundle?) {
         super.init(savedInstanceState)
+        db = FinalDb.create(this)
         control = getModule(CarManageModule::class.java, this)
         //证件识别操作
         read_card_btn.setOnClickListener {
@@ -75,7 +80,6 @@ class AddPersonActivity : BaseActivity<ActivityAddPersonBinding>(), AbsModule.On
         model.VehiclePersonCertType = "01"
         model.VehiclePersonCompare = "0.81"
         binding.model = model
-        binding.sex = "男"
         binding.nation = "汉族"
         //跳转到拍照页面
         real_user_iv.setOnClickListener {
@@ -84,9 +88,42 @@ class AddPersonActivity : BaseActivity<ActivityAddPersonBinding>(), AbsModule.On
         next_btn.setOnClickListener {
             startActivity(Intent(this@AddPersonActivity, AddCarActivity::class.java)
                     .putExtra("model", model))
-            finish()
         }
+        nation_ll.setOnClickListener {
+            dialog(mz_array!!, 3)
+        }
+        init_data()
+    }
 
+    fun init_data() {
+        var nation_id = "01"
+        nation_list = db!!.findAllByWhere(CodeModel::class.java, " CodeName='Code_Nation'")
+        mz_array = arrayOfNulls(nation_list!!.size)
+        for (id in 0 until nation_list!!.size) {
+            var model = nation_list!![id]
+            mz_array!![id] = model.Name
+            if (nation_id == model.ID) {
+                binding.nation = model.Name
+            }
+        }
+    }
+
+    /**
+     * 弹出的列表选择框
+     * */
+    fun dialog(key: Array<String?>, method: Int) {
+        //dialog参数设置
+        val builder = AlertDialog.Builder(this)  //先得到构造器
+        builder.setItems(key) { dialog, which ->
+            when (method) {
+                3 -> {//民族
+                    model!!.VehiclePersonNation = nation_list!![which].ID
+                    binding.nation = nation_list!![which].Name
+                }
+            }
+            dialog.dismiss()
+        }
+        builder.create().show()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

@@ -183,6 +183,14 @@ class AddEmployeeActivity : BaseActivity<ActivityAddEmployeeBinding>(), AbsModul
             zt_id = employee!!.EmployeeState
         }
         nation_list = db!!.findAllByWhere(CodeModel::class.java, " CodeName='Code_Nation'")
+        mz_array = arrayOfNulls(nation_list!!.size)
+        for (id in 0 until nation_list!!.size) {
+            var model = nation_list!![id]
+            mz_array!![id] = model.Name
+            if (nation_id == model.ID) {
+                binding.nation = model.Name
+            }
+        }
         zt_list = db!!.findAllByWhere(CodeModel::class.java, " CodeName='Code_EmployeeState'")
         zt_array = arrayOfNulls(zt_list!!.size)
         for (id in 0 until zt_array!!.size) {
@@ -192,14 +200,7 @@ class AddEmployeeActivity : BaseActivity<ActivityAddEmployeeBinding>(), AbsModul
                 binding.state = model.Name
             }
         }
-        mz_array = arrayOfNulls(nation_list!!.size)
-        for (id in 0 until nation_list!!.size) {
-            var model = nation_list!![id]
-            mz_array!![id] = model.Name
-            if (nation_id == model.ID) {
-                binding.nation = model.Name
-            }
-        }
+
     }
 
     var nation_list: List<CodeModel>? = null

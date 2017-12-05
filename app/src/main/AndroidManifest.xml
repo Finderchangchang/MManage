@@ -57,6 +57,8 @@
         <receiver android:name=".service.AlarmReceiver" />
 
         <activity android:name=".ui.inbound.AddInBoundActivity" />
+        <activity android:name=".ui.inbound.ChoiceInBoundActivity" />
+
         <activity android:name=".ui.main.MainActivity">
 
         </activity>
@@ -65,6 +67,7 @@
         <activity android:name=".ui.vehicle.AddPersonActivity" />
         <activity android:name=".ui.vehicle.SearchVehicleActivity" />
         <activity android:name=".ui.vehicle.VehicleDetailActivity" />
+        <activity android:name=".ui.vehicle.ChoiceVehicleActivity" />
         <activity android:name=".ui.main.HomeActivity" />
         <activity android:name=".ui.employee.SearchEmployeeActivity" />
         <activity android:name=".ui.employee.ChoiceEmployeeActivity" />

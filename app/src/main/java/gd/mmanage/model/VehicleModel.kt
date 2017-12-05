@@ -68,5 +68,7 @@ class VehicleModel : Serializable {
     var VehicleTakePersonCompare: Int = 0
     var VehicleTakeTime: Any? = null
     var VehicleComment: Any? = null
+    var CreateTimeBegin = ""
+    var CreateTimeEnd = ""
     var files = ""
 }
