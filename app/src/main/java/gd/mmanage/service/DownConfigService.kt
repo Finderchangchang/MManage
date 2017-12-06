@@ -43,7 +43,7 @@ class DownConfigService : Service() {
                 db!!.save(model)
             }
             cmd = cmd + 1
-            if (cmd == command.config + 8) {
+            if (cmd == command.config + 9) {
                 //全部下载完成
                 Utils.putCache(sp.down_all, "1")
             } else {

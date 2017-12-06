@@ -42,8 +42,8 @@ abstract class JsonCallback<T> : AbsCallback<T>() {
         }
         val df = SimpleDateFormat("yyyyMMddHHmmss")//设置日期格式
         var TimeStamp = df.format(Date())// new Date()为获取当前系统时间
-        request!!.params("AccountId", Utils.getCache(sp.user_id))//账号id
-                .params("AccountSecret", Sha1.getSha1(Utils.getCache(sp.pwd) + "_" + TimeStamp))
+        request!!.params("AccountId", Utils.getCache(sp.user_id))//账号id 密码先md5加密
+                .params("AccountSecret", Sha1.getSha1(string2MD5(Utils.getCache(sp.pwd)) + "_" + TimeStamp))
                 .params("TimeStamp", TimeStamp)
     }
 

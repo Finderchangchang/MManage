@@ -19,11 +19,12 @@ class NormalRequest<T> {
     constructor(code: Int, message: String?, obj: T?) {
         this.code = code
         this.obj = obj
+        this.message = message
     }
 
 
     var code: Int = 0//请求码0:请求成功。1：失败。2：报错
     var result: Boolean = false//是否解析成功
-    var message: String = ""//提示的消息
+    var message: String? = ""//提示的消息
     var obj: T? = null
 }

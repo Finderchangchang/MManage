@@ -1,107 +1,37 @@
 package gd.mmanage.method
 
-import android.annotation.SuppressLint
 import android.annotation.TargetApi
-import android.app.Activity
-import android.app.Dialog
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Matrix
 import android.graphics.Point
-import android.graphics.drawable.BitmapDrawable
+import android.media.ExifInterface
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.os.Build
 import android.telephony.TelephonyManager
 import android.util.Base64
-import android.view.Gravity
 import android.view.View
-import android.view.ViewGroup
 import android.view.WindowManager
-
-import java.io.ByteArrayInputStream
-import java.io.ByteArrayOutputStream
-import java.io.FileInputStream
-import java.io.FileNotFoundException
-import java.io.IOException
-import java.io.InputStream
-import java.io.UnsupportedEncodingException
-import java.net.URLEncoder
-import java.security.MessageDigest
+import android.widget.ListView
+import gd.mmanage.base.BaseApplication
+import java.io.*
+import java.lang.Exception
 import java.sql.Timestamp
 import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Date
-import java.util.HashMap
-import java.util.Random
-import java.util.regex.Matcher
+import java.util.*
 import java.util.regex.Pattern
 
-import android.content.Context.MODE_PRIVATE
-import android.support.v7.app.AlertDialog
-import android.text.TextUtils
-import android.widget.*
-import com.google.gson.JsonArray
-import gd.mmanage.base.BaseApplication
-
 /**
- * Created by Administrator on 2016/5/19.
+ * Created by Administrator on 2017/12/6.
  */
-object Utils {
-    /**
-     * 判断输入的内容是否为空
-     * @param et 文本输入框
-     * @return true:空 false:不是空
-     * */
-    fun etIsNull(et: EditText): Boolean {
-        if (TextUtils.isEmpty(et.text.toString().trim())) {
-            return true
-        }
-        return false
-    }
+object uu {
 
-    /***
-     * MD5加码 生成32位md5码
-     */
-    fun string2MD5(inStr: String): String {
-        var md5: MessageDigest? = null
-        try {
-            md5 = MessageDigest.getInstance("MD5")
-        } catch (e: Exception) {
-            println(e.toString())
-            e.printStackTrace()
-            return ""
-        }
-
-        val charArray = inStr.toCharArray()
-        val byteArray = ByteArray(charArray.size)
-
-        for (i in charArray.indices)
-            byteArray[i] = charArray[i].toByte()
-        val md5Bytes = md5!!.digest(byteArray)
-        val hexValue = StringBuffer()
-        for (i in md5Bytes.indices) {
-            val `val` = md5Bytes[i].toInt() and 0xff
-            if (`val` < 16)
-                hexValue.append("0")
-            hexValue.append(Integer.toHexString(`val`))
-        }
-        return hexValue.toString()
-
-    }
-
-    fun setDialog(cont: String, sure: setSure, cancle: setCancle): Dialog {
-        return setDialog("提示", cont, "确定", "取消", sure, cancle)
-    }
-
-    fun setDialog(cont: String, sure: setSure): Dialog {
-        return setDialog("提示", cont, "确定", "取消", sure, null)
-    }
 
     /**
      * 设置TotalListView(自定义)的高度
@@ -124,15 +54,6 @@ object Utils {
         listView.layoutParams = params
     }
 
-    fun setDialog(title: String, cont: String, sure_str: String, cancle_str: String, sure: setSure, cancle: setCancle?): Dialog {
-        val localBuilder1 = AlertDialog.Builder(BaseApplication.context!!)
-                .setTitle(title).setMessage(cont)
-        return localBuilder1.setPositiveButton(cancle_str
-        ) { dialog, which ->
-            cancle?.click(null)
-        }.setNegativeButton(sure_str) { paramDialogInterface, paramInt -> sure.click(null) }.create()
-    }
-
     interface setSure {
         fun click(view: View?)
     }
@@ -149,14 +70,14 @@ object Utils {
 
 
     fun putCache(key: String, `val`: String?) {
-        val sp = BaseApplication.context!!.getSharedPreferences("grclass", MODE_PRIVATE)
+        val sp = BaseApplication.context!!.getSharedPreferences("grclass", Context.MODE_PRIVATE)
         val editor = sp.edit()
         editor.putString(key, `val`)
         editor.commit()
     }
 
     fun putBooleanCache(key: String, `val`: Boolean) {
-        val sp = BaseApplication.context!!.getSharedPreferences("grclass", MODE_PRIVATE)
+        val sp = BaseApplication.context!!.getSharedPreferences("grclass", Context.MODE_PRIVATE)
         val editor = sp.edit()
         editor.putBoolean(key, `val`)
         editor.commit()
@@ -173,10 +94,12 @@ object Utils {
         get() {
             val connectivity = BaseApplication.context!!
                     .getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-            val info = connectivity.activeNetworkInfo
-            if (info != null && info.isConnected) {
-                if (info.state == NetworkInfo.State.CONNECTED) {
-                    return true
+            if (connectivity != null) {
+                val info = connectivity.activeNetworkInfo
+                if (info != null && info.isConnected) {
+                    if (info.state == NetworkInfo.State.CONNECTED) {
+                        return true
+                    }
                 }
             }
             return false
@@ -193,30 +116,13 @@ object Utils {
                     .networkType == TelephonyManager.NETWORK_TYPE_UMTS
         }
 
-
-    fun isWifiConnected(act: Activity): Boolean {
-
-        val manager = act.application.getSystemService(
-                Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-
-
-        val networkinfo = manager.activeNetworkInfo
-
-        if (networkinfo == null || !networkinfo.isAvailable || networkinfo.type != ConnectivityManager.TYPE_WIFI) {
-            return false
-        }
-
-        return true
-    }
-
-
     fun getCache(key: String): String {
-        val sharedPreferences = BaseApplication.context!!.getSharedPreferences("grclass", MODE_PRIVATE)
+        val sharedPreferences = BaseApplication.context!!.getSharedPreferences("grclass", Context.MODE_PRIVATE)
         return sharedPreferences.getString(key, "")
     }
 
     fun getBooleanCache(key: String): Boolean {
-        val sharedPreferences = BaseApplication.context!!.getSharedPreferences("grclass", MODE_PRIVATE)
+        val sharedPreferences = BaseApplication.context!!.getSharedPreferences("grclass", Context.MODE_PRIVATE)
         return sharedPreferences.getBoolean(key, false)
     }
 
@@ -275,11 +181,74 @@ object Utils {
         }
 
     fun compressImage(image: Bitmap): Bitmap {
-
         val baos = ByteArrayOutputStream()
         image.compress(Bitmap.CompressFormat.JPEG, 100, baos)//质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
-        var options = 100
-        while (baos.toByteArray().size / 1024 > 100) {  //循环判断如果压缩后图片是否大于100kb,大于继续压缩
+        var options = 90
+        while (baos.toByteArray().size / 1024 > 100 * 2) {  //循环判断如果压缩后图片是否大于100kb,大于继续压缩
+            baos.reset()//重置baos即清空baos
+            if (options < 0) {
+                options = 1
+            }
+            image.compress(Bitmap.CompressFormat.JPEG, options, baos)//这里压缩options%，把压缩后的数据存放到baos中
+            options -= 10//每次都减少10
+        }
+        val isBm = ByteArrayInputStream(baos.toByteArray())//把压缩后的数据baos存放到ByteArrayInputStream中
+        val bitmap = BitmapFactory.decodeStream(isBm, null, null)//把ByteArrayInputStream数据生成图片
+        return bitmap
+    }
+
+    fun compressImage(image: Bitmap, bit: Int): Bitmap {
+        val baos = ByteArrayOutputStream()
+        image.compress(Bitmap.CompressFormat.JPEG, 100, baos)//质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
+        var options = 90
+        while (baos.toByteArray().size / 1024 > bit) {  //循环判断如果压缩后图片是否大于100kb,大于继续压缩
+            baos.reset()//重置baos即清空baos
+            if (options < 0) {
+                options = 1
+            }
+            image.compress(Bitmap.CompressFormat.JPEG, options, baos)//这里压缩options%，把压缩后的数据存放到baos中
+            options -= 10//每次都减少10
+        }
+        val isBm = ByteArrayInputStream(baos.toByteArray())//把压缩后的数据baos存放到ByteArrayInputStream中
+        val bitmap = BitmapFactory.decodeStream(isBm, null, null)//把ByteArrayInputStream数据生成图片
+        return bitmap
+    }
+
+    fun getimage(contxt: Int, srcPath: String): Bitmap {
+        val newOpts = BitmapFactory.Options()
+        //开始读入图片，此时把options.inJustDecodeBounds 设回true了
+        newOpts.inJustDecodeBounds = true
+        var bitmap = BitmapFactory.decodeFile(srcPath, newOpts)//此时返回bm为空
+        newOpts.inJustDecodeBounds = false
+        val w = newOpts.outWidth
+        val h = newOpts.outHeight
+        //现在主流手机比较多是800*480分辨率，所以高和宽我们设置为
+        //Bitmap header = BitmapFactory.decodeResource(contxt.getResources(), R.mipmap.person_header);
+
+        val hh = 1440f//这里设置高度为800f
+        val ww = 900f//这里设置宽度为480f
+        //缩放比。由于是固定比例缩放，只用高或者宽其中一个数据进行计算即可
+        var be = 1//be=1表示不缩放
+        if (w > h && w > ww) {//如果宽度大的话根据宽度固定大小缩放
+            be = (newOpts.outWidth / ww).toInt()
+        } else if (w < h && h > hh) {//如果高度高的话根据宽度固定大小缩放
+            be = (newOpts.outHeight / hh).toInt()
+        }
+        if (be <= 0)
+            be = 1
+        newOpts.inSampleSize = be//设置缩放比例
+        //重新读入图片，注意此时已经把options.inJustDecodeBounds 设回false了
+        bitmap = BitmapFactory.decodeFile(srcPath, newOpts)
+
+        return compressImagexin(bitmap, contxt)//压缩好比例大小后再进行质量压缩
+    }
+
+    fun compressImagexin(image: Bitmap, context: Int): Bitmap {
+
+        val baos = ByteArrayOutputStream()
+        image.compress(Bitmap.CompressFormat.JPEG, 80, baos)//质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
+        var options = 50
+        while (baos.toByteArray().size / 1024 > context) {  //循环判断如果压缩后图片是否大于100kb,大于继续压缩
             baos.reset()//重置baos即清空baos
             image.compress(Bitmap.CompressFormat.JPEG, options, baos)//这里压缩options%，把压缩后的数据存放到baos中
             options -= 10//每次都减少10
@@ -287,6 +256,35 @@ object Utils {
         val isBm = ByteArrayInputStream(baos.toByteArray())//把压缩后的数据baos存放到ByteArrayInputStream中
         val bitmap = BitmapFactory.decodeStream(isBm, null, null)//把ByteArrayInputStream数据生成图片
         return bitmap
+    }
+
+    //得到旋转的角度
+    fun readPictureDegree(path: String): Int {
+        var degree = 0
+        try {
+            val exifInterface = ExifInterface(path)
+            val orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
+            when (orientation) {
+                ExifInterface.ORIENTATION_ROTATE_90 -> degree = 90
+                ExifInterface.ORIENTATION_ROTATE_180 -> degree = 180
+                ExifInterface.ORIENTATION_ROTATE_270 -> degree = 270
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+        return degree
+    }
+
+    //旋转图片
+    fun rotaingImageView(angle: Int, bitmap: Bitmap): Bitmap {
+        //旋转图片 动作
+        val matrix = Matrix()
+        matrix.postRotate(angle.toFloat())
+        println("angle2=" + angle)
+        // 创建新的图片
+        val resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0,
+                bitmap.width, bitmap.height, matrix, true)
+        return resizedBitmap
     }
 
     /**
@@ -513,23 +511,6 @@ object Utils {
         return str
     }
 
-    /**
-     * 对URL进行编码操作
-
-     * @param text
-     * *
-     * @return
-     */
-    fun URLEncodeImage(text: String): String {
-        if (Utils.isEmptyString(text))
-            return ""
-        try {
-            return URLEncoder.encode(text, "UTF-8")
-        } catch (e: UnsupportedEncodingException) {
-            return ""
-        }
-
-    }
 
     /**
      * 判断字符串是否为空,为空返回空串
@@ -582,22 +563,6 @@ object Utils {
 
     val allChar = "0123456789"
 
-    /**
-     * 返回一个定长的随机字符串(只包含大小写字母、数字)
-
-     * @param length 随机字符串长度
-     * *
-     * @return 随机字符串
-     */
-    fun getRandomChar(length: Int): String {
-        val sb = StringBuffer()
-        val random = Random()
-        for (i in 0 until length) {
-            sb.append(allChar[random.nextInt(allChar.length)])
-        }
-        return sb.toString()
-    }
-
 
     /**
      * 获取系统的当前日期，格式为YYYYMMDD
@@ -635,20 +600,6 @@ object Utils {
         BaseApplication.context!!.startActivity(intent)
     }
 
-    /**
-     * 判断ip地址是否符合格式（10.0.3.2）
-
-     * @param ip 需要检测的ip地址
-     * *
-     * @return 是否符合规定，true为符合。
-     */
-    fun checkIP(ip: String): Boolean {
-        if (Utils.getContainSize(ip, ".") == 3 && ip.length >= 7) {
-            return true
-        } else {
-            return false
-        }
-    }
 
     /**
      * 获得key在val中存在的个数
@@ -748,27 +699,6 @@ object Utils {
         }
     }
 
-    //得到手机的imei
-    val imei: String
-        @SuppressLint("MissingPermission")
-        get() = (BaseApplication.context!!
-                .getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager).deviceId
-
-    /**
-     * 获得当前手机的手机号码
-
-     * @return
-     */
-    val phoneNum: String
-        get() {
-            val phoneMgr = BaseApplication.context!!.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
-            try {
-                return phoneMgr.line1Number
-            } catch (ex: Exception) {
-                return ""
-            }
-
-        }
 
     /**
      * 跳页传参的接口
@@ -777,8 +707,3 @@ object Utils {
         fun put(intent: Intent)
     }
 }
-/**
- * 不带参数的跳页
-
- * @param cla 需要跳转到的页面
- */

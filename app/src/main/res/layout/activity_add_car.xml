@@ -15,6 +15,13 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <net.tsz.afinal.view.TitleBar
+            android:id="@+id/title_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            app:center_tv="车辆信息登记" />
+
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -25,12 +32,6 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-                <net.tsz.afinal.view.TitleBar
-                    android:id="@+id/title_bar"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/colorPrimary"
-                    app:center_tv="车辆信息登记" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -121,7 +122,8 @@
                     android:id="@+id/ll2"
                     style="@style/center_ll"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="35dp"
+                    android:gravity="center_vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -134,7 +136,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
                         android:background="@null"
-                        android:text="@={model.vehicleOwner}" />
+                        android:text="@={model.vehicleOwner}"
+                        android:textSize="14sp" />
                 </LinearLayout>
 
                 <TextView
@@ -146,7 +149,8 @@
                     android:id="@+id/ll3"
                     style="@style/center_ll"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="35dp"
+                    android:gravity="center_vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -159,7 +163,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
                         android:background="@null"
-                        android:text="@={model.vehicleNumber}" />
+                        android:text="@={model.vehicleNumber}"
+                        android:textSize="14sp" />
                 </LinearLayout>
 
                 <TextView
@@ -171,7 +176,8 @@
                     android:id="@+id/ll4"
                     style="@style/center_ll"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="35dp"
+                    android:gravity="center_vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -184,7 +190,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
                         android:background="@null"
-                        android:text="@={model.vehicleBrand}" />
+                        android:text="@={model.vehicleBrand}"
+                        android:textSize="14sp" />
                 </LinearLayout>
 
                 <TextView
@@ -196,7 +203,8 @@
                     android:id="@+id/ll5"
                     style="@style/center_ll"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="35dp"
+                    android:gravity="center_vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -209,7 +217,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
                         android:background="@null"
-                        android:text="@={model.vehicleFrameNumber}" />
+                        android:text="@={model.vehicleFrameNumber}"
+                        android:textSize="14sp" />
                 </LinearLayout>
 
                 <TextView
@@ -221,7 +230,8 @@
                     android:id="@+id/ll6"
                     style="@style/center_ll"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="35dp"
+                    android:gravity="center_vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -234,7 +244,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
                         android:background="@null"
-                        android:text="@={model.vehicleEngine}" />
+                        android:text="@={model.vehicleEngine}"
+                        android:textSize="14sp" />
                 </LinearLayout>
 
                 <TextView
@@ -242,124 +253,116 @@
                     android:layout_height="10dp"
                     android:background="@color/line_bg" />
 
-                <LinearLayout
+
+                <TextView
+                    style="@style/Top_lab"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="15dp"
+                    android:text="车辆交接信息" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/line_bg" />
+
+                <LinearLayout
+                    android:id="@+id/ll7"
+                    style="@style/center_ll"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:gravity="center_vertical">
 
                     <TextView
-                        style="@style/Top_lab"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="送  车  人" />
+
+                    <TextView
+                        android:id="@+id/tv7"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingLeft="15dp"
-                        android:text="车辆交接信息" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="0.5dp"
-                        android:background="@color/line_bg" />
-
-                    <LinearLayout
-                        android:id="@+id/ll7"
-                        style="@style/center_ll"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="送  车  人" />
-
-                        <EditText
-                            android:id="@+id/tv7"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="20dp"
-                            android:background="@null"
-                            android:text="@={model.vehiclePerson}" />
-                    </LinearLayout>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="0.5dp"
-                        android:background="@color/line_bg" />
-
-                    <LinearLayout
-                        android:id="@+id/ll8"
-                        style="@style/center_ll"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="送车电话" />
-
-                        <EditText
-                            android:id="@+id/tv8"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="20dp"
-                            android:background="@null"
-                            android:text="@={model.vehiclePersonPhone}" />
-                    </LinearLayout>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="0.5dp"
-                        android:background="@color/line_bg" />
-
-                    <LinearLayout
-                        android:id="@+id/ll9"
-                        style="@style/center_ll"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="收  车  人" />
-
-                        <TextView
-                            android:id="@+id/tv9"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="20dp"
-                            android:text="@={model.vehicleReceivePerson}" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/ll10"
-                        style="@style/center_ll"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="收车时间" />
-
-                        <TextView
-                            android:id="@+id/tv10"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="20dp"
-                            android:text="@={model.vehicleReceiveTime}" />
-                    </LinearLayout>
+                        android:layout_marginLeft="20dp"
+                        android:background="@null"
+                        android:text="@{model.vehiclePerson}"
+                        android:textSize="14sp" />
                 </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/line_bg" />
+
+                <LinearLayout
+                    android:id="@+id/ll8"
+                    style="@style/center_ll"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="送车电话" />
+
+                    <EditText
+                        android:id="@+id/tv8"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:background="@null"
+                        android:inputType="number"
+                        android:text="@={model.vehiclePersonPhone}"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/line_bg" />
+
+                <LinearLayout
+                    android:id="@+id/ll9"
+                    style="@style/center_ll"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="收  车  人" />
+
+                    <TextView
+                        android:id="@+id/tv9"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:layout_weight="1"
+                        android:text="@={model.vehicleReceivePerson}" />
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginRight="20dp"
+                        android:src="@mipmap/ic_launcher" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/line_bg" />
             </LinearLayout>
         </ScrollView>
 
         <Button
             android:id="@+id/save_btn"
-            android:layout_width="200dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="10dp"
             android:background="@color/colorPrimary"
             android:text="保存"
             android:textColor="@color/white"
-            android:textSize="20sp" />
+            android:textSize="18sp" />
     </LinearLayout>
 </layout>

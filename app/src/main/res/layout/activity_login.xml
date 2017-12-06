@@ -49,6 +49,7 @@
                 android:hint="用户名"
                 android:paddingLeft="5dp"
                 android:paddingRight="10dp"
+                android:text="demo2"
                 android:textSize="15sp" />
 
             <EditText
@@ -62,6 +63,7 @@
                 android:inputType="textPassword"
                 android:paddingLeft="5dp"
                 android:paddingRight="10dp"
+                android:text="123456"
                 android:textSize="15sp" />
 
             <Button

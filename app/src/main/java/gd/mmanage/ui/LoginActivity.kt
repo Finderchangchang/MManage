@@ -1,5 +1,6 @@
 package gd.mmanage.ui
 
+import android.Manifest
 import android.os.Bundle
 import com.arialyy.frame.module.AbsModule
 import gd.mmanage.R
@@ -23,13 +24,14 @@ import gd.mmanage.service.DownConfigService
 import gd.mmanage.ui.config.DownHotelActivity
 import gd.mmanage.ui.main.HomeActivity
 import kotlinx.android.synthetic.main.activity_add_parts.*
+import pub.devrel.easypermissions.EasyPermissions
 import java.io.UnsupportedEncodingException
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 import kotlin.experimental.and
 
 
-class LoginActivity : BaseActivity<ActivityLoginBinding>(), AbsModule.OnCallback {
+class LoginActivity : BaseActivity<ActivityLoginBinding>(), AbsModule.OnCallback, EasyPermissions.PermissionCallbacks {
     private var control: LoginModule? = null
     var dialog: LoadingDialog.Builder? = null
     override fun init(savedInstanceState: Bundle?) {
@@ -39,21 +41,46 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(), AbsModule.OnCallback
         StatusBarUtil.setTransparent(this)//设置状态栏颜色
         //登录按钮
         login_btn.setOnClickListener {
-            var name = id_et.text.toString().trim()
-            var pwd = pwd_et.text.toString().trim()
-            when {
-                TextUtils.isEmpty(name) -> toast("请输入用户名")
-                TextUtils.isEmpty(pwd) -> toast("请输入密码")
-                else -> {
-                    control!!.user_login(name, Sha1.getSha1(pwd))//登录操作
+            if (!EasyPermissions.hasPermissions(this@LoginActivity, Manifest.permission.READ_PHONE_STATE)) {
+                EasyPermissions.requestPermissions(this@LoginActivity, "您需要允许以下权限",
+                        2, Manifest.permission.READ_PHONE_STATE);
+            } else {
+                var name = id_et.text.toString().trim()
+                var pwd = pwd_et.text.toString().trim()
+                when {
+                    TextUtils.isEmpty(name) -> toast("请输入用户名")
+                    TextUtils.isEmpty(pwd) -> toast("请输入密码")
+                    else -> {
+                        control!!.user_login(name, pwd)//登录操作
+                    }
                 }
             }
+        }
+        if (!EasyPermissions.hasPermissions(this@LoginActivity, Manifest.permission.READ_PHONE_STATE)) {
+            EasyPermissions.requestPermissions(this@LoginActivity, "您需要允许以下权限",
+                    2, Manifest.permission.READ_PHONE_STATE);
         }
         control!!.check_version()//检查更新
         //标志不存在，执行下载配置信息操作
         //if (TextUtils.isEmpty(Utils.getCache(sp.down_all))) {
         startService(Intent(this, DownConfigService::class.java))
         //}
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
+    }
+
+    var update_path = ""
+    //成功
+    override fun onPermissionsGranted(requestCode: Int, list: List<String>) {
+
+    }
+
+    //失败
+    override fun onPermissionsDenied(requestCode: Int, list: List<String>) {
+
     }
 
     /**

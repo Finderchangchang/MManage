@@ -1,5 +1,6 @@
 package gd.mmanage.model
 
+import android.text.TextUtils
 import net.tsz.afinal.sqlite.Id
 import java.io.Serializable
 
@@ -86,9 +87,13 @@ class EmployeeModel : Serializable {
     var EntryDateEnd = ""//入职结束时间
 
     fun setSex(): String {
-        when (EmployeeSex) {
-            "2" -> return "女"
-            else -> return "男"
+        return if (!TextUtils.isEmpty(EmployeeSex)) {
+            when (EmployeeSex) {
+                "2" -> "女"
+                else -> "男"
+            }
+        } else {
+            "男"
         }
     }
 }

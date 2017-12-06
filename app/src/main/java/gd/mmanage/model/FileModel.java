@@ -1,10 +1,12 @@
 package gd.mmanage.model;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 2017/11/30.
  */
 
-public class FileModel {
+public class FileModel implements Serializable {
     //byte[] FileContent;
     Integer[] FileContent;
     String FileName;

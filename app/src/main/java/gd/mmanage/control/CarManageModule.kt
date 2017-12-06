@@ -1,11 +1,13 @@
 package gd.mmanage.control
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.text.TextUtils
 import gd.mmanage.base.BaseModule
 import gd.mmanage.config.command
 import gd.mmanage.config.url
 import gd.mmanage.control.HttpUtils
+import gd.mmanage.method.ImgUtils
 import gd.mmanage.method.UtilControl
 import gd.mmanage.model.RepairModel
 import gd.mmanage.model.StorageModel
@@ -19,8 +21,8 @@ class CarManageModule : BaseModule {
     constructor(context: Context?) : super(context)
 
     /**
-     * 添加配件信息
-     * @param model配件信息集合
+     * 车辆承接信息
+     * @param model承接信息集合
      * */
     fun add_prat(model: VehicleModel) {
         var u = "AddVehicle"
@@ -73,5 +75,16 @@ class CarManageModule : BaseModule {
      * */
     fun save_repair(model: RepairModel) {
         HttpUtils<VehicleModel>().post(url.get_repair + "AddRepair", command.car_manage + 7, UtilControl.change(model), this)
+    }
+
+    /**
+     * 添加维修业务
+     * @param model 维修数据
+     * */
+    fun check_two_img(bitmap1: Bitmap, bitmap2: Bitmap) {
+        var map = HashMap<String, String>()
+        map.put("imageA", ImgUtils().bitmapToBase64(bitmap1))
+        map.put("imageB", ImgUtils().bitmapToBase64(bitmap2))
+        HttpUtils<VehicleModel>().post(url.normal + "Other/FaceRecognition", command.car_manage + 8, map, this)
     }
 }

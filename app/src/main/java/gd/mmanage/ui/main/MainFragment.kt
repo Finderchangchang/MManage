@@ -11,6 +11,7 @@ import gd.mmanage.base.BaseFragment
 import gd.mmanage.databinding.FragMainBinding
 import gd.mmanage.method.GlideImageLoader
 import gd.mmanage.ui.car_manage.AddDubiousCarActivity
+import gd.mmanage.ui.car_manage.AddGetCarActivity
 import gd.mmanage.ui.car_manage.AddServiceActivity
 import gd.mmanage.ui.vehicle.AddPersonActivity
 import gd.mmanage.ui.employee.SearchEmployeeActivity
@@ -70,7 +71,8 @@ class MainFragment : BaseFragment<FragMainBinding>() {
         }
         //取车登记
         ll4!!.setOnClickListener {
-            startActivity(Intent(context, AddPersonActivity::class.java))
+            startActivity(Intent(context, AddGetCarActivity::class.java)
+                    .putExtra("vehicleId", "C02130602000120171202001"))
         }
         //车辆承接
         ll5!!.setOnClickListener {

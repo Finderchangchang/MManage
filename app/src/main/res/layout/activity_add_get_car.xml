@@ -25,7 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
-            app:center_tv="送车人信息登记" />
+            app:center_tv="取车人信息登记" />
 
 
         <LinearLayout
@@ -93,7 +93,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingLeft="15dp"
-                android:text="送车人基本信息" />
+                android:text="取车人基本信息" />
 
             <View
                 style="@style/center_line"
@@ -129,7 +129,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
                         android:background="@null"
-                        android:text="@={model.vehiclePerson}"
+                        android:text="@={model.vehicleTakePerson}"
                         android:textSize="14sp" />
                 </LinearLayout>
 
@@ -186,7 +186,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:background="@null"
-                    android:text="@={model.vehiclePersonCertNumber}"
+                    android:text="@={model.vehicleTakePersonCertNumber}"
                     android:textSize="14sp" />
             </LinearLayout>
 
@@ -213,7 +213,7 @@
                     android:layout_height="35dp"
                     android:layout_marginLeft="20dp"
                     android:background="@null"
-                    android:text="@={model.vehiclePersonAddress}"
+                    android:text="@={model.vehicleTakePersonAddress}"
                     android:textSize="14sp" />
             </LinearLayout>
 
@@ -246,7 +246,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="20dp"
                     android:text="识别率 83%"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
             </LinearLayout>
 
             <View
@@ -310,7 +310,10 @@
                 android:id="@+id/next_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="下一步" />
+                android:background="@color/colorPrimary"
+                android:text="保存"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
         </LinearLayout>
 
     </LinearLayout>
