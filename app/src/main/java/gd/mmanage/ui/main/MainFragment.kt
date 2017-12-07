@@ -10,12 +10,10 @@ import gd.mmanage.R
 import gd.mmanage.base.BaseFragment
 import gd.mmanage.databinding.FragMainBinding
 import gd.mmanage.method.GlideImageLoader
-import gd.mmanage.ui.car_manage.AddDubiousCarActivity
-import gd.mmanage.ui.car_manage.AddGetCarActivity
-import gd.mmanage.ui.car_manage.AddServiceActivity
-import gd.mmanage.ui.vehicle.AddPersonActivity
 import gd.mmanage.ui.employee.SearchEmployeeActivity
 import gd.mmanage.ui.inbound.SearchInBoundsActivity
+import gd.mmanage.ui.notice.SearchNoticeActivity
+import gd.mmanage.ui.vehicle.OnlySearchVehicleActivity
 import gd.mmanage.ui.vehicle.SearchVehicleActivity
 
 /**
@@ -29,6 +27,8 @@ class MainFragment : BaseFragment<FragMainBinding>() {
     var ll4: LinearLayout? = null
     var ll5: LinearLayout? = null
     var ll6: LinearLayout? = null
+    var ll7: LinearLayout? = null
+    var ll8: LinearLayout? = null
 
     var banner: Banner? = null
     override fun load_view(view: View?) {
@@ -38,6 +38,9 @@ class MainFragment : BaseFragment<FragMainBinding>() {
         ll4 = view.findViewById(R.id.ll4) as LinearLayout
         ll5 = view.findViewById(R.id.ll5) as LinearLayout
         ll6 = view.findViewById(R.id.ll6) as LinearLayout
+        ll7 = view.findViewById(R.id.ll7) as LinearLayout
+        ll8 = view.findViewById(R.id.ll8) as LinearLayout
+
         banner = view.findViewById(R.id.banner) as Banner
     }
 
@@ -56,33 +59,71 @@ class MainFragment : BaseFragment<FragMainBinding>() {
         super.init(savedInstanceState);
         main_context = HomeActivity.context
         load_banner()
-        //从业人员
-        ll1!!.setOnClickListener {
-            startActivity(Intent(context, SearchEmployeeActivity::class.java))
-        }
-        //配件管理(入库单)
-        ll2!!.setOnClickListener {
-            startActivity(Intent(context, SearchInBoundsActivity::class.java))
-        }
-        //维修业务
-        ll3!!.setOnClickListener {
-            startActivity(Intent(context, AddServiceActivity::class.java)
-                    .putExtra("vehicleId", "C02130602000120171202001"))
-        }
-        //取车登记
-        ll4!!.setOnClickListener {
-            startActivity(Intent(context, AddGetCarActivity::class.java)
-                    .putExtra("vehicleId", "C02130602000120171202001"))
-        }
         //车辆承接
-        ll5!!.setOnClickListener {
+        ll1!!.setOnClickListener {
+            //            startActivity(Intent(context, AddPersonActivity::class.java)
+            //           .putExtra("model", VehicleModel()))
             startActivity(Intent(context, SearchVehicleActivity::class.java))
         }
-        //可疑车辆登记
-        ll6!!.setOnClickListener {
-            startActivity(Intent(context, AddDubiousCarActivity::class.java)
-                    .putExtra("vehicleId", "C02130602000120171202001"))
+        //取车登记
+        ll2!!.setOnClickListener {
+            startActivity(Intent(context, OnlySearchVehicleActivity::class.java)
+                    .putExtra("id", "1"))
         }
+        //机修登记
+        ll3!!.setOnClickListener {
+            startActivity(Intent(context, OnlySearchVehicleActivity::class.java)
+                    .putExtra("id", "2"))
+        }
+        //可疑车辆
+        ll4!!.setOnClickListener {
+            startActivity(Intent(context, OnlySearchVehicleActivity::class.java)
+                    .putExtra("id", "3"))
+        }
+        //配件管理
+        ll5!!.setOnClickListener {
+            startActivity(Intent(context, SearchInBoundsActivity::class.java))
+        }
+        //人员管理
+        ll6!!.setOnClickListener {
+            startActivity(Intent(context, SearchEmployeeActivity::class.java))
+        }
+        //配件业务添加
+        ll7!!.setOnClickListener {
+            startActivity(Intent(context, OnlySearchVehicleActivity::class.java)
+                    .putExtra("id", "4"))
+        }
+        //通知通告
+        ll8!!.setOnClickListener {
+            startActivity(Intent(context, SearchNoticeActivity::class.java))
+        }
+//        //从业人员
+//        ll1!!.setOnClickListener {
+//            startActivity(Intent(context, SearchEmployeeActivity::class.java))
+//        }
+//        //配件管理(入库单)
+//        ll2!!.setOnClickListener {
+//            startActivity(Intent(context, SearchInBoundsActivity::class.java))
+//        }
+//        //维修业务
+//        ll3!!.setOnClickListener {
+//            startActivity(Intent(context, AddServiceActivity::class.java)
+//                    .putExtra("vehicleId", "C02130602000120171202001"))
+//        }
+//        //取车登记
+//        ll4!!.setOnClickListener {
+//            startActivity(Intent(context, AddGetCarActivity::class.java)
+//                    .putExtra("vehicleId", "C02130602000120171202001"))
+//        }
+//        //车辆承接
+//        ll5!!.setOnClickListener {
+//            startActivity(Intent(context, SearchVehicleActivity::class.java))
+//        }
+//        //可疑车辆登记
+//        ll6!!.setOnClickListener {
+//            startActivity(Intent(context, AddDubiousCarActivity::class.java)
+//                    .putExtra("vehicleId", "C02130602000120171202001"))
+//        }
     }
 
     /**

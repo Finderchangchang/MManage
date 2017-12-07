@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">机动车修理业治安管理系统</string>
+    <string name="app_short_name">机修管理系统</string>
+
     <string name="title_activity_login">LoginActivity</string>
     <string name="title_activity_add_employee">AddEmployeeActivity</string>
 </resources>

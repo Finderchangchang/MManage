@@ -10,24 +10,23 @@ import com.google.gson.JsonParser
 import gd.mmanage.R
 import gd.mmanage.base.BaseActivity
 import gd.mmanage.config.command
-import gd.mmanage.databinding.ActivityAddEmployeeBinding
-import gd.mmanage.databinding.ActivityAddPartsBinding
+import gd.mmanage.databinding.ActivityAddPartsServicesBinding
 import gd.mmanage.databinding.ActivitySearchPartsBinding
 import gd.mmanage.method.CommonAdapter
 import gd.mmanage.method.CommonViewHolder
 import gd.mmanage.method.UtilControl
-import gd.mmanage.model.EmployeeModel
+import gd.mmanage.method.Utils
 import gd.mmanage.model.NormalRequest
 import gd.mmanage.model.PageModel
+import gd.mmanage.model.PartsBusinessModel
 import gd.mmanage.model.PartsModel
 import gd.mmanage.ui.inbound.ChoiceInBoundActivity
-import kotlinx.android.synthetic.main.activity_search_parts.*
+import kotlinx.android.synthetic.main.activity_add_parts_services.*
 
 /**
  * 查询配件信息
  * */
-class SearchPartsActivity : BaseActivity<ActivitySearchPartsBinding>(), AbsModule.OnCallback {
-    var only_selected = false//仅仅是选择
+class AddPartsServicesActivity : BaseActivity<ActivityAddPartsServicesBinding>(), AbsModule.OnCallback {
     override fun onSuccess(result: Int, success: Any?) {
         main_srl.isRefreshing = false
         when (result) {
@@ -44,6 +43,19 @@ class SearchPartsActivity : BaseActivity<ActivitySearchPartsBinding>(), AbsModul
                 adapter!!.refresh(answer_list)
                 main_lv.getIndex(page_index, 20, mode.ItemCount)
             }
+            command.parts -> {
+                success as NormalRequest<JsonElement>
+                if (success.code == 0) {
+                    if (save_num == result_list.size - 1) {
+                        finish()
+                        toast("添加成功")
+                    } else {
+                        save_num++
+                    }
+                } else {
+                    toast(success.message)
+                }
+            }
         }
     }
 
@@ -53,36 +65,40 @@ class SearchPartsActivity : BaseActivity<ActivitySearchPartsBinding>(), AbsModul
 
     var adapter: CommonAdapter<PartsModel>? = null//资讯
     var answer_list = ArrayList<PartsModel>()
-
+    var result_list = ArrayList<PartsModel>()
+    var vehicleId = ""
+    var save_num = 0//当前是第几次保存
     override fun init(savedInstanceState: Bundle?) {
         super.init(savedInstanceState)//http://192.168.1.115:3334/Api/Storage/SearchStorage
-        only_selected = intent.getBooleanExtra("only_selected", true)
+        vehicleId = intent.getStringExtra("vehicleId")
+
         control = getModule(PratsModule::class.java, this)//初始化数据访问层
-        adapter = object : CommonAdapter<PartsModel>(this, answer_list, R.layout.item_part) {
+        adapter = object : CommonAdapter<PartsModel>(this, answer_list, R.layout.item_vehicle_add) {
             override fun convert(holder: CommonViewHolder, model: PartsModel, position: Int) {
                 holder.setText(R.id.name_tv, model.PartsName + "  " + model.PartsSpecifications)
                 holder.setText(R.id.price_tv, "￥" + model.PartesPrice)
                 holder.setText(R.id.company_type_tv, model.PartsManufacturer)
                 holder.setText(R.id.count_tv, "共" + model.PartsNumber + "件")
-                holder.setVisible(R.id.update_ll, only_selected)
-                //修改操作
-                holder.setOnClickListener(R.id.update_ll) {
-                    if (!only_selected) {//仅选择
-                        setResult(13, Intent().putExtra("model", model))
-                        finish()
-                    } else {
-                        startActivityForResult(Intent(this@SearchPartsActivity, AddPartsActivity::class.java)
-                                .putExtra("model", model), 11)
+                holder.setChecked(R.id.checkbox, model.num > 0)//设置是否点击
+                //增加
+                holder.setOnClickListener(R.id.jia_iv) {
+                    var result = answer_list[position].num + 1
+                    if (result <= model.PartsNumber.toInt()) {
+                        answer_list[position].num = result
+                        adapter!!.refresh(answer_list)
+                        holder.setText(R.id.num_tv, result.toString())
+                    }
+                }
+                //减少
+                holder.setOnClickListener(R.id.jian_iv) {
+                    var result = answer_list[position].num - 1
+                    if (result >= 0) {
+                        answer_list[position].num = result
+                        adapter!!.refresh(answer_list)
+                        holder.setText(R.id.num_tv, result.toString())
                     }
                 }
             }
-        }
-        //控制添加按钮显示隐藏
-        if (only_selected) bottom_ll.visibility = View.VISIBLE else bottom_ll.visibility = View.GONE
-        title_bar.setRightClick {
-            startActivityForResult(
-                    Intent(this@SearchPartsActivity, ChoiceInBoundActivity::class.java)
-                            .putExtra("model", choice_model), 11)
         }
         main_lv.adapter = adapter
         //解决listview和srl冲突问题
@@ -96,22 +112,22 @@ class SearchPartsActivity : BaseActivity<ActivitySearchPartsBinding>(), AbsModul
             page_index = 1
             load_data()
         }
-        //item点击事件
-        main_lv.setOnItemClickListener { parent, view, position, id ->
-            if (!only_selected) {//仅选择
-                var intent = Intent()
-                intent.putExtra("model", answer_list[position])
-                setResult(13, intent)
-                finish()
-            } else {
-                startActivity(Intent(this, PartDetailActivity::class.java)
-                        .putExtra("id", answer_list[position].PartsId))
-            }
-        }
         //添加配件信息
         add_btn.setOnClickListener {
-            startActivityForResult(Intent(this@SearchPartsActivity, AddPartsActivity::class.java)
-                    .putExtra("model", PartsModel()), 11)
+            answer_list.filter { it.num > 0 }.forEach { result_list.add(it) }
+            if (result_list.size == 0) {
+                toast("请选择需要添加的配件")
+            } else {
+                for (key in result_list) {
+                    var model = PartsBusinessModel()
+                    //model.Comment = desc_et.text.toString().trim()
+                    model.Number = key.num.toString()
+                    model.PartsId = key.PartsId
+                    model.CreateTime = Utils.normalTime
+                    model.VehicleId = vehicleId
+                    control!!.add_service_prat(model)
+                }
+            }
         }
         load_data()
     }
@@ -121,10 +137,7 @@ class SearchPartsActivity : BaseActivity<ActivitySearchPartsBinding>(), AbsModul
         when (resultCode) {
             12, 1 -> {//刷新数据
                 page_index = 1
-                try {
-                    choice_model = data!!.getSerializableExtra("model") as PartsModel
-                } catch (e: Exception) {
-                }
+                choice_model = data!!.getSerializableExtra("model") as PartsModel
                 load_data()
             }
         }
@@ -141,6 +154,6 @@ class SearchPartsActivity : BaseActivity<ActivitySearchPartsBinding>(), AbsModul
     var page_index = 1
     var choice_model: PartsModel = PartsModel()
     override fun setLayoutId(): Int {
-        return R.layout.activity_search_parts
+        return R.layout.activity_add_parts_services
     }
 }

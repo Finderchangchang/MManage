@@ -1,4 +1,4 @@
-package gd.mmanage.ui.employee
+package gd.mmanage.ui.notice
 
 import android.content.Intent
 import android.os.Bundle
@@ -21,12 +21,14 @@ import com.google.gson.JsonParser
 import com.google.gson.Gson
 import gd.mmanage.method.UtilControl
 import gd.mmanage.model.PageModel
+import gd.mmanage.ui.employee.AddEmployeeActivity
+import gd.mmanage.ui.employee.ChoiceEmployeeActivity
 
 
 /**
- * 从业人员信息管理
+ * 通知通告管理
  * */
-class SearchEmployeeActivity : BaseActivity<ActivitySearchEmployeeBinding>(), AbsModule.OnCallback {
+class SearchNoticeActivity : BaseActivity<ActivitySearchEmployeeBinding>(), AbsModule.OnCallback {
     var adapter: CommonAdapter<EmployeeModel>? = null//资讯
     var answer_list = ArrayList<EmployeeModel>()
     var page_index = 1//当前页码数
@@ -53,7 +55,7 @@ class SearchEmployeeActivity : BaseActivity<ActivitySearchEmployeeBinding>(), Ab
                 holder.setText(R.id.address_tv, model.EmployeeAddress)
                 //修改操作
                 holder.setOnClickListener(R.id.update_ll) {
-                    startActivityForResult(Intent(this@SearchEmployeeActivity, AddEmployeeActivity::class.java)
+                    startActivityForResult(Intent(this@SearchNoticeActivity, AddEmployeeActivity::class.java)
                             .putExtra("model", answer_list[position]), 11)
                 }
             }
@@ -61,7 +63,7 @@ class SearchEmployeeActivity : BaseActivity<ActivitySearchEmployeeBinding>(), Ab
 
         title_bar.setLeftClick { finish() }
         title_bar.setRightClick {
-            startActivityForResult(Intent(this@SearchEmployeeActivity, ChoiceEmployeeActivity::class.java)
+            startActivityForResult(Intent(this@SearchNoticeActivity, ChoiceEmployeeActivity::class.java)
                     .putExtra("model", chice_model), 11)
         }
         main_lv.adapter = adapter
@@ -78,7 +80,7 @@ class SearchEmployeeActivity : BaseActivity<ActivitySearchEmployeeBinding>(), Ab
         }
         //添加从业人员
         add_btn.setOnClickListener {
-            startActivityForResult(Intent(this@SearchEmployeeActivity, AddEmployeeActivity::class.java)
+            startActivityForResult(Intent(this@SearchNoticeActivity, AddEmployeeActivity::class.java)
                     .putExtra("model", EmployeeModel()), 11)
         }
         main_srl.setOnRefreshListener {
@@ -92,7 +94,7 @@ class SearchEmployeeActivity : BaseActivity<ActivitySearchEmployeeBinding>(), Ab
         dialog!!.show()
         var map = UtilControl.change(chice_model)
         map.put("page_index", page_index.toString())
-        control!!.get_employees(map)
+        control!!.get_notice(map)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -117,7 +119,7 @@ class SearchEmployeeActivity : BaseActivity<ActivitySearchEmployeeBinding>(), Ab
     override fun onSuccess(result: Int, success: Any?) {
         close()
         when (result) {
-            command.employee + 3 -> {
+            command.employee + 4 -> {
                 success as NormalRequest<JsonElement>
                 if (page_index == 1) {
                     answer_list = ArrayList()

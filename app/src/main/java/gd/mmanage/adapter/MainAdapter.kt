@@ -17,7 +17,7 @@ class MainAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
 
     init {
         list.add(MainFragment())
-        list.add(VehicleFragment())
+        //list.add(VehicleFragment())
         list.add(UserFragment())
 
     }

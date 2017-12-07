@@ -11,15 +11,21 @@ import gd.mmanage.databinding.ActivityLoginBinding
 import kotlinx.android.synthetic.main.activity_login.*
 import android.content.Intent
 import android.databinding.repacked.apache.commons.codec.digest.DigestUtils
+import android.support.v7.app.AlertDialog
 import android.text.TextUtils
+import com.google.gson.Gson
+import com.google.gson.JsonElement
 import com.jaeger.library.StatusBarUtil
 import gd.mmanage.model.NormalRequest
 import com.jiangyy.easydialog.LoadingDialog
 import gd.mmanage.config.command
 import gd.mmanage.config.sp
+import gd.mmanage.config.url
 import gd.mmanage.method.Sha1
+import gd.mmanage.method.UpdateManager
 import gd.mmanage.method.Utils
 import gd.mmanage.model.CodeModel
+import gd.mmanage.model.UpdateModel
 import gd.mmanage.service.DownConfigService
 import gd.mmanage.ui.config.DownHotelActivity
 import gd.mmanage.ui.main.HomeActivity
@@ -99,9 +105,25 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(), AbsModule.OnCallback
                 }
             }
             command.login + 1 -> {//检查版本更新
-                success as NormalRequest<List<CodeModel>>
-                if (success.result) {//提示更新
+                success as NormalRequest<JsonElement>
+                if (success.code == 0) {//提示更新
                     //toast(success.obj)
+                    var model = Gson().fromJson<UpdateModel>(success.obj, UpdateModel::class.java)
+                    var vv = Utils.version
+                    if (Utils.version != model.AndroidVersion) {
+                        if (!EasyPermissions.hasPermissions(this@LoginActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                            EasyPermissions.requestPermissions(this@LoginActivity, "需要下载新的apk",
+                                    2, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                        } else {
+                            val builder = AlertDialog.Builder(this@LoginActivity)
+                            builder.setTitle("提示")
+                            builder.setMessage("您有新的版本，请及时更新~~")
+                            builder.setNegativeButton("确定") { dialog, which ->
+                                UpdateManager(this@LoginActivity).checkUpdateInfo(url.normal + model.AndroidUpdateUrl)
+                            }
+                            builder.show()
+                        }
+                    }
                 }
             }
         }

@@ -7,7 +7,7 @@
 
         <variable
             name="model"
-            type="gd.mmanage.model.VehicleModel" />
+            type="gd.mmanage.model.DetailModel" />
     </data>
 
     <LinearLayout
@@ -67,7 +67,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="20dp"
-                            android:text="@{model.VehiclePerson}" />
+                            android:text="@{model.vehicle.VehiclePerson}" />
                     </LinearLayout>
 
                     <TextView
@@ -91,7 +91,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="20dp"
-                            android:text="@{model.vehiclePersonPhone}" />
+                            android:text="@{model.vehicle.vehiclePersonPhone}" />
                     </LinearLayout>
 
                     <TextView
@@ -115,7 +115,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="20dp"
-                            android:text="@{model.vehicleReceivePerson}" />
+                            android:text="@{model.vehicle.vehicleReceivePerson}" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -134,7 +134,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="20dp"
-                            android:text="@{model.vehicleReceiveTime}" />
+                            android:text="@{model.vehicle.vehicleReceiveTime}" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -205,7 +205,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
-                        android:text="@{model.vehicleOwner}" />
+                        android:text="@{model.vehicle.vehicleOwner}" />
                 </LinearLayout>
 
                 <TextView
@@ -229,7 +229,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
-                        android:text="@{model.vehicleNumber}" />
+                        android:text="@{model.vehicle.vehicleNumber}" />
                 </LinearLayout>
 
                 <TextView
@@ -253,7 +253,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
-                        android:text="@{model.vehicleBrand}" />
+                        android:text="@{model.vehicle.vehicleBrand}" />
                 </LinearLayout>
 
                 <TextView
@@ -270,14 +270,14 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="车  架   号" />
+                        android:text="车  架  号" />
 
                     <TextView
                         android:id="@+id/tv5"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
-                        android:text="@{model.vehicleFrameNumber}" />
+                        android:text="@{model.vehicle.vehicleFrameNumber}" />
                 </LinearLayout>
 
                 <TextView
@@ -301,7 +301,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
-                        android:text="@{model.vehicleEngine}" />
+                        android:text="@{model.vehicle.vehicleEngine}" />
                 </LinearLayout>
 
                 <LinearLayout

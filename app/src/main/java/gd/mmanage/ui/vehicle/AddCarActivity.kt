@@ -14,6 +14,7 @@ import com.google.gson.JsonObject
 import gd.mmanage.R
 import gd.mmanage.base.BaseActivity
 import gd.mmanage.config.command
+import gd.mmanage.config.sp
 import gd.mmanage.control.CarManageModule
 import gd.mmanage.databinding.ActivityAddCarBinding
 import gd.mmanage.databinding.ActivityAddPartsBinding
@@ -47,6 +48,8 @@ class AddCarActivity : BaseActivity<ActivityAddCarBinding>(), AbsModule.OnCallba
                     } else {
                         toast("修改成功")
                     }
+                    AddPersonActivity.context!!.finish()
+                    finish()
                 } else {
                     if (TextUtils.isEmpty(model!!.VehicleId)) {
                         toast("添加失败")
@@ -97,13 +100,19 @@ class AddCarActivity : BaseActivity<ActivityAddCarBinding>(), AbsModule.OnCallba
         xc_url = intent.getStringExtra("xc_url")
         user_img = intent.getSerializableExtra("user_file") as FileModel
         var img_list = ArrayList<FileModel>()
-        var bmp = uu.getimage(100, xc_url)
-        var xc_img = uu.compressImage(uu.rotaingImageView(90, uu.compressImage(bmp)))
-        img_list.add(FileModel(bitmap_to_bytes(xc_img), "送车人实际照片", "C3", ""))
-        img_list.add(user_img!!)
-        model!!.files = Gson().toJson(img_list).toString()
+        if (!TextUtils.isEmpty(xc_url)) {
+            var bmp = uu.getimage(100, xc_url)
+            var xc_img = uu.compressImage(uu.rotaingImageView(90, uu.compressImage(bmp)))
+            img_list.add(FileModel(bitmap_to_bytes(xc_img), "送车人实际照片", "C3", ""))
+        }
+        if (user_img!!.FileContent != null) {
+            img_list.add(user_img!!)
+        }
+        if (img_list.size > 0) {
+            model!!.files = Gson().toJson(img_list).toString()
+        }
         binding.model = model//刷新一下数据
-        control!!.get_vehicleByIdCard("130624198709183414")
+        control!!.get_vehicleByIdCard(model!!.VehiclePersonCertNumber)
         //选择送车人名下车辆
         cars_tv.setOnClickListener {
             builder.show()
@@ -123,6 +132,7 @@ class AddCarActivity : BaseActivity<ActivityAddCarBinding>(), AbsModule.OnCallba
             }
             builder.create().show()
         }
+        model!!.VehicleReceiveUser = Utils.getCache(sp.user_id)
         employees = db!!.findAll(EmployeeModel::class.java)
         emp_array = arrayOfNulls(employees!!.size)
         for (i in 0 until employees!!.size) {

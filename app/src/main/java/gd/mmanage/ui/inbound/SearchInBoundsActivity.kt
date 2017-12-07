@@ -113,7 +113,11 @@ class SearchInBoundsActivity : BaseActivity<ActivitySearchInBoundsBinding>(), Ab
         when (resultCode) {
             12, 1 -> {//刷新数据
                 page_index = 1
-                choice_model = data!!.getSerializableExtra("model") as PartsModel
+                try {
+                    choice_model = data!!.getSerializableExtra("model") as PartsModel
+                } catch (e: Exception) {
+
+                }
                 load_data()
             }
         }

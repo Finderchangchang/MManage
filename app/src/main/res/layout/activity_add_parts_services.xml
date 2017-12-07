@@ -13,8 +13,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
-            app:center_tv="配件管理"
-            app:right_tv="查询" />
+            app:center_tv="配件服务添加"/>
 
         <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/main_srl"

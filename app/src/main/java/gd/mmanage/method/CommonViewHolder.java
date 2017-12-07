@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
@@ -125,6 +126,18 @@ public class CommonViewHolder {
         return this;
     }
 
+    /**
+     * 设置checkbox选中
+     *
+     * @param viewId 控件id
+     * @param text   点击与否
+     */
+    public CommonViewHolder setChecked(int viewId, boolean text) {
+        CheckBox view = getView(viewId);
+        view.setChecked(text);
+        return this;
+    }
+
     public CommonViewHolder setTextColor(int viewId, int text) {
         TextView view = getView(viewId);
         view.setTextColor(mContext.getResources().getColor(text));
@@ -217,7 +230,7 @@ public class CommonViewHolder {
         GlideImgManager.glideLoader(mContext, url, R.mipmap.ic_launcher, R.mipmap.ic_launcher, img, 1);
         return this;
     }
-    
+
 
     //方形圆角
     public CommonViewHolder setSmallRoundImage(int vid, String url) {

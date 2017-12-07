@@ -31,7 +31,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         var mAdapter = MainAdapter(supportFragmentManager)
         tab_pager.adapter = mAdapter
         //预加载页面的个数
-        tab_pager!!.offscreenPageLimit = 3
+        tab_pager!!.offscreenPageLimit = 2
         alphaIndicator!!.setViewPager(tab_pager)
         if (!TextUtils.isEmpty(Utils.getCache(inten.blue_tooth))) {
             mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter()

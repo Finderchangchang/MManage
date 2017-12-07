@@ -123,18 +123,20 @@ class AddEmployeeActivity : BaseActivity<ActivityAddEmployeeBinding>(), AbsModul
                 var map = HashMap<String, String>()
                 var model = binding.model
                 map = UtilControl.change(model)
-                var img_list = ArrayList<FileModel>()
-                var bytt = bitmap_to_bytes()
-                var data = arrayOfNulls<Int>(bytt!!.size);
-                for (i in 0 until bytt!!.size) {
-                    if (bytt[i] < 0) {
-                        data[i] = bytt[i] + 256
-                    } else {
-                        data[i] = bytt[i].toInt()
+                if (user_bitmap != null) {
+                    var img_list = ArrayList<FileModel>()
+                    var bytt = bitmap_to_bytes()
+                    var data = arrayOfNulls<Int>(bytt!!.size);
+                    for (i in 0 until bytt.size) {
+                        if (bytt[i] < 0) {
+                            data[i] = bytt[i] + 256
+                        } else {
+                            data[i] = bytt[i].toInt()
+                        }
                     }
+                    img_list.add(FileModel(data, "111", "01", model.EmployeeId))
+                    map.put("files", Gson().toJson(img_list))
                 }
-                img_list.add(FileModel(data, "111", "01", model.EmployeeId))
-                map.put("files", Gson().toJson(img_list))
                 control!!.add_employee(map)
             }
         }
@@ -147,28 +149,6 @@ class AddEmployeeActivity : BaseActivity<ActivityAddEmployeeBinding>(), AbsModul
 
     var mz_array: Array<String?>? = null//民族的集合
     var zt_array: Array<String?>? = null//人员状态的集合
-    fun File2byte(filePath: String): ByteArray? {
-        var buffer: ByteArray? = null
-        try {
-            val file = File(filePath)
-            val fis = FileInputStream(file)
-            val bos = ByteArrayOutputStream()
-            val b = ByteArray(1024)
-            var n: Int = fis.read(b)
-            while (n != -1) {
-                bos.write(b, 0, n)
-            }
-            fis.close()
-            bos.close()
-            buffer = bos.toByteArray()
-        } catch (e: FileNotFoundException) {
-            e.printStackTrace()
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-
-        return buffer
-    }
 
     /**
      * 加载民族的字典

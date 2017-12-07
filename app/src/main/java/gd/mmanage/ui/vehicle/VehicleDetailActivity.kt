@@ -11,6 +11,7 @@ import gd.mmanage.databinding.ActivityVehicleDetailBinding
 import gd.mmanage.model.NormalRequest
 import gd.mmanage.model.VehicleModel
 import gd.mmanage.control.CarManageModule
+import gd.mmanage.model.DetailModel
 import kotlinx.android.synthetic.main.activity_vehicle_detail.*
 
 /**
@@ -30,7 +31,7 @@ class VehicleDetailActivity : BaseActivity<ActivityVehicleDetailBinding>(), AbsM
         when (result) {
             command.car_manage + 2 -> {//查询出来的结果
                 success as NormalRequest<JsonElement>
-                binding.model = Gson().fromJson<VehicleModel>(success.obj, VehicleModel::class.java)
+                binding.model = Gson().fromJson<DetailModel>(success.obj, DetailModel::class.java)
             }
         }
     }

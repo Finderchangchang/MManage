@@ -75,7 +75,7 @@ class HomeActivity : BaseActivity<ActivityMainBinding>(), AbsModule.OnCallback {
         var mAdapter = MainAdapter(supportFragmentManager)
         tab_pager.adapter = mAdapter
         //预加载页面的个数
-        tab_pager.offscreenPageLimit = 3
+        tab_pager.offscreenPageLimit = 2
         alphaIndicator!!.setViewPager(tab_pager)
         getModule(EmployeeModule::class.java, this).get_employees(HashMap())
         getModule(UserModule::class.java, this).get_equipments("C021306020001")

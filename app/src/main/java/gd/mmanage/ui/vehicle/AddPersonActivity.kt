@@ -13,6 +13,7 @@ import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v7.app.AlertDialog
+import android.text.TextUtils
 import android.view.View
 import android.widget.Toast
 import com.arialyy.frame.module.AbsModule
@@ -51,6 +52,11 @@ class AddPersonActivity : BaseActivity<ActivityAddPersonBinding>(), AbsModule.On
     var user_img: Bitmap? = null//用户头像
     var xc_url = ""
     var user_url = ""
+
+    companion object {
+        var context: AddPersonActivity? = null
+    }
+
     override fun onSuccess(result: Int, success: Any?) {
         when (result) {
             command.car_manage + 5 -> {//根据身份证号获得车的记录(解析list然后用dialog的形式展示出来)
@@ -132,6 +138,7 @@ class AddPersonActivity : BaseActivity<ActivityAddPersonBinding>(), AbsModule.On
     override fun init(savedInstanceState: Bundle?) {
         super.init(savedInstanceState)
         db = FinalDb.create(this)
+        context = this
         control = getModule(CarManageModule::class.java, this)
         model = intent.getSerializableExtra("model") as VehicleModel
         //证件识别操作
@@ -153,16 +160,43 @@ class AddPersonActivity : BaseActivity<ActivityAddPersonBinding>(), AbsModule.On
                     .putExtra("position", "1"), 77)
         }
         next_btn.setOnClickListener {
-            startActivity(Intent(this@AddPersonActivity, AddCarActivity::class.java)
-                    .putExtra("model", model)
-                    .putExtra("xc_url", xc_url)//FileModel(user_img, "送车人证件照", "C2", "")
-                    .putExtra("user_file", FileModel(bitmap_to_bytes(user_img!!), "送车人证件照", "C2", "")))
+            if (check_null()) {
+                var intent = Intent(this@AddPersonActivity, AddCarActivity::class.java)
+                if (user_img != null) {
+                    intent.putExtra("user_file", FileModel(bitmap_to_bytes(user_img!!), "送车人证件照", "C2", ""))
+                } else {
+                    intent.putExtra("user_file", FileModel())
+                }
+                startActivity(intent
+                        .putExtra("model", model)
+                        .putExtra("xc_url", xc_url))//FileModel(user_img, "送车人证件照", "C2", "")
+            }
         }
         nation_ll.setOnClickListener {
             dialog(mz_array!!, 3)
         }
         init_data()
         init_blue()
+    }
+
+    //检测输入的是不是为空
+    fun check_null(): Boolean {
+        if (TextUtils.isEmpty(model.VehiclePerson)) {
+            toast("送车人姓名不能为空")
+            return false
+        } else if (TextUtils.isEmpty(model.VehiclePersonCertNumber)) {
+            toast("送车人证件号码不能为空")
+            return false
+        } else if (TextUtils.isEmpty(model.VehiclePersonAddress)) {
+            toast("家庭住址不能为空")
+            return false
+        } else if (TextUtils.isEmpty(model.VehicleId) && TextUtils.isEmpty(model.VehiclePersonCompare)) {
+            //添加图片不能为空
+            //修改图片可以为空
+            toast("请先进行人像比对")
+            return false
+        }
+        return true
     }
 
     fun init_data() {

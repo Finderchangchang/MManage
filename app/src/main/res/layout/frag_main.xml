@@ -60,7 +60,7 @@
                             style="@style/main_item_tv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="从业人员管理" />
+                            android:text="车辆承接" />
                     </LinearLayout>
 
                     <TextView
@@ -85,7 +85,27 @@
                             style="@style/main_item_tv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="配件管理" />
+                            android:text="取车登记" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll9"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <ImageView
+                            style="@style/main_item_iv"
+                            android:src="@mipmap/ll3" />
+
+                        <TextView
+                            style="@style/main_item_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="车辆管理" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -117,7 +137,7 @@
                             style="@style/main_item_tv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="维修业务" />
+                            android:text="机修登记" />
                     </LinearLayout>
 
                     <TextView
@@ -142,7 +162,32 @@
                             style="@style/main_item_tv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="取车登记" />
+                            android:text="可疑车辆" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/line_bg"
+                        tools:ignore="Suspicious0dp" />
+
+                    <LinearLayout
+                        android:id="@+id/ll7"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            style="@style/main_item_iv"
+                            android:src="@mipmap/ll7" />
+
+                        <TextView
+                            style="@style/main_item_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="配件业务" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -174,7 +219,7 @@
                             style="@style/main_item_tv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="车辆承接" />
+                            android:text="配件管理" />
                     </LinearLayout>
 
                     <TextView
@@ -199,7 +244,32 @@
                             style="@style/main_item_tv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="可疑车辆" />
+                            android:text="人员管理" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/line_bg"
+                        tools:ignore="Suspicious0dp" />
+
+                    <LinearLayout
+                        android:id="@+id/ll8"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            style="@style/main_item_iv"
+                            android:src="@mipmap/ll8" />
+
+                        <TextView
+                            style="@style/main_item_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="通知通告" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>

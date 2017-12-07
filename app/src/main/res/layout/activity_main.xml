@@ -39,17 +39,7 @@
                 app:textColorNormal="@color/bottom_bg"
                 app:textColorSelected="@color/colorPrimary" />
 
-            <com.yinglan.alphatabs.AlphaTabView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:padding="2dp"
-                app:tabIconNormal="@mipmap/ic_launcher"
-                app:tabIconSelected="@mipmap/ic_launcher"
-                app:tabText="承接"
-                app:tabTextSize="10sp"
-                app:textColorNormal="@color/bottom_bg"
-                app:textColorSelected="@color/colorPrimary" />
+
 
             <com.yinglan.alphatabs.AlphaTabView
                 android:layout_width="0dp"

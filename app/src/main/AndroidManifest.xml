@@ -24,6 +24,7 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
     <uses-feature
         android:name="android.hardware.bluetooth_le"
         android:required="false" />
@@ -33,12 +34,10 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
             android:name=".ui.LoginActivity"
-            android:label="@string/title_activity_login"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -48,7 +47,6 @@
         </activity>
         <activity
             android:name=".ui.employee.AddEmployeeActivity"
-            android:label="@string/title_activity_add_employee"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <service android:name=".service.LongRunningService" />
@@ -64,16 +62,20 @@
         <activity android:name=".ui.SetIpActivity" />
         <activity android:name=".ui.vehicle.AddCarActivity" />
         <activity android:name=".ui.vehicle.AddPersonActivity" />
+        <activity android:name=".ui.vehicle.OnlySearchVehicleActivity" />
         <activity android:name=".ui.vehicle.SearchVehicleActivity" />
         <activity android:name=".ui.vehicle.VehicleDetailActivity" />
         <activity android:name=".ui.vehicle.ChoiceVehicleActivity" />
         <activity android:name=".ui.main.HomeActivity" />
         <activity android:name=".ui.employee.SearchEmployeeActivity" />
+        <activity android:name=".ui.notice.SearchNoticeActivity" />
+
         <activity android:name=".ui.employee.ChoiceEmployeeActivity" />
         <activity android:name=".ui.parts.SearchPartsActivity" />
         <activity android:name=".ui.parts.AddPartsActivity" />
         <activity android:name=".ui.parts.PartDetailActivity" />
         <activity android:name=".ui.parts.AddPartsServiceActivity" />
+        <activity android:name=".ui.parts.AddPartsServicesActivity" />
         <activity android:name=".ui.car_manage.AddServiceActivity" />
         <activity android:name=".ui.car_manage.AddDubiousCarActivity" />
         <activity android:name=".ui.car_manage.AddGetCarActivity" />

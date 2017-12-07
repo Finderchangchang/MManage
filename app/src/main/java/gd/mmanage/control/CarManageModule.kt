@@ -35,7 +35,7 @@ class CarManageModule : BaseModule {
      * @param id 配件id
      * */
     fun get_vehicleById(id: String) {
-        HttpUtils<VehicleModel>().post(url.get_vehicle + "GetVehicle?vehicleId=" + id, command.car_manage + 2, null, this)
+        HttpUtils<VehicleModel>().post(url.get_vehicle + "GetAllVehicle?vehicleId=" + id, command.car_manage + 2, null, this)
     }
 
     /**

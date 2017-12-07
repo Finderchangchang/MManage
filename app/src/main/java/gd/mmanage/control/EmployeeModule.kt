@@ -47,4 +47,11 @@ class EmployeeModule : BaseModule {
     fun get_employees(map: HashMap<String, String>) {
         HttpUtils<List<EmployeeModel>>().post(url.get_employee + "SearchEmployee", command.employee + 3, map, this)
     }
+
+    /**
+     * 获得通知通告
+     * */
+    fun get_notice(map: HashMap<String, String>) {
+        HttpUtils<List<EmployeeModel>>().post(url.normal + "News/SearchNews", command.employee + 4, map, this)
+    }
 }

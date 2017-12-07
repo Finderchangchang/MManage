@@ -13,8 +13,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
-            app:center_tv="配件管理"
-            app:right_tv="查询" />
+            app:center_tv="通知通告" />
 
         <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/main_srl"
@@ -25,31 +24,9 @@
             <gd.mmanage.method.OnlyLoadListView
                 android:id="@+id/main_lv"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:divider="@null"
-                android:dividerHeight="0dp" />
+                android:layout_height="match_parent" />
 
         </android.support.v4.widget.SwipeRefreshLayout>
-
-        <LinearLayout
-            android:id="@+id/bottom_ll"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/add_btn"
-                android:layout_width="0dp"
-                android:layout_height="40dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
-                android:layout_weight="1"
-                android:background="@drawable/bg_button"
-                android:text="添加配件信息"
-                android:textColor="@color/white"
-                android:textSize="16sp" />
-        </LinearLayout>
     </LinearLayout>
 
 </layout>
