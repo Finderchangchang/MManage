@@ -82,7 +82,7 @@ class AddPersonActivity : BaseActivity<ActivityAddPersonBinding>(), AbsModule.On
                     startActivity(Intent(this@AddPersonActivity, AddCarActivity::class.java)
                             .putExtra("model", model)
                             .putExtra("xc_url", xc_url)//FileModel(user_img, "送车人证件照", "C2", "")
-                            .putExtra("user_file", FileModel(bitmap_to_bytes(user_img!!), "送车人证件照", "C2", "")))
+                            .putExtra("user_file", FileModel(bitmap_to_bytes(user_img!!).toString(), "送车人证件照", "C2", "")))
                 }
                 builder.show()
             }
@@ -163,7 +163,7 @@ class AddPersonActivity : BaseActivity<ActivityAddPersonBinding>(), AbsModule.On
             if (check_null()) {
                 var intent = Intent(this@AddPersonActivity, AddCarActivity::class.java)
                 if (user_img != null) {
-                    intent.putExtra("user_file", FileModel(bitmap_to_bytes(user_img!!), "送车人证件照", "C2", ""))
+                    intent.putExtra("user_file", FileModel(bitmap_to_bytes(user_img!!).toString(), "送车人证件照", "C2", ""))
                 } else {
                     intent.putExtra("user_file", FileModel())
                 }

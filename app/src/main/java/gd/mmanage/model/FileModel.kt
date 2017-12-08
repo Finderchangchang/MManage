@@ -8,14 +8,15 @@ import java.io.Serializable
 
 class FileModel : Serializable {
     //byte[] FileContent;
-    var FileContent: Array<Int?>? = null
+    var FileContent: String = ""
     var FileName = ""
     var FileType = ""
     var FileForeignId = ""
+    var FileSuffix = ".jpg"
 
     constructor() {}
 
-    constructor(fileContent: Array<Int?>, fileName: String, fileType: String, fileForeignId: String) {
+    constructor(fileContent: String, fileName: String, fileType: String, fileForeignId: String) {
         FileContent = fileContent
         FileName = fileName
         FileType = fileType

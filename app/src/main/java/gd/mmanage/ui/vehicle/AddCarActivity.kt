@@ -41,7 +41,7 @@ class AddCarActivity : BaseActivity<ActivityAddCarBinding>(), AbsModule.OnCallba
     override fun onSuccess(result: Int, success: Any?) {
         when (result) {
             command.car_manage + 1 -> {
-                success as NormalRequest<JsonObject>
+                success as NormalRequest<*>
                 if (success.code == 0) {
                     if (TextUtils.isEmpty(model!!.VehicleId)) {
                         toast("添加成功")
@@ -103,13 +103,14 @@ class AddCarActivity : BaseActivity<ActivityAddCarBinding>(), AbsModule.OnCallba
         if (!TextUtils.isEmpty(xc_url)) {
             var bmp = uu.getimage(100, xc_url)
             var xc_img = uu.compressImage(uu.rotaingImageView(90, uu.compressImage(bmp)))
-            img_list.add(FileModel(bitmap_to_bytes(xc_img), "送车人实际照片", "C3", ""))
+            img_list.add(FileModel(bitmap_to_bytes(xc_img).toString(), "送车人实际照片", "C3", ""))
         }
         if (user_img!!.FileContent != null) {
             img_list.add(user_img!!)
         }
         if (img_list.size > 0) {
-            model!!.files = Gson().toJson(img_list).toString()
+//            model!!.files = Gson().toJson(img_list).toString()
+            model!!.files = img_list
         }
         binding.model = model//刷新一下数据
         control!!.get_vehicleByIdCard(model!!.VehiclePersonCertNumber)

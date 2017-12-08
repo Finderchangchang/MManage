@@ -70,5 +70,5 @@ class VehicleModel : Serializable {
     var VehicleComment = ""
     var CreateTimeBegin = ""
     var CreateTimeEnd = ""
-    var files = ""
+    var files: List<FileModel>? = null
 }

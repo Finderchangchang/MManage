@@ -78,7 +78,7 @@ public class OnlyLoadListView extends ListView implements AbsListView.OnScrollLi
                 if (!isLoading) {
                     isLoading = true;
                     // 加载更多（获取接口）
-                    iLoadListener.onLoad(footer);
+                    if (iLoadListener != null) iLoadListener.onLoad(footer);
                 }
             }
         }
@@ -86,9 +86,9 @@ public class OnlyLoadListView extends ListView implements AbsListView.OnScrollLi
                 && this.getChildAt(0).getTop() >= this.getPaddingTop()) {
             //解决滑动冲突，当滑动到第一个item，下拉刷新才起作用
 //            isValid.setSwipeEnabledTrue();
-            srl.setEnabled(true);
+            if (srl != null) srl.setEnabled(true);
         } else {
-            srl.setEnabled(false);
+            if (srl != null) srl.setEnabled(false);
 //            if (isValid != null) {
 //                isValid.setSwipeEnabledFalse();
 //            }

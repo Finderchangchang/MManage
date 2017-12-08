@@ -134,7 +134,7 @@ class AddEmployeeActivity : BaseActivity<ActivityAddEmployeeBinding>(), AbsModul
                             data[i] = bytt[i].toInt()
                         }
                     }
-                    img_list.add(FileModel(data, "111", "01", model.EmployeeId))
+                    img_list.add(FileModel(data.toString(), "111", "01", model.EmployeeId))
                     map.put("files", Gson().toJson(img_list))
                 }
                 control!!.add_employee(map)
