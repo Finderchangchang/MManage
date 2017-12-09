@@ -65,6 +65,7 @@ class SearchPartsActivity : BaseActivity<ActivitySearchPartsBinding>(), AbsModul
                 holder.setText(R.id.company_type_tv, model.PartsManufacturer)
                 holder.setText(R.id.count_tv, "共" + model.PartsNumber + "件")
                 holder.setVisible(R.id.update_ll, only_selected)
+                holder.setVisible(R.id.bottom_line_v, only_selected)
                 //修改操作
                 holder.setOnClickListener(R.id.update_ll) {
                     if (!only_selected) {//仅选择

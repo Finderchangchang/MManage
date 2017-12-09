@@ -8,6 +8,14 @@
         <variable
             name="model"
             type="gd.mmanage.model.EnterpriseModel" />
+
+        <variable
+            name="xc"
+            type="String" />
+
+        <variable
+            name="qy"
+            type="String" />
     </data>
 
     <LinearLayout
@@ -17,7 +25,8 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="140dp">
+            android:layout_height="140dp"
+            android:background="@mipmap/login_title">
 
             <ImageView
                 android:layout_width="70dp"
@@ -25,7 +34,8 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="50dp"
-                android:src="@mipmap/ic_launcher" />
+                android:src="@mipmap/company"
+                android:visibility="gone"/>
 
             <ImageView
                 android:id="@+id/set_iv"
@@ -34,7 +44,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_margin="10dp"
                 android:padding="6dp"
-                android:src="@mipmap/ic_launcher" />
+                android:src="@mipmap/set" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -81,7 +91,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:background="@null"
-                android:text="@={model.enterpriseVehicleType}" />
+                android:text="@{xc}" />
         </LinearLayout>
 
         <View
@@ -112,7 +122,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:background="@null"
-                android:text="@={model.enterpriseState}" />
+                android:text="@{qy}" />
         </LinearLayout>
 
         <View

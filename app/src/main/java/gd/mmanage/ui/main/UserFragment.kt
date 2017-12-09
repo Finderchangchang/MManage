@@ -15,9 +15,11 @@ import gd.mmanage.config.command
 import gd.mmanage.control.LoginModule
 import gd.mmanage.control.UserModule
 import gd.mmanage.databinding.FragUserBinding
+import gd.mmanage.model.CodeModel
 import gd.mmanage.model.EnterpriseModel
 import gd.mmanage.model.NormalRequest
 import gd.mmanage.ui.config.SetActivity
+import net.tsz.afinal.FinalDb
 
 /**
  * Created by Administrator on 2017/11/11.
@@ -25,12 +27,18 @@ import gd.mmanage.ui.config.SetActivity
 
 class UserFragment : BaseFragment<FragUserBinding>(), AbsModule.OnCallback {
     var set_iv: ImageView? = null
+    var db: FinalDb? = null
+    var xc_list: List<CodeModel>? = null
+    var qy_list: List<CodeModel>? = null
     override fun onSuccess(result: Int, success: Any?) {
         when (result) {
             command.user -> {
                 success as NormalRequest<JsonElement>
-                var model: EnterpriseModel = Gson().fromJson(success.obj
-                        , EnterpriseModel::class.java)
+                var model: EnterpriseModel = Gson().fromJson(success.obj, EnterpriseModel::class.java)
+                xc_list = db!!.findAllByWhere(CodeModel::class.java, " CodeName='Code_RepairType' and ID='"+model.EnterpriseVehicleType+"'")//修车类型
+                if(xc_list!=null&& xc_list!!.isNotEmpty())binding.xc=xc_list!![0].Name
+                qy_list = db!!.findAllByWhere(CodeModel::class.java, " CodeName='Code_EnterpriseState' and ID='"+model.EnterpriseVehicleType+"'")//企业状态
+                if(qy_list!=null&& qy_list!!.isNotEmpty())binding.qy=qy_list!![0].Name
                 binding.model = model
             }
         }
@@ -43,6 +51,8 @@ class UserFragment : BaseFragment<FragUserBinding>(), AbsModule.OnCallback {
     override fun init(savedInstanceState: Bundle?) {
         control = getModule(UserModule::class.java, this)
         control!!.get_company_info("C021306020001")
+        db = FinalDb.create(context)
+
     }
 
     override fun load_view(view: View?) {

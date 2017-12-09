@@ -45,6 +45,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".ui.employee.AddEmployeeActivity"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -69,6 +70,7 @@
         <activity android:name=".ui.main.HomeActivity" />
         <activity android:name=".ui.employee.SearchEmployeeActivity" />
         <activity android:name=".ui.notice.SearchNoticeActivity" />
+        <activity android:name=".ui.notice.NoticeDetailActivity" />
 
         <activity android:name=".ui.employee.ChoiceEmployeeActivity" />
         <activity android:name=".ui.parts.SearchPartsActivity" />

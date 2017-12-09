@@ -4,7 +4,8 @@ package gd.mmanage.config
  * Created by Administrator on 2017/11/17.
  */
 object url {
-    var normal = "http://192.168.1.115:3334/Api/"
+    var key = "http://192.168.1.115:3334/"
+    var normal = key + "Api/"
     var login = normal + "User/"
     var get_code = normal + "Code/GetCode?codeName="
     var get_enterprise = normal + "Enterprise/"
@@ -14,5 +15,5 @@ object url {
     var get_vehicle = normal + "Vehicle/"//车辆承接Suspicious
     var get_suspicious = normal + "Suspicious/"//车辆承接Repair
     var get_repair = normal + "Repair/"//车辆维修
-    var get_parts_business= normal+"PartsBusiness/"//配件业务
+    var get_parts_business = normal + "PartsBusiness/"//配件业务
 }

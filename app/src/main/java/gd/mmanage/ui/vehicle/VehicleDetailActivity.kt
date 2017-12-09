@@ -13,6 +13,7 @@ import gd.mmanage.databinding.ActivityVehicleDetailBinding
 import gd.mmanage.control.CarManageModule
 import gd.mmanage.method.CommonAdapter
 import gd.mmanage.method.CommonViewHolder
+import gd.mmanage.method.ImgUtils
 import gd.mmanage.model.*
 import gd.mmanage.ui.car_manage.AddDubiousCarActivity
 import gd.mmanage.ui.car_manage.AddGetCarActivity
@@ -61,7 +62,6 @@ class VehicleDetailActivity : BaseActivity<ActivityVehicleDetailBinding>(), AbsM
             startActivityForResult(Intent(this@VehicleDetailActivity, AddPartsServicesActivity::class.java)
                     .putExtra("vehicleId", binding.model.Vehicle!!.VehicleId), 14)
         }
-
     }
 
     override fun onSuccess(result: Int, success: Any?) {
@@ -69,9 +69,11 @@ class VehicleDetailActivity : BaseActivity<ActivityVehicleDetailBinding>(), AbsM
             command.car_manage + 2 -> {//查询出来的结果
                 success as NormalRequest<*>
                 var model = Gson().fromJson<DetailModel>(success.obj.toString(), DetailModel::class.java)
+                if (model.Vehicle!!.VehicleTakeState == "01") bottom_ll.visibility = View.VISIBLE
+                else bottom_ll.visibility = View.GONE
                 binding.model = model
                 if (model != null) {
-                    if (model.Parts != null) {
+                    if (model.Parts != null && model.Parts!!.isNotEmpty()) {
                         pj_ll.visibility = View.VISIBLE
                         pj_tv.visibility = View.VISIBLE
                         adapter!!.refresh(model.Parts)
@@ -82,6 +84,12 @@ class VehicleDetailActivity : BaseActivity<ActivityVehicleDetailBinding>(), AbsM
                     }
                     if (model.Suspicious != null) {
                         bj_ll.visibility = View.VISIBLE
+                    }
+                    if (model.Vehicle!!.files!!.isNotEmpty()) {
+                        iv.setImageBitmap(ImgUtils().base64ToBitmap(model.Vehicle!!.files!![0].FileContent))
+                        iv1.setImageBitmap(ImgUtils().base64ToBitmap(model.Vehicle!!.files!![1].FileContent))
+                        iv2.setImageBitmap(ImgUtils().base64ToBitmap(model.Vehicle!!.files!![2].FileContent))
+                        iv3.setImageBitmap(ImgUtils().base64ToBitmap(model.Vehicle!!.files!![3].FileContent))
                     }
                 }
             }

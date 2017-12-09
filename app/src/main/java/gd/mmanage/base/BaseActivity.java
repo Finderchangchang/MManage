@@ -17,11 +17,9 @@ import net.tsz.afinal.view.TitleBar;
 public abstract class BaseActivity<VB extends ViewDataBinding> extends AbsActivity<VB> {
     TitleBar title_bar;
     Toast toast;
-    String[] s;
     public AlertDialog.Builder builder;
 
     public void toast(String msg) {
-        s = new String[10];
         if (toast == null) {
             toast = Toast.makeText(this, msg, Toast.LENGTH_SHORT);
         } else {

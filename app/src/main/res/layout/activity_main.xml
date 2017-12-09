@@ -22,7 +22,7 @@
         <com.yinglan.alphatabs.AlphaTabsIndicator
             android:id="@+id/alphaIndicator"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="50dp"
             android:background="@color/white"
             android:orientation="horizontal"
             android:paddingBottom="3dp"
@@ -32,13 +32,12 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                app:tabIconNormal="@mipmap/main_search"
-                app:tabIconSelected="@mipmap/main_search"
-                app:tabText="查询"
+                app:tabIconNormal="@mipmap/main_home"
+                app:tabIconSelected="@mipmap/main_home"
+                app:tabText="首页"
                 app:tabTextSize="10sp"
                 app:textColorNormal="@color/bottom_bg"
                 app:textColorSelected="@color/colorPrimary" />
-
 
 
             <com.yinglan.alphatabs.AlphaTabView

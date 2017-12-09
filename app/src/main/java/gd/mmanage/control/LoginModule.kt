@@ -7,6 +7,7 @@ import com.lzy.okgo.callback.StringCallback
 import gd.mmanage.base.BaseModule
 import gd.mmanage.callback.LzyResponse
 import gd.mmanage.config.command
+import gd.mmanage.config.sp
 import gd.mmanage.config.url
 import gd.mmanage.method.Utils
 import gd.mmanage.model.CodeModel
@@ -41,6 +42,7 @@ class LoginModule(context: Context?) : BaseModule(context) {
      * 检查更新
      * */
     fun check_version() {
-        HttpUtils<List<CodeModel>>().post(url.normal + "Other/GetAndroidVersion", command.login + 1, this)
+        HttpUtils<List<CodeModel>>().get(url.normal + "Other/GetAndroidVersion", command.login + 1, this)
     }
+
 }

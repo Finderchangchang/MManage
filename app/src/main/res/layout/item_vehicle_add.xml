@@ -93,8 +93,9 @@
                 android:id="@+id/jian_iv"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:padding="5dp"
-                android:src="@mipmap/ic_launcher" />
+                android:padding="8dp"
+                android:scaleType="fitXY"
+                android:src="@mipmap/jian" />
 
             <TextView
                 android:id="@+id/num_tv"
@@ -107,8 +108,9 @@
                 android:id="@+id/jia_iv"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:padding="5dp"
-                android:src="@mipmap/ic_launcher" />
+                android:padding="8dp"
+                android:scaleType="fitXY"
+                android:src="@mipmap/jia" />
         </LinearLayout>
     </RelativeLayout>
 

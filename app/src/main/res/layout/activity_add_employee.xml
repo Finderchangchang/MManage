@@ -124,8 +124,8 @@
                         android:text="@{model.setSex()}" />
 
                     <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
                         android:layout_marginRight="20dp"
                         android:src="@mipmap/ic_launcher" />
                 </LinearLayout>
@@ -155,8 +155,8 @@
                         android:text="@{nation}" />
 
                     <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
                         android:layout_marginRight="20dp"
                         android:src="@mipmap/ic_launcher" />
                 </LinearLayout>
@@ -170,10 +170,10 @@
 
                 <ImageView
                     android:id="@+id/user_iv"
-                    android:layout_width="80dp"
+                    android:layout_width="85dp"
                     android:layout_height="100dp"
                     android:scaleType="fitXY"
-                    android:src="@mipmap/ic_launcher" />
+                    android:src="@mipmap/main_touxiang" />
             </LinearLayout>
         </LinearLayout>
 
@@ -294,8 +294,8 @@
                 android:text="@{state}" />
 
             <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
                 android:layout_marginRight="20dp"
                 android:src="@mipmap/ic_launcher" />
         </LinearLayout>
@@ -306,32 +306,6 @@
             android:layout_height="0.5dp"
             android:background="@color/line_bg" />
 
-        <LinearLayout
-            android:id="@+id/ll9"
-            style="@style/add_et"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="入职时间" />
-
-            <EditText
-                android:id="@+id/et9"
-                style="@style/et_style"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:background="@null"
-                android:enabled="false"
-                android:text="@={model.employeeCreateTime}" />
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="@color/line_bg" />
 
         <LinearLayout
             android:id="@+id/ll10"

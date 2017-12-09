@@ -1,5 +1,6 @@
 package gd.mmanage.control
 
+import android.text.TextUtils
 import com.arialyy.frame.module.AbsModule
 import com.google.gson.Gson
 import com.google.gson.JsonParser
@@ -9,12 +10,20 @@ import com.lzy.okgo.callback.StringCallback
 import gd.mmanage.base.BaseModule
 import gd.mmanage.callback.LzyResponse
 import gd.mmanage.config.command
+import gd.mmanage.config.command.login
+import gd.mmanage.config.command.parts
+import gd.mmanage.config.sp
+import gd.mmanage.method.Sha1
+import gd.mmanage.method.Utils
+import gd.mmanage.method.Utils.string2MD5
 import gd.mmanage.model.CodeModel
 import gd.mmanage.model.NormalRequest
 import okhttp3.Call
 import okhttp3.Response
 import wai.gr.cla.callback.JsonCallback
 import java.lang.Exception
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * Created by Administrator on 2017/11/16.
@@ -51,6 +60,19 @@ class HttpUtils<T> {
             for (model in map) {
                 go.params(model.key, model.value)
             }
+        }
+        if (back_id > login) {
+            var token = Utils.getCache(sp.token)
+            if (!TextUtils.isEmpty(token)) {
+                go!!.params("Token", token)//令牌
+            }
+            val df = SimpleDateFormat("yyyyMMddHHmmss")//设置日期格式
+            var TimeStamp = df.format(Date())// new Date()为
+            var md5 = Utils.getCache(sp.pwd)// 获取当前系统时间
+            var md51 = string2MD5(Utils.getCache(sp.pwd))
+            go!!.params("AccountId", Utils.getCache(sp.user_id))//账号id 密码先md5加密
+                    .params("AccountSecret", Sha1.encode(string2MD5(Utils.getCache(sp.pwd)).toUpperCase() + "_" + TimeStamp).toUpperCase())
+                    .params("TimeStamp", TimeStamp)
         }
         go.execute(object : StringCallback() {
             override fun onSuccess(str: String, call: okhttp3.Call?, response: okhttp3.Response?) {
@@ -90,6 +112,19 @@ class HttpUtils<T> {
             for (model in map) {
                 go.params(model.key, model.value)
             }
+        }
+        if (back_id > login) {
+            var token = Utils.getCache(sp.token)
+            if (!TextUtils.isEmpty(token)) {
+                go!!.params("Token",token.toString())//令牌
+            }
+            val df = SimpleDateFormat("yyyyMMddHHmmss")//设置日期格式
+            var TimeStamp = df.format(Date())// new Date()为
+            var md5 = Utils.getCache(sp.pwd)// 获取当前系统时间
+            var md51 = string2MD5(Utils.getCache(sp.pwd))
+            go!!.params("AccountId", Utils.getCache(sp.user_id))//账号id 密码先md5加密
+                    .params("AccountSecret", Sha1.encode(string2MD5(Utils.getCache(sp.pwd)).toUpperCase() + "_" + TimeStamp).toUpperCase())
+                    .params("TimeStamp", TimeStamp)
         }
         go.execute(object : StringCallback() {
             override fun onSuccess(str: String, call: okhttp3.Call?, response: okhttp3.Response?) {

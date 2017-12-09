@@ -97,8 +97,7 @@ class SearchInBoundsActivity : BaseActivity<ActivitySearchInBoundsBinding>(), Ab
         }
         //入库单添加
         add_in_bound_btn.setOnClickListener {
-            startActivityForResult(Intent(this@SearchInBoundsActivity, AddInBoundActivity::class.java)
-                    .putExtra("storagePartsId", "5A1B6BFF32BF500270AA0A16"), 11)
+            startActivityForResult(Intent(this@SearchInBoundsActivity, AddInBoundActivity::class.java), 11)
         }
         //添加配件信息
         add_pj_btn.setOnClickListener {

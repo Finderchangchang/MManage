@@ -66,7 +66,6 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(), AbsModule.OnCallback
             EasyPermissions.requestPermissions(this@LoginActivity, "您需要允许以下权限",
                     2, Manifest.permission.READ_PHONE_STATE);
         }
-        control!!.check_version()//检查更新
         //标志不存在，执行下载配置信息操作
         //if (TextUtils.isEmpty(Utils.getCache(sp.down_all))) {
         startService(Intent(this, DownConfigService::class.java))
@@ -95,11 +94,15 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(), AbsModule.OnCallback
     override fun onSuccess(result: Int, success: Any?) {
         when (result) {
             command.login -> {//登录接口
-                success as NormalRequest<String>
+                var s = success as NormalRequest<String>
                 if (success.code == 0) {
                     startActivity(Intent(this@LoginActivity, HomeActivity::class.java))
                     finish()
-                    Utils.putCache(sp.user_id, name_et.text.toString().trim())//姓名
+                    var obb = success.obj.toString()
+                    if (!TextUtils.isEmpty(obb)) obb = obb.substring(1, obb.length - 1)
+                    Utils.putCache(sp.token, obb)
+                    Utils.putCache(sp.user_id, id_et.text.toString().trim())//姓名
+                    Utils.putCache(sp.pwd, pwd_et.text.toString().trim())//姓名
                 } else {
                     if (!TextUtils.isEmpty(success.message)) toast(success.message)
                 }
@@ -119,7 +122,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(), AbsModule.OnCallback
                             builder.setTitle("提示")
                             builder.setMessage("您有新的版本，请及时更新~~")
                             builder.setNegativeButton("确定") { dialog, which ->
-                                UpdateManager(this@LoginActivity).checkUpdateInfo(url.normal + model.AndroidUpdateUrl)
+                                UpdateManager(this@LoginActivity).checkUpdateInfo(url.key + model.AndroidUpdateUrl)
                             }
                             builder.show()
                         }

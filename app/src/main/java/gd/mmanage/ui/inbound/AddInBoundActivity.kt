@@ -9,7 +9,9 @@ import com.arialyy.frame.module.AbsModule
 import com.google.gson.JsonElement
 import gd.mmanage.R
 import gd.mmanage.base.BaseActivity
+import gd.mmanage.config.sp
 import gd.mmanage.databinding.ActivityAddInBoundBinding
+import gd.mmanage.method.Utils
 import gd.mmanage.model.EmployeeModel
 import gd.mmanage.model.NormalRequest
 import gd.mmanage.model.PartsModel
@@ -39,13 +41,11 @@ class AddInBoundActivity : BaseActivity<ActivityAddInBoundBinding>(), AbsModule.
     var emp_array: Array<String?>? = null//从业人员的集合
     var employees: List<EmployeeModel>? = null//从业人员model
     var db: FinalDb? = null
-    var storagePartsId = ""//配件编码
     var control: InBoundsModule? = null
     override fun init(savedInstanceState: Bundle?) {
         super.init(savedInstanceState)
         db = FinalDb.create(this)
         control = getModule(InBoundsModule::class.java, this)
-        storagePartsId = intent.getStringExtra("storagePartsId")//获得配件编码
         employees = db!!.findAll(EmployeeModel::class.java)
         emp_array = arrayOfNulls(employees!!.size)
         for (i in 0 until employees!!.size) {
@@ -68,12 +68,16 @@ class AddInBoundActivity : BaseActivity<ActivityAddInBoundBinding>(), AbsModule.
             builder.create().show()
         }
         save_btn.setOnClickListener {
-            model.StorageNumber = et6.text.toString().trim()
-            model.StorageUser = "123"//入库用户
-            model.StoragePartsId = storagePartsId
-            model.StorageTime = "2017-11-12"
-            control!!.add_prat(model)
+            if (model.StoragePartsId.isEmpty()) {
+                toast("请选择需要入库的配件信息")
+            } else {
+                model.StorageNumber = et6.text.toString().trim()
+                model.StorageUser = Utils.getCache(sp.user_id)
+                model.StorageTime = Utils.normalTime
+                control!!.add_prat(model)
+            }
         }
+        et6.setSelection(1)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

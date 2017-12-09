@@ -9,4 +9,7 @@ object sp {
     var token = "token"
     var down_all = "down_all"
     var equipment_id = "equipment_id"//设备id
+    var company_id = "company_id"//企业编码
+    var blueToothName = "BlueToothName"
+    var blueToothAddress = "BlueToothAddress"
 }

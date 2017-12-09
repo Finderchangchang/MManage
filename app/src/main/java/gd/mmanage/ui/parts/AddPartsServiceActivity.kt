@@ -10,6 +10,7 @@ import gd.mmanage.R
 import gd.mmanage.base.BaseActivity
 import gd.mmanage.databinding.ActivityAddInBoundBinding
 import gd.mmanage.databinding.ActivityAddPartsServiceBinding
+import gd.mmanage.method.Utils
 import gd.mmanage.model.*
 import gd.mmanage.ui.inbound.InBoundsModule
 import kotlinx.android.synthetic.main.activity_add_parts_service.*
@@ -52,7 +53,7 @@ class AddPartsServiceActivity : BaseActivity<ActivityAddPartsServiceBinding>(), 
                 model.Number = tv4.text.toString().trim()//配件数量
             }
             model.Comment = desc_et.text.toString().trim()
-            model.CreateTime = "2017-11-12"
+            model.CreateTime = Utils.normalTime
             model.VehicleId = vehicleId
             control!!.add_service_prat(model)
         }

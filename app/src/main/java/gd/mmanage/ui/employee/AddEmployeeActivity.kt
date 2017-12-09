@@ -30,6 +30,7 @@ import gd.mmanage.R
 import gd.mmanage.R.id.textView
 import gd.mmanage.base.BaseActivity
 import gd.mmanage.config.command
+import gd.mmanage.config.sp
 import gd.mmanage.control.EmployeeModule
 import gd.mmanage.control.LoginModule
 import gd.mmanage.databinding.ActivityAddEmployeeBinding
@@ -60,7 +61,7 @@ class AddEmployeeActivity : BaseActivity<ActivityAddEmployeeBinding>(), AbsModul
 
     override fun onSuccess(result: Int, success: Any?) {
         //添加
-        success as NormalRequest<*>
+        var s=success as NormalRequest<*>
         when (success.code) {
             0 -> {
                 when (result) {
@@ -95,7 +96,7 @@ class AddEmployeeActivity : BaseActivity<ActivityAddEmployeeBinding>(), AbsModul
 //        employee!!.EmployeePhone = "17093215800"
 //        employee!!.EmployeeState = "1"
 //        employee!!.EmployeeEntryDate = "2017-11-12"
-
+        employee!!.EnterpriseId=Utils.getCache(sp.company_id)
         binding.model = employee//数据绑定操作
         control = getModule(EmployeeModule::class.java, this)
         title_bar.setLeftClick { finish() }
@@ -108,11 +109,6 @@ class AddEmployeeActivity : BaseActivity<ActivityAddEmployeeBinding>(), AbsModul
             OnBnRead()
 //            }
         }
-        //入职时间选择
-        ll9.setOnClickListener {
-            datePickerDialog = DatePickerDialog(this, "")
-            datePickerDialog!!.datePickerDialog(et9)
-        }
         //性别选择
         ll3.setOnClickListener { dialog(arrayOf("男", "女"), 1) }
         //人员状态
@@ -122,6 +118,7 @@ class AddEmployeeActivity : BaseActivity<ActivityAddEmployeeBinding>(), AbsModul
             if (check_null()) {
                 var map = HashMap<String, String>()
                 var model = binding.model
+                model.EmployeeEntryDate = Utils.normalTime
                 map = UtilControl.change(model)
                 if (user_bitmap != null) {
                     var img_list = ArrayList<FileModel>()
@@ -178,6 +175,7 @@ class AddEmployeeActivity : BaseActivity<ActivityAddEmployeeBinding>(), AbsModul
             zt_array!![id] = model.Name
             if (zt_id == model.ID) {
                 binding.state = model.Name
+                binding.model.EmployeeState = model.ID
             }
         }
 
@@ -222,7 +220,7 @@ class AddEmployeeActivity : BaseActivity<ActivityAddEmployeeBinding>(), AbsModul
     //设备连接
     fun OnBnRead() {
         if (null == idCardReader) {
-            val device = mBluetoothAdapter!!.getRemoteDevice("00:13:04:84:00:64")
+            val device = mBluetoothAdapter!!.getRemoteDevice(Utils.getCache(sp.blueToothAddress))
             try {
                 connect(device)
             } catch (e: Exception) {
@@ -258,10 +256,10 @@ class AddEmployeeActivity : BaseActivity<ActivityAddEmployeeBinding>(), AbsModul
             val action = arg1.action
             if (action == BluetoothDevice.ACTION_FOUND) {
                 val device = arg1.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
-                if (device.address == "00:13:04:84:00:64") {//DC:0D:30:04:20:D9
+                if (device.address == Utils.getCache(sp.blueToothAddress)) {//DC:0D:30:04:20:D9
                     //0064 00:13:04:84:00:64
                     try {
-                        connect(device)
+                        //connect(device)
                     } catch (e: Exception) {
                         Toast.makeText(this@AddEmployeeActivity, "连接失败", Toast.LENGTH_SHORT).show()
                     }

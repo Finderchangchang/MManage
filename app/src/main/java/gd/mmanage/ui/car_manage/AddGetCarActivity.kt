@@ -27,8 +27,10 @@ import com.zkteco.id3xx.meta.IDCardInfo
 import gd.mmanage.R
 import gd.mmanage.base.BaseActivity
 import gd.mmanage.config.command
+import gd.mmanage.config.sp
 import gd.mmanage.control.CarManageModule
 import gd.mmanage.databinding.ActivityAddGetCarBinding
+import gd.mmanage.method.Utils
 import gd.mmanage.method.uu
 import gd.mmanage.model.*
 import gd.mmanage.ui.DemoActivity
@@ -61,7 +63,6 @@ class AddGetCarActivity : BaseActivity<ActivityAddGetCarBinding>(), AbsModule.On
                     result_btn.text = "成功"
                     model.VehicleTakePersonCompare = key.FaceScore
                     bi_tv.visibility = View.VISIBLE
-                    control!!.get_vehicleByIdCard("130624198709183414")
                 } else {
                     result_btn.text = "失败"
                     model.VehicleTakePersonCompare = "0.0"
@@ -197,9 +198,8 @@ class AddGetCarActivity : BaseActivity<ActivityAddGetCarBinding>(), AbsModule.On
     //设备连接
     fun OnBnRead() {
         if (null == idCardReader) {
-            val device = mBluetoothAdapter!!.getRemoteDevice("00:13:04:84:00:64")
+            val device = mBluetoothAdapter!!.getRemoteDevice(Utils.getCache(sp.blueToothAddress))
             try {
-
                 connect(device)
             } catch (e: Exception) {
                 Toast.makeText(this@AddGetCarActivity, "连接失败", Toast.LENGTH_SHORT).show()
@@ -258,7 +258,7 @@ class AddGetCarActivity : BaseActivity<ActivityAddGetCarBinding>(), AbsModule.On
         override fun run() {
             super.run()
             if (null == idCardReader) {
-                val device = mBluetoothAdapter!!.getRemoteDevice("00:13:04:84:00:64")
+                val device = mBluetoothAdapter!!.getRemoteDevice(Utils.getCache(sp.blueToothAddress))
                 try {
 
                     connect(device)
@@ -345,7 +345,7 @@ class AddGetCarActivity : BaseActivity<ActivityAddGetCarBinding>(), AbsModule.On
             val action = arg1.action
             if (action == BluetoothDevice.ACTION_FOUND) {
                 val device = arg1.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
-                if (device.address == "00:13:04:84:00:64") {//DC:0D:30:04:20:D9
+                if (device.address == Utils.getCache(sp.blueToothAddress)) {//DC:0D:30:04:20:D9
                     //0064 00:13:04:84:00:64
                     try {
                         // connect(device)
