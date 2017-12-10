@@ -10,6 +10,7 @@ import gd.mmanage.R
 import gd.mmanage.base.BaseFragment
 import gd.mmanage.databinding.FragMainBinding
 import gd.mmanage.method.GlideImageLoader
+import gd.mmanage.ui.config.SetActivity
 import gd.mmanage.ui.employee.SearchEmployeeActivity
 import gd.mmanage.ui.inbound.SearchInBoundsActivity
 import gd.mmanage.ui.notice.SearchNoticeActivity
@@ -29,7 +30,7 @@ class MainFragment : BaseFragment<FragMainBinding>() {
     var ll6: LinearLayout? = null
     var ll7: LinearLayout? = null
     var ll8: LinearLayout? = null
-
+    var ll9: LinearLayout? = null
     var banner: Banner? = null
     override fun load_view(view: View?) {
         ll1 = view!!.findViewById(R.id.ll1) as LinearLayout
@@ -40,6 +41,7 @@ class MainFragment : BaseFragment<FragMainBinding>() {
         ll6 = view.findViewById(R.id.ll6) as LinearLayout
         ll7 = view.findViewById(R.id.ll7) as LinearLayout
         ll8 = view.findViewById(R.id.ll8) as LinearLayout
+        ll9 = view.findViewById(R.id.ll9) as LinearLayout
 
         banner = view.findViewById(R.id.banner) as Banner
     }
@@ -80,9 +82,9 @@ class MainFragment : BaseFragment<FragMainBinding>() {
             startActivity(Intent(context, OnlySearchVehicleActivity::class.java)
                     .putExtra("id", "3"))
         }
-        //配件管理
+        //系统设置
         ll5!!.setOnClickListener {
-            startActivity(Intent(context, SearchInBoundsActivity::class.java))
+            startActivity(Intent(context, SetActivity::class.java))
         }
         //人员管理
         ll6!!.setOnClickListener {
@@ -96,6 +98,10 @@ class MainFragment : BaseFragment<FragMainBinding>() {
         //通知通告
         ll8!!.setOnClickListener {
             startActivity(Intent(context, SearchNoticeActivity::class.java))
+        }
+        //配件管理
+        ll9!!.setOnClickListener {
+            startActivity(Intent(context, SearchInBoundsActivity::class.java))
         }
 //        //从业人员
 //        ll1!!.setOnClickListener {

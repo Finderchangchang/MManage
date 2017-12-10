@@ -87,25 +87,28 @@
                             android:layout_height="wrap_content"
                             android:text="取车登记" />
                     </LinearLayout>
-
+                    <TextView
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/line_bg"
+                        tools:ignore="Suspicious0dp" />
                     <LinearLayout
                         android:id="@+id/ll9"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:orientation="vertical"
-                        android:visibility="gone">
+                        android:orientation="vertical">
 
                         <ImageView
                             style="@style/main_item_iv"
-                            android:src="@mipmap/ll3" />
+                            android:src="@mipmap/ll5" />
 
                         <TextView
                             style="@style/main_item_tv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="车辆管理" />
+                            android:text="配件管理" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -219,7 +222,7 @@
                             style="@style/main_item_tv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="配件管理" />
+                            android:text="系统设置" />
                     </LinearLayout>
 
                     <TextView

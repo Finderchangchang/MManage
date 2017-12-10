@@ -7,6 +7,7 @@ import android.provider.Settings
 import com.jiangyy.easydialog.LoadingDialog
 import gd.mmanage.R
 import gd.mmanage.base.BaseActivity
+import gd.mmanage.config.sp
 import gd.mmanage.databinding.ActivitySetBinding
 import gd.mmanage.method.Utils
 import gd.mmanage.model.CodeModel
@@ -26,6 +27,7 @@ class SetActivity : BaseActivity<ActivitySetBinding>() {
         blue_set_mv.setOnClickListener {
             getBluetooth()
         }
+        blue_set_mv.setRight_tv(Utils.getCache(sp.blueToothName))
     }
 
     override fun setLayoutId(): Int {

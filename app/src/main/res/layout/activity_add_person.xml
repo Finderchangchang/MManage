@@ -288,21 +288,22 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:padding="10dp"
+                    android:padding="15dp"
                     android:src="@mipmap/main_touxiang" />
 
                 <Button
                     android:id="@+id/result_btn"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:text="成功" />
+                    android:text="成功"
+                    android:visibility="gone"/>
 
                 <ImageView
                     android:id="@+id/real_user_iv"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:padding="10dp"
+                    android:padding="15dp"
                     android:src="@mipmap/main_xianchang" />
             </LinearLayout>
 

@@ -96,4 +96,6 @@ class EmployeeModel : Serializable {
             "男"
         }
     }
+
+    var file: FileModel? = null
 }

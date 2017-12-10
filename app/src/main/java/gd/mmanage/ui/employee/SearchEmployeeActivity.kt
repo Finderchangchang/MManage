@@ -54,7 +54,8 @@ class SearchEmployeeActivity : BaseActivity<ActivitySearchEmployeeBinding>(), Ab
                 //修改操作
                 holder.setOnClickListener(R.id.update_ll) {
                     startActivityForResult(Intent(this@SearchEmployeeActivity, AddEmployeeActivity::class.java)
-                            .putExtra("model", answer_list[position]), 11)
+                            .putExtra("model", answer_list[position])
+                            .putExtra("is_cc", 2), 11)
                 }
             }
         }
@@ -62,7 +63,8 @@ class SearchEmployeeActivity : BaseActivity<ActivitySearchEmployeeBinding>(), Ab
         title_bar.setLeftClick { finish() }
         title_bar.setRightClick {
             startActivityForResult(Intent(this@SearchEmployeeActivity, ChoiceEmployeeActivity::class.java)
-                    .putExtra("model", chice_model), 11)
+                    .putExtra("model", chice_model)
+                    .putExtra("is_cc", true), 11)
         }
         main_lv.adapter = adapter
         //解决listview和srl冲突问题
@@ -74,12 +76,15 @@ class SearchEmployeeActivity : BaseActivity<ActivitySearchEmployeeBinding>(), Ab
         }
         //item点击事件
         main_lv.setOnItemClickListener { parent, view, position, id ->
-
+            startActivityForResult(Intent(this@SearchEmployeeActivity, AddEmployeeActivity::class.java)
+                    .putExtra("model", answer_list[position])
+                    .putExtra("is_cc", 1), 11)
         }
         //添加从业人员
         add_btn.setOnClickListener {
             startActivityForResult(Intent(this@SearchEmployeeActivity, AddEmployeeActivity::class.java)
-                    .putExtra("model", EmployeeModel()), 11)
+                    .putExtra("model", EmployeeModel())
+                    .putExtra("is_cc", 0), 11)
         }
         main_srl.setOnRefreshListener {
             page_index = 1

@@ -49,11 +49,11 @@ class DemoActivity : AppCompatActivity() {
             if (cameraFragment != null) {
                 cameraFragment.takePhotoOrCaptureVideo(object : CameraFragmentResultAdapter() {
                     override fun onVideoRecorded(filePath: String?) {
-                        Toast.makeText(baseContext, "onVideoRecorded " + filePath!!, Toast.LENGTH_SHORT).show()
+                        //Toast.makeText(baseContext, "onVideoRecorded " + filePath!!, Toast.LENGTH_SHORT).show()
                     }
 
                     override fun onPhotoTaken(bytes: ByteArray?, filePath: String?) {
-                        Toast.makeText(baseContext, "onPhotoTaken " + filePath!!, Toast.LENGTH_SHORT).show()
+                        //Toast.makeText(baseContext, "onPhotoTaken " + filePath!!, Toast.LENGTH_SHORT).show()
 //                        var bmp = uu.getimage(100, filePath)
 //                        iv.setImageBitmap(bmp)
 //                        content.visibility = View.GONE

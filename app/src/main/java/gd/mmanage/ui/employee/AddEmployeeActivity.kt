@@ -22,6 +22,7 @@ import android.widget.Toast
 import com.arialyy.frame.module.AbsModule
 import com.google.gson.Gson
 import com.google.gson.JsonElement
+import com.jiangyy.easydialog.LoadingDialog
 import com.zkteco.android.IDReader.IDPhotoHelper
 import com.zkteco.android.IDReader.WLTService
 import com.zkteco.id3xx.IDCardReader
@@ -35,6 +36,7 @@ import gd.mmanage.control.EmployeeModule
 import gd.mmanage.control.LoginModule
 import gd.mmanage.databinding.ActivityAddEmployeeBinding
 import gd.mmanage.databinding.ActivityLoginBinding
+import gd.mmanage.method.ImgUtils
 import gd.mmanage.method.UtilControl
 import gd.mmanage.method.Utils
 import gd.mmanage.model.CodeModel
@@ -58,20 +60,29 @@ class AddEmployeeActivity : BaseActivity<ActivityAddEmployeeBinding>(), AbsModul
     var is_add = true//true:添加。false：删除
     var employee: EmployeeModel? = null//传递过来的从业人员信息
     var datePickerDialog: DatePickerDialog? = null
+    var dialog: LoadingDialog.Builder? = null
 
     override fun onSuccess(result: Int, success: Any?) {
-        //添加
-        var s=success as NormalRequest<*>
-        when (success.code) {
-            0 -> {
-                when (result) {
-                    command.employee -> toast("添加成功")
-                    command.employee + 1 -> toast("修改成功")
-                }
-                setResult(2)
-                finish()
+        if (result == command.employee + 2) {
+            success as NormalRequest<*>
+            var model: EmployeeModel = Gson().fromJson(success.obj.toString(), EmployeeModel::class.java)
+            if (model.file != null && !TextUtils.isEmpty(model.file!!.FileContent)) {
+                user_iv.setImageBitmap(ImgUtils().base64ToBitmap(model.file!!.FileContent))
             }
-            else -> toast(success.message)
+        } else { //添加
+            success as NormalRequest<*>
+            when (success.code) {
+                0 -> {
+                    when (result) {
+                        command.employee -> toast("添加成功")
+                        command.employee + 1 -> toast("修改成功")
+                    }
+                    setResult(2)
+                    finish()
+                }
+                else -> toast(success.message)
+            }
+            dialog!!.dismiss()
         }
     }
 
@@ -84,38 +95,55 @@ class AddEmployeeActivity : BaseActivity<ActivityAddEmployeeBinding>(), AbsModul
         checkPermission()
     }
 
-
+    var is_cc = 0
     var db: FinalDb? = null
     override fun init(savedInstanceState: Bundle?) {
         super.init(savedInstanceState)
         db = FinalDb.create(this)//创建数据库查询实例
         employee = intent.getSerializableExtra("model") as EmployeeModel
         is_add = employee != null
-        if (is_add) ll1.visibility = View.GONE//添加隐藏编号
+        dialog = LoadingDialog.Builder(this).setTitle("正在加载...")//初始化dialog
+        is_cc = intent.getIntExtra("is_cc", 0)
 //        employee!!.EmployeeCertType = "1"
 //        employee!!.EmployeePhone = "17093215800"
 //        employee!!.EmployeeState = "1"
 //        employee!!.EmployeeEntryDate = "2017-11-12"
-        employee!!.EnterpriseId=Utils.getCache(sp.company_id)
+        employee!!.EnterpriseId = Utils.getCache(sp.company_id)
         binding.model = employee//数据绑定操作
         control = getModule(EmployeeModule::class.java, this)
-        title_bar.setLeftClick { finish() }
         //读卡操作
         read_card_btn.setOnClickListener {
-            //            if (Utils.getCache("BlueToothAddress") == "") {
-//                toast("请检查蓝牙读卡设备设置！")
-//            } else {
-
-            OnBnRead()
-//            }
+            if (TextUtils.isEmpty(Utils.getCache(sp.blueToothAddress))) {
+                toast("请检查蓝牙读卡设备设置！")
+            } else {
+                dialog!!.show()
+                OnBnRead()
+            }
+        }
+        when (intent.getIntExtra("is_cc", 0)) {
+            1 -> {
+                save_btn.visibility = View.GONE
+                read_card_btn.visibility = View.GONE
+                title_bar.center_Tv.text = "从业人员信息"
+                control!!.get_employee(employee!!.EmployeeId)
+            }
+            0 -> {
+                //ll1.visibility = View.GONE//添加隐藏编号
+                title_bar.center_Tv.text = "从业人员添加"
+            }
+            2 -> {
+                title_bar.center_Tv.text = "从业人员修改"
+                control!!.get_employee(employee!!.EmployeeId)
+            }
         }
         //性别选择
-        ll3.setOnClickListener { dialog(arrayOf("男", "女"), 1) }
+        ll3.setOnClickListener { if (is_cc != 1) dialog(arrayOf("男", "女"), 1) }
         //人员状态
-        ll8.setOnClickListener { dialog(zt_array!!, 2) }
+        ll8.setOnClickListener { if (is_cc != 1) dialog(zt_array!!, 2) }
         //添加从业人员
         save_btn.setOnClickListener {
             if (check_null()) {
+                dialog!!.show()
                 var map = HashMap<String, String>()
                 var model = binding.model
                 model.EmployeeEntryDate = Utils.normalTime
@@ -131,15 +159,14 @@ class AddEmployeeActivity : BaseActivity<ActivityAddEmployeeBinding>(), AbsModul
                             data[i] = bytt[i].toInt()
                         }
                     }
-                    img_list.add(FileModel(data.toString(), "111", "01", model.EmployeeId))
-                    map.put("files", Gson().toJson(img_list))
+                    var c = Gson().toJson(data)
+                    img_list.add(FileModel(c, "111", "01", model.EmployeeId))
+                    map.put("file", Gson().toJson(img_list))
                 }
                 control!!.add_employee(map)
             }
         }
-        ll4.setOnClickListener {
-            dialog(mz_array!!, 3)
-        }
+        ll4.setOnClickListener { if (is_cc != 1) dialog(mz_array!!, 3) }
         init_blue()
         initNation()
     }
@@ -219,17 +246,20 @@ class AddEmployeeActivity : BaseActivity<ActivityAddEmployeeBinding>(), AbsModul
     internal var mBluetoothAdapter: BluetoothAdapter? = null
     //设备连接
     fun OnBnRead() {
+        //builder.show()
         if (null == idCardReader) {
             val device = mBluetoothAdapter!!.getRemoteDevice(Utils.getCache(sp.blueToothAddress))
             try {
-                connect(device)
+                Thread() { connect(device) }.start()
             } catch (e: Exception) {
+
                 Toast.makeText(this@AddEmployeeActivity, "连接失败", Toast.LENGTH_SHORT).show()
             }
         } else {
             isRead = true
             workThread = WorkThread()
             workThread!!.start()// 线程启动
+            index = 0
         }
     }
 
@@ -272,42 +302,31 @@ class AddEmployeeActivity : BaseActivity<ActivityAddEmployeeBinding>(), AbsModul
         }
     }
 
-    //搜索设备操作
-    fun OnBnSearch() {
-
-        //dialog.show();
-    }
-
-    //设备版本
-    fun OnBnFirmVer(view: View) {
-        if (null != idCardReader) {
-            val strFirmVersion = idCardReader!!.getFirmwareVersion()
-            Toast.makeText(this@AddEmployeeActivity, "设备版本：" + strFirmVersion, Toast.LENGTH_SHORT).show()
-        }
-    }
 
     //联网操作
     private fun connect(device: BluetoothDevice) {
-
         try {
             idCardReader = IDCardReader()
             idCardReader!!.setDevice(device.address)
             var ret = idCardReader!!.openDevice()
-            if (IDCardReader.ERROR_SUCC == ret) {
-                //textView.setText(bluetooth)
-                //dialog.dismiss()
-                workThread = WorkThread()
-                workThread!!.start()// 线程启动
-                isRead = true
-                Toast.makeText(this@AddEmployeeActivity, "连接成功", Toast.LENGTH_SHORT).show()
-            } else {
-                idCardReader = null
-                Toast.makeText(this@AddEmployeeActivity, "连接失败，错误码:" + ret, Toast.LENGTH_SHORT).show()
+            runOnUiThread {
+                if (IDCardReader.ERROR_SUCC == ret) {
+                    //textView.setText(bluetooth)
+                    //dialog.dismiss()
+
+                    workThread = WorkThread()
+                    workThread!!.start()// 线程启动
+                    isRead = true
+//                    Toast.makeText(this@AddEmployeeActivity, "连接成功", Toast.LENGTH_SHORT).show()
+                } else {
+                    idCardReader = null
+//                    Toast.makeText(this@AddEmployeeActivity, "连接失败，错误码:" + ret, Toast.LENGTH_SHORT).show()
+                }
             }
         } catch (e: Exception) {
             // TODO: handle exception
             idCardReader = null
-            Toast.makeText(this@AddEmployeeActivity, "连接失败", Toast.LENGTH_SHORT).show()
+//            Toast.makeText(this@AddEmployeeActivity, "连接失败", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -316,56 +335,36 @@ class AddEmployeeActivity : BaseActivity<ActivityAddEmployeeBinding>(), AbsModul
     private inner class WorkThread : Thread() {
         override fun run() {
             super.run()
-            if (isRead) {
-                if (!ReadCardInfo()) {
-                    //textView.post(Runnable { textView.setText("请放卡...") })
-
-                } else {
-                    //textView.post(Runnable { textView.setText("读卡成功，请放入下一张卡") })
-
-                }
-            }
-        }
-    }
-
-    inner class WorkThread1 : Thread() {
-        override fun run() {
-            super.run()
             while (index < 10) {
                 runOnUiThread {
-                    if (!ReadCardInfo()) {
-                        index++
-                        if (index == 9) {
-                            index = 0
-                            if (idCardReader != null) {
-                                idCardReader!!.closeDevice()
-                                idCardReader = null
-                            }
-//                            reg_person_read.isEnabled = true
-//                            progressDialog!!.dismiss()
-                            //mHandler.sendMessage(mHandler.obtainMessage(1, "读卡失败"))
-                        } else {
-                            //Toast.makeText(AddEmployeeActivity.this,"请放卡...",Toast.LENGTH_SHORT);
+                    if (null == idCardReader) {
+                        val device = mBluetoothAdapter!!.getRemoteDevice(Utils.getCache(sp.blueToothAddress))
+                        try {
+                            connect(device)
+                        } catch (e: Exception) {
+                            dialog!!.dismiss()
+                            Toast.makeText(this@AddEmployeeActivity, "连接失败", Toast.LENGTH_SHORT).show()
                         }
                     } else {
-                        index = 11
-                        if (idCardReader != null) {
-                            idCardReader!!.closeDevice()
-                            idCardReader = null
+                        if (isRead) {
+                            if (!ReadCardInfo()) {
+                                index++
+                                if (index == 9) {
+                                    dialog!!.dismiss()
+                                    Toast.makeText(this@AddEmployeeActivity, "读卡失败", Toast.LENGTH_SHORT).show()
+                                }
+                                //textView.post(Runnable { textView.setText("请放卡...") })
+
+                            } else {
+                                dialog!!.dismiss()
+                                //textView.post(Runnable { textView.setText("读卡成功，请放入下一张卡") })
+                                index = 11
+                            }
                         }
-//                        progressDialog!!.dismiss()
-//                        reg_person_read.isEnabled = true
-                        //read!!.closeDevice()
-                        //mHandler.sendMessage(mHandler.obtainMessage(1, "读卡成功"))
                     }
                 }
-
-                try {
-                    Thread.sleep(500)
-                } catch (e: InterruptedException) {
-                    e.printStackTrace()
-                }
             }
+
         }
     }
 
@@ -419,6 +418,7 @@ class AddEmployeeActivity : BaseActivity<ActivityAddEmployeeBinding>(), AbsModul
                     user_bitmap = IDPhotoHelper.Bgr2Bitmap(buf)
                     if (null != user_bitmap) {
                         user_iv.post(Runnable { user_iv.setImageBitmap(user_bitmap) })
+                        dialog!!.dismiss()
                     }
                 }
             }
@@ -451,7 +451,6 @@ class AddEmployeeActivity : BaseActivity<ActivityAddEmployeeBinding>(), AbsModul
 
         idCardReader!!.closeDevice()
         idCardReader = null
-        Toast.makeText(this@AddEmployeeActivity, "断开设备成功", Toast.LENGTH_SHORT).show()
         //textView.setText("")
     }
 

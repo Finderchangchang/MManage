@@ -35,10 +35,8 @@ class EmployeeModule : BaseModule {
      * 删除指定的从业人员信息
      * @param id 从业人d
      * */
-    fun del_employee(id: String) {
-        var map = HashMap<String, String>()
-        map.put("e_id", id)
-        HttpUtils<String>().get(url.get_employee + "SearchEmployee", command.employee + 2, map, this)
+    fun get_employee(id: String) {
+        HttpUtils<String>().get(url.get_employee + "GetEmployee?employeeId=" + id, command.employee + 2, HashMap(), this)
     }
 
     /**

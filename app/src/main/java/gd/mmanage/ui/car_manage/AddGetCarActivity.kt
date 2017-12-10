@@ -13,6 +13,7 @@ import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v7.app.AlertDialog
+import android.text.TextUtils
 import android.view.View
 import android.widget.Toast
 import com.arialyy.frame.module.AbsModule
@@ -20,6 +21,7 @@ import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
+import com.jiangyy.easydialog.LoadingDialog
 import com.zkteco.android.IDReader.IDPhotoHelper
 import com.zkteco.android.IDReader.WLTService
 import com.zkteco.id3xx.IDCardReader
@@ -53,6 +55,8 @@ class AddGetCarActivity : BaseActivity<ActivityAddGetCarBinding>(), AbsModule.On
     var xc_url = ""
     var user_url = ""
     var vehicleId = ""
+    var dialog: LoadingDialog.Builder? = null//转圈的dialog
+
     override fun onSuccess(result: Int, success: Any?) {
         when (result) {
             command.car_manage + 8 -> {
@@ -65,14 +69,18 @@ class AddGetCarActivity : BaseActivity<ActivityAddGetCarBinding>(), AbsModule.On
                     bi_tv.visibility = View.VISIBLE
                 } else {
                     result_btn.text = "失败"
-                    model.VehicleTakePersonCompare = "0.0"
+                    model.VehicleTakePersonCompare = ""
                     bi_tv.visibility = View.GONE
                 }
+                result_btn.visibility = View.VISIBLE
                 bi_tv.text = "识别率 " + model.VehicleTakePersonCompare
+                dialog!!.dismiss()
             }
             command.car_manage + 1 -> {
                 success as NormalRequest<JsonElement>
                 if (success.code == 0) {
+                    dialog!!.dismiss()
+                    setResult(1)
                     finish()
                     toast("取车成功")
                 } else {
@@ -106,6 +114,7 @@ class AddGetCarActivity : BaseActivity<ActivityAddGetCarBinding>(), AbsModule.On
      * */
     fun check_two_img() {
         if (xc_img != null && user_img != null) {
+            dialog!!.show()
             control!!.check_two_img(xc_img!!, user_img!!)
         }
     }
@@ -115,16 +124,21 @@ class AddGetCarActivity : BaseActivity<ActivityAddGetCarBinding>(), AbsModule.On
     override fun init(savedInstanceState: Bundle?) {
         super.init(savedInstanceState)
         db = FinalDb.create(this)
+        dialog = LoadingDialog.Builder(this).setTitle("正在加载...")//初始化dialog
         vehicleId = intent.getStringExtra("vehicleId")
         model.VehicleId = vehicleId
-        model.VehicleTakeState="02"
+        model.VehicleTakeState = "02"
         control = getModule(CarManageModule::class.java, this)
         //证件识别操作
         read_card_btn.setOnClickListener {
             //身份证读取
             if (id_card_rb.isChecked) {
                 model.VehicleTakePersonCertType = "01"
-                OnBnRead()
+                if (TextUtils.isEmpty(Utils.getCache(sp.blueToothAddress))) {
+                    toast("请检查蓝牙读卡设备设置！")
+                } else {
+                    OnBnRead()
+                }
             } else {//orc读取驾驶证
                 model.VehicleTakePersonCertType = "01"
             }
@@ -139,13 +153,33 @@ class AddGetCarActivity : BaseActivity<ActivityAddGetCarBinding>(), AbsModule.On
         }
         //执行保存操作
         next_btn.setOnClickListener {
-            control!!.add_prat(model)
+            if (check_null()) {
+                control!!.add_prat(model)
+            }
         }
         nation_ll.setOnClickListener {
             dialog(mz_array!!, 3)
         }
         init_data()
         init_blue()
+    }
+
+    //检测输入的是不是为空
+    fun check_null(): Boolean {
+        if (TextUtils.isEmpty(model.VehicleTakePerson)) {
+            toast("送车人姓名不能为空")
+            return false
+        } else if (TextUtils.isEmpty(model.VehicleTakePersonCertNumber)) {
+            toast("送车人证件号码不能为空")
+            return false
+        } else if (TextUtils.isEmpty(model.VehicleTakePersonAddress)) {
+            toast("家庭住址不能为空")
+            return false
+        } else if (TextUtils.isEmpty(model.VehicleTakePersonCompare)) {
+            toast("请先进行人像比对")
+            return false
+        }
+        return true
     }
 
     fun init_data() {
@@ -197,17 +231,21 @@ class AddGetCarActivity : BaseActivity<ActivityAddGetCarBinding>(), AbsModule.On
     internal var mBluetoothAdapter: BluetoothAdapter? = null
     //设备连接
     fun OnBnRead() {
+        dialog!!.show()
+        //builder.show()
         if (null == idCardReader) {
             val device = mBluetoothAdapter!!.getRemoteDevice(Utils.getCache(sp.blueToothAddress))
             try {
-                connect(device)
+                Thread() { connect(device) }.start()
             } catch (e: Exception) {
                 Toast.makeText(this@AddGetCarActivity, "连接失败", Toast.LENGTH_SHORT).show()
+                dialog!!.dismiss()
             }
         } else {
             isRead = true
             workThread = WorkThread()
             workThread!!.start()// 线程启动
+            index = 0
         }
     }
 
@@ -229,25 +267,28 @@ class AddGetCarActivity : BaseActivity<ActivityAddGetCarBinding>(), AbsModule.On
 
     //联网操作
     private fun connect(device: BluetoothDevice) {
-
         try {
             idCardReader = IDCardReader()
             idCardReader!!.setDevice(device.address)
             var ret = idCardReader!!.openDevice()
-            if (IDCardReader.ERROR_SUCC == ret) {
-                //textView.setText(bluetooth)
-                //dialog.dismiss()
-                workThread = WorkThread()
-                workThread!!.start()// 线程启动
-                isRead = true
-                Toast.makeText(this@AddGetCarActivity, "连接成功", Toast.LENGTH_SHORT).show()
-            } else {
-                idCardReader = null
-                Toast.makeText(this@AddGetCarActivity, "连接失败，错误码:" + ret, Toast.LENGTH_SHORT).show()
+            runOnUiThread {
+                if (IDCardReader.ERROR_SUCC == ret) {
+                    //textView.setText(bluetooth)
+                    //dialog.dismiss()
+                    workThread = WorkThread()
+                    workThread!!.start()// 线程启动
+                    isRead = true
+                    Toast.makeText(this@AddGetCarActivity, "连接成功", Toast.LENGTH_SHORT).show()
+                } else {
+                    idCardReader = null
+                    dialog!!.dismiss()
+                    Toast.makeText(this@AddGetCarActivity, "连接失败，错误码:" + ret, Toast.LENGTH_SHORT).show()
+                }
             }
         } catch (e: Exception) {
             // TODO: handle exception
             idCardReader = null
+            dialog!!.dismiss()
             Toast.makeText(this@AddGetCarActivity, "连接失败", Toast.LENGTH_SHORT).show()
         }
     }
@@ -257,25 +298,36 @@ class AddGetCarActivity : BaseActivity<ActivityAddGetCarBinding>(), AbsModule.On
     private inner class WorkThread : Thread() {
         override fun run() {
             super.run()
-            if (null == idCardReader) {
-                val device = mBluetoothAdapter!!.getRemoteDevice(Utils.getCache(sp.blueToothAddress))
-                try {
-
-                    connect(device)
-                } catch (e: Exception) {
-                    Toast.makeText(this@AddGetCarActivity, "连接失败", Toast.LENGTH_SHORT).show()
-                }
-            } else {
-                if (isRead) {
-                    if (!ReadCardInfo()) {
-                        //textView.post(Runnable { textView.setText("请放卡...") })
-
+            while (index < 10) {
+                runOnUiThread {
+                    if (null == idCardReader) {
+                        val device = mBluetoothAdapter!!.getRemoteDevice(Utils.getCache(sp.blueToothAddress))
+                        try {
+                            connect(device)
+                        } catch (e: Exception) {
+                            dialog!!.dismiss()
+                            Toast.makeText(this@AddGetCarActivity, "连接失败", Toast.LENGTH_SHORT).show()
+                        }
                     } else {
-                        //textView.post(Runnable { textView.setText("读卡成功，请放入下一张卡") })
+                        if (isRead) {
+                            if (!ReadCardInfo()) {
+                                index++
+                                if (index == 9) {
+                                    dialog!!.dismiss()
+                                    Toast.makeText(this@AddGetCarActivity, "读卡失败", Toast.LENGTH_SHORT).show()
+                                }
+                                //textView.post(Runnable { textView.setText("请放卡...") })
 
+                            } else {
+                                //textView.post(Runnable { textView.setText("读卡成功，请放入下一张卡") })
+                                index = 11
+                                dialog!!.dismiss()
+                            }
+                        }
                     }
                 }
             }
+
         }
     }
 
@@ -283,9 +335,11 @@ class AddGetCarActivity : BaseActivity<ActivityAddGetCarBinding>(), AbsModule.On
     fun ReadCardInfo(): Boolean {
 
         if (idCardReader != null && !idCardReader!!.sdtFindCard()) {
+            dialog!!.dismiss()
             return false
         } else {
             if (!idCardReader!!.sdtSelectCard()) {
+                dialog!!.dismiss()
                 return false
             }
         }
@@ -335,7 +389,7 @@ class AddGetCarActivity : BaseActivity<ActivityAddGetCarBinding>(), AbsModule.On
             //playSound(9, 0);
         }
         //textView.post(Runnable { textView.setText("读卡失败...") })
-
+        dialog!!.dismiss()
         return false
     }
 
@@ -369,6 +423,7 @@ class AddGetCarActivity : BaseActivity<ActivityAddGetCarBinding>(), AbsModule.On
     //页面关闭处理
     override fun onDestroy() {
         super.onDestroy()
+        dialog!!.dismiss()
         unregisterReceiver(mReceiver)
         OnBnDisconn()
     }
@@ -386,7 +441,7 @@ class AddGetCarActivity : BaseActivity<ActivityAddGetCarBinding>(), AbsModule.On
 
         idCardReader!!.closeDevice()
         idCardReader = null
-        Toast.makeText(this@AddGetCarActivity, "断开设备成功", Toast.LENGTH_SHORT).show()
+        //Toast.makeText(this@AddGetCarActivity, "断开设备成功", Toast.LENGTH_SHORT).show()
         //textView.setText("")
     }
 

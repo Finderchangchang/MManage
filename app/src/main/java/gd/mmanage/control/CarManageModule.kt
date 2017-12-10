@@ -3,16 +3,14 @@ package gd.mmanage.control
 import android.content.Context
 import android.graphics.Bitmap
 import android.text.TextUtils
+import com.google.gson.Gson
 import gd.mmanage.base.BaseModule
 import gd.mmanage.config.command
 import gd.mmanage.config.url
 import gd.mmanage.control.HttpUtils
 import gd.mmanage.method.ImgUtils
 import gd.mmanage.method.UtilControl
-import gd.mmanage.model.RepairModel
-import gd.mmanage.model.StorageModel
-import gd.mmanage.model.SuspiciousModel
-import gd.mmanage.model.VehicleModel
+import gd.mmanage.model.*
 
 /**
  * Created by Administrator on 2017/11/14.
@@ -27,7 +25,9 @@ class CarManageModule : BaseModule {
     fun add_prat(model: VehicleModel) {
         var u = "AddVehicle"
         if (!TextUtils.isEmpty(model.VehicleId)) u = "UpdateVehicle"
-        HttpUtils<VehicleModel>().post(url.get_vehicle + u, command.car_manage + 1, UtilControl.change(model), this)
+        var map = UtilControl.change(model)
+        //map.put("files", Gson().toJson(model.files))
+        HttpUtils<VehicleModel>().post(url.get_vehicle + u, command.car_manage + 1, map, this)
     }
 
     /**

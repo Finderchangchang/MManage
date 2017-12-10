@@ -14,6 +14,8 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -101,9 +103,9 @@ public class BlueActivity extends AppCompatActivity {
                     mBluetoothAdapter.cancelDiscovery();
                 }
                 String text = list.get(arg2);
-                int a = text.indexOf("|");
-                String mac = text.substring(a + 1);
-                BluetoothDevice device = mBluetoothAdapter.getRemoteDevice("00:13:04:84:00:64");
+                int a = text.indexOf("|");//00:13:04:84:00:64
+                String mac = text.substring(a + 1);//DC:0D:30:05:CD:28
+                BluetoothDevice device = mBluetoothAdapter.getRemoteDevice("DC:0D:30:05:CD:28");
                 try {
                     connect(device, text.split("\\|")[0]);
                 } catch (Exception e) {
@@ -172,9 +174,9 @@ public class BlueActivity extends AppCompatActivity {
         mAdapter = new ArrayAdapter<>(getApplicationContext(), R.layout.tv, list);
         mList.setAdapter(mAdapter);
         //dialog.show();
-        BluetoothDevice device = mBluetoothAdapter.getRemoteDevice("00:13:04:84:00:64");
         try {
-            connect(device, "");
+            thread.start();
+            //connect(device, "");
         } catch (Exception e) {
             Toast.makeText(BlueActivity.this, "连接失败", Toast.LENGTH_SHORT).show();
         }
@@ -251,6 +253,8 @@ public class BlueActivity extends AppCompatActivity {
         image.setImageBitmap(null);
     }
 
+    Thread thread;
+
     private void initUI() {
         textView = (TextView) findViewById(R.id.textView);
         infoName = (EditText) findViewById(R.id.infoName);
@@ -262,6 +266,14 @@ public class BlueActivity extends AppCompatActivity {
         infoCertifying = (EditText) findViewById(R.id.infoCertifying);
         infoData = (EditText) findViewById(R.id.infoData);
         image = (ImageView) findViewById(R.id.image);
+        thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Message message = new Message();
+                message.what = 1;
+                mHandler.sendMessage(message);
+            }
+        });
     }
 
     //读卡操作
@@ -280,6 +292,8 @@ public class BlueActivity extends AppCompatActivity {
                 resetContent();
             }
         });
+
+
         final IDCardInfo idCardInfo = new IDCardInfo();
         if (idCardReader.sdtReadCard(1, idCardInfo)) {
             long time = System.currentTimeMillis();
@@ -330,11 +344,19 @@ public class BlueActivity extends AppCompatActivity {
         return false;
     }
 
+    public Handler mHandler = new Handler() {
+        public void handleMessage(Message msg) {
+            BluetoothDevice device = mBluetoothAdapter.getRemoteDevice("DC:0D:30:05:CD:28");
+            connect(device, "");
+            super.handleMessage(msg);
+        }
+    };
+
     //设备连接
     public void OnBnRead(View view) {
 
         if (null == idCardReader) {
-            BluetoothDevice device = mBluetoothAdapter.getRemoteDevice("00:13:04:84:00:64");
+            BluetoothDevice device = mBluetoothAdapter.getRemoteDevice("DC:0D:30:05:CD:28");
             try {
                 connect(device, "");
             } catch (Exception e) {

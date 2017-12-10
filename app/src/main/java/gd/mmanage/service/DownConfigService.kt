@@ -43,7 +43,7 @@ class DownConfigService : Service() {
                 db!!.save(model)
             }
             cmd = cmd + 1
-            if (cmd == command.config + 10) {
+            if (cmd == command.config + 11) {
                 //全部下载完成
                 Utils.putCache(sp.down_all, "1")
             } else {
@@ -110,6 +110,7 @@ class DownConfigService : Service() {
             command.config + 6 -> "Code_VehicleType"//车辆类型
             command.config + 7 -> "Code_VehicleTakeState"//
             command.config + 8 -> "Code_EnterpriseState"//企业状态
+            command.config + 9 -> "Code_EnterpriseVehicleType"//修车状态
             else -> "Code_Nation"
         }
     }

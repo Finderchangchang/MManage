@@ -85,12 +85,12 @@ class VehicleDetailActivity : BaseActivity<ActivityVehicleDetailBinding>(), AbsM
                     if (model.Suspicious != null) {
                         bj_ll.visibility = View.VISIBLE
                     }
-                    if (model.Vehicle!!.files!!.isNotEmpty()) {
-                        iv.setImageBitmap(ImgUtils().base64ToBitmap(model.Vehicle!!.files!![0].FileContent))
-                        iv1.setImageBitmap(ImgUtils().base64ToBitmap(model.Vehicle!!.files!![1].FileContent))
-                        iv2.setImageBitmap(ImgUtils().base64ToBitmap(model.Vehicle!!.files!![2].FileContent))
-                        iv3.setImageBitmap(ImgUtils().base64ToBitmap(model.Vehicle!!.files!![3].FileContent))
-                    }
+//                    if (model.Vehicle!!.files!!.isNotEmpty()) {
+//                        iv.setImageBitmap(ImgUtils().base64ToBitmap(model.Vehicle!!.files!![0].FileContent))
+//                        iv1.setImageBitmap(ImgUtils().base64ToBitmap(model.Vehicle!!.files!![1].FileContent))
+//                        iv2.setImageBitmap(ImgUtils().base64ToBitmap(model.Vehicle!!.files!![2].FileContent))
+//                        iv3.setImageBitmap(ImgUtils().base64ToBitmap(model.Vehicle!!.files!![3].FileContent))
+//                    }
                 }
             }
         }

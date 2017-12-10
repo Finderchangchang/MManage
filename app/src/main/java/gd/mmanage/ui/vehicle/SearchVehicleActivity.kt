@@ -63,7 +63,7 @@ class SearchVehicleActivity : BaseActivity<ActivitySearchVehicleBinding>(), AbsM
                 //修改操作
                 holder.setOnClickListener(R.id.update_ll) {
                     startActivityForResult(Intent(this@SearchVehicleActivity, AddPersonActivity::class.java)
-                            .putExtra("model", model), 11)
+                            .putExtra("model", model), 12)
                 }
             }
         }
@@ -107,12 +107,21 @@ class SearchVehicleActivity : BaseActivity<ActivitySearchVehicleBinding>(), AbsM
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (resultCode) {
-            12, 1 -> {//刷新数据
-                page_index = 1
-                choice_model = data!!.getSerializableExtra("model") as VehicleModel
-                load_data()
+            12, 1 -> {
+                refresh_list(data)
             }
         }
+        if (requestCode == 12) {
+            refresh_list(data)
+        }
+    }
+
+    fun refresh_list(data: Intent?) {
+        page_index = 1
+        if (data != null) {
+            choice_model = data.getSerializableExtra("model") as VehicleModel
+        }
+        load_data()
     }
 
     var control: CarManageModule? = null

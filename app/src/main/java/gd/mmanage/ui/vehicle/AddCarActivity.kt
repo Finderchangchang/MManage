@@ -99,19 +99,7 @@ class AddCarActivity : BaseActivity<ActivityAddCarBinding>(), AbsModule.OnCallba
         model = intent.getSerializableExtra("model") as VehicleModel
         xc_url = intent.getStringExtra("xc_url")
         user_img = intent.getSerializableExtra("user_file") as FileModel
-        var img_list = ArrayList<FileModel>()
-        if (!TextUtils.isEmpty(xc_url)) {
-            var bmp = uu.getimage(100, xc_url)
-            var xc_img = uu.compressImage(uu.rotaingImageView(90, uu.compressImage(bmp)))
-            img_list.add(FileModel(bitmap_to_bytes(xc_img).toString(), "送车人实际照片", "C3", ""))
-        }
-        if (user_img!!.FileContent != null) {
-            img_list.add(user_img!!)
-        }
-        if (img_list.size > 0) {
-//            model!!.files = Gson().toJson(img_list).toString()
-            model!!.files = img_list
-        }
+
         binding.model = model//刷新一下数据
         control!!.get_vehicleByIdCard(model!!.VehiclePersonCertNumber)
         //选择送车人名下车辆
@@ -120,6 +108,19 @@ class AddCarActivity : BaseActivity<ActivityAddCarBinding>(), AbsModule.OnCallba
         }
         save_btn.setOnClickListener {
             model = binding.model
+            var img_list = ArrayList<FileModel>()
+            if (!TextUtils.isEmpty(xc_url)) {
+                var bmp = uu.getimage(100, xc_url)
+                var xc_img = uu.compressImage(uu.rotaingImageView(90, uu.compressImage(bmp)))
+                //img_list.add(FileModel(Gson().toJson(bitmap_to_bytes(xc_img)), "送车人实际照片", "C3", ""))
+            }
+            if (user_img!!.FileContent != null) {
+                img_list.add(user_img!!)
+            }
+            if (img_list.size > 0) {
+//            model!!.files = Gson().toJson(img_list).toString()
+                model!!.files = img_list
+            }
             model!!.VehicleReceiveTime = Utils.normalTime
             control!!.add_prat(model!!)
         }

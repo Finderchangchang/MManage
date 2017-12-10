@@ -23,6 +23,12 @@ import gd.mmanage.model.*
 import kotlinx.android.synthetic.main.activity_main.*
 import net.tsz.afinal.FinalDb
 import pub.devrel.easypermissions.EasyPermissions
+import android.R.attr.path
+import android.os.Build
+import gd.mmanage.DownloadUtils
+import org.mozilla.universalchardet.Constants
+import java.io.File
+
 
 class HomeActivity : BaseActivity<ActivityMainBinding>(), AbsModule.OnCallback {
     override fun onSuccess(result: Int, success: Any?) {
@@ -52,14 +58,7 @@ class HomeActivity : BaseActivity<ActivityMainBinding>(), AbsModule.OnCallback {
                     }
                 }
             }
-            command.user + 1 -> {//获得当前用户信息
-                success as NormalRequest<JsonElement>
-                var user: UserModel = Gson().fromJson<UserModel>(success.obj, UserModel::class.java)
-                if (user != null && user.EnterpriseId != null) {
-                    Utils.putCache(sp.company_id, user.EnterpriseId)
 
-                }
-            }
             command.login + 1 -> {//检查版本更新
                 success as NormalRequest<JsonElement>
                 if (success.code == 0) {//提示更新
@@ -75,7 +74,11 @@ class HomeActivity : BaseActivity<ActivityMainBinding>(), AbsModule.OnCallback {
                             builder.setTitle("提示")
                             builder.setMessage("您有新的版本，请及时更新~~")
                             builder.setNegativeButton("确定") { dialog, which ->
-                                UpdateManager(this@HomeActivity).checkUpdateInfo(url.key + model.AndroidUpdateUrl)
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                                    DownloadUtils(this).downloadAPK(url.key + model.AndroidUpdateUrl, "新版本Apk.apk")
+                                } else {
+                                    UpdateManager(this@HomeActivity).checkUpdateInfo(url.key + model.AndroidUpdateUrl)
+                                }
                             }
                             builder.show()
                         }
@@ -110,6 +113,5 @@ class HomeActivity : BaseActivity<ActivityMainBinding>(), AbsModule.OnCallback {
         tab_pager.offscreenPageLimit = 2
         alphaIndicator!!.setViewPager(tab_pager)
         getModule(EmployeeModule::class.java, this).get_employees(HashMap())
-        getModule(UserModule::class.java, this).get_user_info()
     }
 }

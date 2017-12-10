@@ -57,6 +57,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(), AbsModule.OnCallback
                     TextUtils.isEmpty(name) -> toast("请输入用户名")
                     TextUtils.isEmpty(pwd) -> toast("请输入密码")
                     else -> {
+                        dialog!!.show()
                         control!!.user_login(name, pwd)//登录操作
                     }
                 }
@@ -106,6 +107,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(), AbsModule.OnCallback
                 } else {
                     if (!TextUtils.isEmpty(success.message)) toast(success.message)
                 }
+                dialog!!.dismiss()
             }
             command.login + 1 -> {//检查版本更新
                 success as NormalRequest<JsonElement>
