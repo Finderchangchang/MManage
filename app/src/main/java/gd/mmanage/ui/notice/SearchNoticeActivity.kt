@@ -2,6 +2,7 @@ package gd.mmanage.ui.notice
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Html
 import android.text.TextUtils
 import com.arialyy.frame.module.AbsModule
 import com.jiangyy.easydialog.LoadingDialog
@@ -42,7 +43,8 @@ class SearchNoticeActivity : BaseActivity<ActivitySearchEmployeeBinding>(), AbsM
         adapter = object : CommonAdapter<NoticeModel>(this, answer_list, R.layout.item_notice) {
             override fun convert(holder: CommonViewHolder, model: NoticeModel, position: Int) {
                 holder.setText(R.id.title_tv, model.NewsTitle)
-                holder.setText(R.id.content_tv, model.NewsContent)
+                val sb = StringBuilder(model.NewsContent)
+                holder.setText(R.id.content_tv, Html.fromHtml(sb.toString()).toString())
                 holder.setText(R.id.time_tv, model.CreateTime)
             }
         }

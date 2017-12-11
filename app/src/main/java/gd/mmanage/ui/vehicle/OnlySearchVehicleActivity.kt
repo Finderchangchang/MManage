@@ -136,7 +136,11 @@ class OnlySearchVehicleActivity : BaseActivity<ActivitySearchOnlyVehicleBinding>
         when (resultCode) {
             12, 1 -> {//刷新数据
                 page_index = 1
-                choice_model = data!!.getSerializableExtra("model") as VehicleModel
+                try {
+                    choice_model = data!!.getSerializableExtra("model") as VehicleModel
+                } catch (e: Exception) {
+
+                }
                 load_data()
             }
         }

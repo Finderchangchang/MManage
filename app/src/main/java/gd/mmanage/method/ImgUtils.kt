@@ -17,16 +17,25 @@ class ImgUtils {
         return BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
     }
 
+    fun bitmapToBase64(bitmap: Bitmap?): String {
+        return bitmapToBase64(bitmap, 90)
+    }
+
+    fun Only_bitmapToBase64(bitmap: Bitmap?): String {
+        return bitmapToBase64(bitmap, 0)
+    }
+
     /***
      * bitmap转成Base64
+     * @param jd 旋转的角度
      */
-    fun bitmapToBase64(bitmap: Bitmap?): String {
+    fun bitmapToBase64(bitmap: Bitmap?, jd: Int): String {
         var bitmap = bitmap
         var result: String? = null
         var baos: ByteArrayOutputStream? = null
         try {
             if (bitmap != null) {
-                bitmap = rotaingImageView(90, bitmap)
+                bitmap = rotaingImageView(jd, bitmap)
                 baos = ByteArrayOutputStream()
                 var options = 100
                 bitmap.compress(Bitmap.CompressFormat.JPEG, options, baos)

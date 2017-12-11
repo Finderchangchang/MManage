@@ -32,6 +32,7 @@ import gd.mmanage.config.command
 import gd.mmanage.config.sp
 import gd.mmanage.control.CarManageModule
 import gd.mmanage.databinding.ActivityAddGetCarBinding
+import gd.mmanage.method.ImgUtils
 import gd.mmanage.method.Utils
 import gd.mmanage.method.uu
 import gd.mmanage.model.*
@@ -90,21 +91,6 @@ class AddGetCarActivity : BaseActivity<ActivityAddGetCarBinding>(), AbsModule.On
         }
     }
 
-    fun bitmap_to_bytes(bitmap: Bitmap): Array<Int?> {
-        var baos: ByteArrayOutputStream = ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        var bytt = baos.toByteArray()
-        var data = arrayOfNulls<Int>(bytt!!.size);
-        for (i in 0 until bytt!!.size) {
-            if (bytt[i] < 0) {
-                data[i] = bytt[i] + 256
-            } else {
-                data[i] = bytt[i].toInt()
-            }
-        }
-        return data
-    }
-
     override fun onError(result: Int, error: Any?) {
 
     }
@@ -154,6 +140,10 @@ class AddGetCarActivity : BaseActivity<ActivityAddGetCarBinding>(), AbsModule.On
         //执行保存操作
         next_btn.setOnClickListener {
             if (check_null()) {
+                var img_list = ArrayList<FileModel>()
+                img_list.add(FileModel(ImgUtils().Only_bitmapToBase64(xc_img), "取车人实际照片", "C5", ""))
+                img_list.add(FileModel(ImgUtils().Only_bitmapToBase64(user_img), "取车人证件照片", "C4", ""))
+                model.files = img_list
                 control!!.add_prat(model)
             }
         }
@@ -221,6 +211,7 @@ class AddGetCarActivity : BaseActivity<ActivityAddGetCarBinding>(), AbsModule.On
             var bmp = uu.getimage(100, xc_url)
             xc_img = uu.compressImage(uu.rotaingImageView(90, uu.compressImage(bmp)))
             real_user_iv.setImageBitmap(xc_img)
+            model.VehicleTakePersonCompare = ""
             check_two_img()
         }
     }
@@ -379,6 +370,7 @@ class AddGetCarActivity : BaseActivity<ActivityAddGetCarBinding>(), AbsModule.On
                 if (1 == WLTService.wlt2Bmp(idCardInfo.photo, buf)) {
                     user_img = IDPhotoHelper.Bgr2Bitmap(buf)
                     if (null != user_img) {
+                        model.VehicleTakePersonCompare = ""
                         card_user_iv.post(Runnable { card_user_iv.setImageBitmap(user_img) })
                         check_two_img()
                     }

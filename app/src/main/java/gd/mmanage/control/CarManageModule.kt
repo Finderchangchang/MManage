@@ -11,6 +11,9 @@ import gd.mmanage.control.HttpUtils
 import gd.mmanage.method.ImgUtils
 import gd.mmanage.method.UtilControl
 import gd.mmanage.model.*
+import org.json.JSONArray
+import org.json.JSONException
+import org.json.JSONObject
 
 /**
  * Created by Administrator on 2017/11/14.
@@ -26,7 +29,18 @@ class CarManageModule : BaseModule {
         var u = "AddVehicle"
         if (!TextUtils.isEmpty(model.VehicleId)) u = "UpdateVehicle"
         var map = UtilControl.change(model)
-        //map.put("files", Gson().toJson(model.files))
+        val accountArray = JSONArray()
+        for (i in 0 until model.files!!.size) {
+            val accountStr = Gson().toJson(model.files!!.get(i))
+            val accountObject: JSONObject
+            try {
+                accountObject = JSONObject(accountStr)
+                accountArray.put(i, accountObject)
+            } catch (e: JSONException) {
+
+            }
+        }
+        map.put("files", accountArray.toString())
         HttpUtils<VehicleModel>().post(url.get_vehicle + u, command.car_manage + 1, map, this)
     }
 
@@ -86,5 +100,25 @@ class CarManageModule : BaseModule {
         map.put("imageA", ImgUtils().bitmapToBase64(bitmap1))
         map.put("imageB", ImgUtils().bitmapToBase64(bitmap2))
         HttpUtils<VehicleModel>().post(url.normal + "Other/FaceRecognition", command.car_manage + 8, map, this)
+    }
+
+    /**
+     * 通过ocr解析驾驶证
+     * @param bitmap1 驾驶证bitmap
+     * */
+    fun ocr_js(bitmap1: Bitmap) {
+        var map = HashMap<String, String>()
+        map.put("image", ImgUtils().bitmapToBase64(bitmap1))
+        HttpUtils<VehicleModel>().post(url.normal + "Other/DriverCardRecognition", command.car_manage + 9, map, this)
+    }
+
+    /**
+     * 通过ocr解析行驶证
+     * @param bitmap1 行驶证bitmap
+     * */
+    fun ocr_xs(bitmap1: Bitmap) {
+        var map = HashMap<String, String>()
+        map.put("image", ImgUtils().bitmapToBase64(bitmap1))
+        HttpUtils<VehicleModel>().post(url.normal + "Other/DrivingCardRecognition", command.car_manage + 10, map, this)
     }
 }

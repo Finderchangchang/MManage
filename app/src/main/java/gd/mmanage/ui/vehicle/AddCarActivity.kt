@@ -11,6 +11,7 @@ import com.arialyy.frame.module.AbsModule
 import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
+import com.jiangyy.easydialog.LoadingDialog
 import gd.mmanage.R
 import gd.mmanage.base.BaseActivity
 import gd.mmanage.config.command
@@ -18,12 +19,12 @@ import gd.mmanage.config.sp
 import gd.mmanage.control.CarManageModule
 import gd.mmanage.databinding.ActivityAddCarBinding
 import gd.mmanage.databinding.ActivityAddPartsBinding
+import gd.mmanage.method.ImgUtils
 import gd.mmanage.method.Utils
 import gd.mmanage.method.uu
-import gd.mmanage.model.EmployeeModel
-import gd.mmanage.model.FileModel
-import gd.mmanage.model.NormalRequest
-import gd.mmanage.model.VehicleModel
+import gd.mmanage.method.uu.compressImage
+import gd.mmanage.model.*
+import gd.mmanage.ui.DemoActivity
 import kotlinx.android.synthetic.main.activity_add_car.*
 import net.tsz.afinal.FinalDb
 import java.io.ByteArrayOutputStream
@@ -38,6 +39,9 @@ class AddCarActivity : BaseActivity<ActivityAddCarBinding>(), AbsModule.OnCallba
     var emp_array: Array<String?>? = null//从业人员的集合
     var employees: List<EmployeeModel>? = null//从业人员model
     var db: FinalDb? = null
+    var click_position = -1
+    var dialog: LoadingDialog.Builder? = null
+
     override fun onSuccess(result: Int, success: Any?) {
         when (result) {
             command.car_manage + 1 -> {
@@ -57,6 +61,7 @@ class AddCarActivity : BaseActivity<ActivityAddCarBinding>(), AbsModule.OnCallba
                         toast("修改失败")
                     }
                 }
+                dialog!!.dismiss()
             }
             command.car_manage + 5 -> {//根据身份证号获得车的记录(解析list然后用dialog的形式展示出来)
                 success as NormalRequest<JsonArray>
@@ -65,6 +70,29 @@ class AddCarActivity : BaseActivity<ActivityAddCarBinding>(), AbsModule.OnCallba
                 for (key in 0 until success.obj!!.size()) {
                     var kk = Gson().fromJson(success.obj!![key], VehicleModel::class.java)
                     array[key] = kk.VehicleNumber
+                    if (click_position > -1) {
+                        if (key == click_position) {
+                            try {
+                                if (kk.files!!.isNotEmpty()) {
+                                    for (mo in kk.files!!) {
+                                        //根据前面选择的图片进行显示
+                                        when (mo.FileType) {
+                                            "C1" -> {
+                                                left_bm = ImgUtils().base64ToBitmap(mo.FileContent)
+                                                car_iv.setImageBitmap(left_bm)
+                                            }
+                                            "C6" -> {
+                                                right_bm = ImgUtils().base64ToBitmap(mo.FileContent)
+                                                id_card_iv.setImageBitmap(right_bm)
+                                            }
+                                        }
+                                    }
+                                }
+                            } catch (e: Exception) {
+                                var s = ""
+                            }
+                        }
+                    }
                     list.add(kk)
                 }
                 cars_tv.text = list.size.toString() + "辆"
@@ -81,48 +109,143 @@ class AddCarActivity : BaseActivity<ActivityAddCarBinding>(), AbsModule.OnCallba
                     model!!.VehicleFrameNumber = now_model.VehicleFrameNumber
                     binding.model = model//刷新一下数据
                 }
+                dialog!!.dismiss()
+            }
+            command.car_manage + 10 -> {
+                success as NormalRequest<*>
+                if (success.result) {
+                    var key = Gson().fromJson<CarModel>(success.obj.toString(), CarModel::class.java)
+                    model!!.VehicleOwner = key.Owner
+                    model!!.VehicleNumber = key.VehicleType//车牌
+                    model!!.VehicleBrand = key.VehicleBrand//品牌
+                    model!!.VehicleFrameNumber = key.FrameNumber//车架
+                    model!!.VehicleEngine = key.EngineNumber//发动机
+                    id_card_iv.setImageBitmap(right_bm)
+                    if (model!!.files!!.isNotEmpty()) {
+                        for (mo in model!!.files!!) {
+                            //根据前面选择的图片进行显示
+                            when (mo.FileType) {
+                                "C1" -> {
+                                    left_bm = ImgUtils().base64ToBitmap(mo.FileContent)
+                                    car_iv.setImageBitmap(left_bm)
+                                }
+                                "C6" -> {
+                                    right_bm = ImgUtils().base64ToBitmap(mo.FileContent)
+                                    id_card_iv.setImageBitmap(right_bm)
+                                }
+                            }
+                        }
+                    }
+                    binding.model = model
+                }
+                dialog!!.dismiss()
+            }
+            command.car_manage + 2 -> {//查询出来的结果
+                success as NormalRequest<*>
+                var model = Gson().fromJson<DetailModel>(success.obj.toString(), DetailModel::class.java)
+                if (model != null) {
+
+                    if (model.Vehicle!!.files!!.isNotEmpty()) {
+                        for (mo in model.Vehicle!!.files!!) {
+                            when (mo.FileType) {
+                                "C1" -> {
+                                    left_bm = ImgUtils().base64ToBitmap(mo.FileContent)
+                                    car_iv.setImageBitmap(left_bm)
+                                }
+                                "C6" -> {
+                                    right_bm = ImgUtils().base64ToBitmap(mo.FileContent)
+                                    id_card_iv.setImageBitmap(right_bm)
+                                }
+                            }
+                        }
+                    }
+                }
+                dialog!!.dismiss()
             }
         }
     }
 
     override fun onError(result: Int, error: Any?) {
+        dialog!!.dismiss()
+    }
 
+    var left_bm: Bitmap? = null
+    var right_bm: Bitmap? = null
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        //拍照成功将图片显示出来
+        if (resultCode == 66) {
+            var url = data!!.getStringExtra("data")
+            var bmp = uu.getimage(100, url)
+            if (img_click_position == 1) {
+                right_bm = compressImage(uu.rotaingImageView(0, compressImage(bmp)))
+                id_card_iv.setImageBitmap(right_bm)
+                dialog!!.show()
+                control!!.ocr_xs(right_bm!!)
+            } else {
+                left_bm = compressImage(uu.rotaingImageView(0, compressImage(bmp)))
+                car_iv.setImageBitmap(left_bm)
+            }
+        }
     }
 
     var control: CarManageModule? = null
     var xc_url = ""
     var user_img: FileModel? = null
+    var img_click_position = 0//0：拍车照片 1:ocr识别
     override fun init(savedInstanceState: Bundle?) {
         super.init(savedInstanceState)
         db = FinalDb.create(this)
+        dialog = LoadingDialog.Builder(this).setTitle("正在加载...")//初始化dialog
+        dialog!!.show()
         control = getModule(CarManageModule::class.java, this)
         model = intent.getSerializableExtra("model") as VehicleModel
         xc_url = intent.getStringExtra("xc_url")
+        if (!TextUtils.isEmpty(model!!.VehicleId)) {
+            control!!.get_vehicleById(model!!.VehicleId)
+        }
         user_img = intent.getSerializableExtra("user_file") as FileModel
-
+        click_position = intent.getIntExtra("click_position", -1)
         binding.model = model//刷新一下数据
         control!!.get_vehicleByIdCard(model!!.VehiclePersonCertNumber)
         //选择送车人名下车辆
         cars_tv.setOnClickListener {
             builder.show()
         }
+        car_iv.setOnClickListener {
+            img_click_position = 0
+            startActivityForResult(Intent(this@AddCarActivity, DemoActivity::class.java)
+                    .putExtra("position", "2"), 77)
+        }
+        ocr_btn.setOnClickListener {
+            img_click_position = 1
+            startActivityForResult(Intent(this@AddCarActivity, DemoActivity::class.java)
+                    .putExtra("position", "2"), 77)
+        }
+        id_card_iv.setOnClickListener {
+            img_click_position = 1
+            startActivityForResult(Intent(this@AddCarActivity, DemoActivity::class.java)
+                    .putExtra("position", "2"), 77)
+        }
         save_btn.setOnClickListener {
-            model = binding.model
-            var img_list = ArrayList<FileModel>()
-            if (!TextUtils.isEmpty(xc_url)) {
-                var bmp = uu.getimage(100, xc_url)
-                var xc_img = uu.compressImage(uu.rotaingImageView(90, uu.compressImage(bmp)))
-                //img_list.add(FileModel(Gson().toJson(bitmap_to_bytes(xc_img)), "送车人实际照片", "C3", ""))
-            }
-            if (user_img!!.FileContent != null) {
-                img_list.add(user_img!!)
-            }
-            if (img_list.size > 0) {
-//            model!!.files = Gson().toJson(img_list).toString()
+            if (check_null()) {
+                dialog!!.show()
+                model = binding.model
+                var img_list = ArrayList<FileModel>()
+                if (!TextUtils.isEmpty(xc_url)) {
+                    var bmp = uu.getimage(100, xc_url)
+                    var xc_img = uu.compressImage(uu.rotaingImageView(90, uu.compressImage(bmp)))
+                    img_list.add(FileModel(ImgUtils().Only_bitmapToBase64(xc_img), "送车人实际照片", "C3", ""))
+                }
+                if (user_img!!.FileContent != null) {
+                    img_list.add(user_img!!)
+                }
+                img_list.add(FileModel(ImgUtils().Only_bitmapToBase64(left_bm), "机动车现场照片", "C1", ""))
+                img_list.add(FileModel(ImgUtils().Only_bitmapToBase64(right_bm), "行驶证照片", "C6", ""))
                 model!!.files = img_list
+                model!!.VehicleReceiveTime = Utils.normalTime
+                control!!.add_prat(model!!)
             }
-            model!!.VehicleReceiveTime = Utils.normalTime
-            control!!.add_prat(model!!)
         }
         //收车人
         ll9.setOnClickListener {
@@ -146,19 +269,34 @@ class AddCarActivity : BaseActivity<ActivityAddCarBinding>(), AbsModule.OnCallba
         }
     }
 
-    fun bitmap_to_bytes(bitmap: Bitmap): Array<Int?> {
-        var baos: ByteArrayOutputStream = ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        var bytt = baos.toByteArray()
-        var data = arrayOfNulls<Int>(bytt!!.size);
-        for (i in 0 until bytt!!.size) {
-            if (bytt[i] < 0) {
-                data[i] = bytt[i] + 256
-            } else {
-                data[i] = bytt[i].toInt()
-            }
+    //检测输入的是不是为空
+    fun check_null(): Boolean {
+        if (TextUtils.isEmpty(model!!.VehicleOwner)) {
+            toast("车辆所有人姓名不能为空")
+            return false
+        } else if (TextUtils.isEmpty(model!!.VehicleNumber)) {
+            toast("车牌号码不能为空")
+            return false
+        } else if (TextUtils.isEmpty(model!!.VehicleBrand)) {
+            toast("车辆品牌不能为空")
+            return false
+        } else if (TextUtils.isEmpty(model!!.VehicleEngine)) {
+            toast("车架号不能为空")
+            return false
+        } else if (TextUtils.isEmpty(model!!.VehiclePersonAddress)) {
+            toast("发动机号不能为空")
+            return false
+        } else if (TextUtils.isEmpty(model!!.VehiclePersonPhone)) {
+            toast("送车电话不能为空")
+            return false
+        } else if (left_bm == null) {
+            toast("车辆照片不能为空")
+            return false
+        } else if (right_bm == null) {
+            toast("行驶证不能为空")
+            return false
         }
-        return data
+        return true
     }
 
     /**

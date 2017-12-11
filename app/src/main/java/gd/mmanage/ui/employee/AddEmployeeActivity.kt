@@ -150,18 +150,8 @@ class AddEmployeeActivity : BaseActivity<ActivityAddEmployeeBinding>(), AbsModul
                 map = UtilControl.change(model)
                 if (user_bitmap != null) {
                     var img_list = ArrayList<FileModel>()
-                    var bytt = bitmap_to_bytes()
-                    var data = arrayOfNulls<Int>(bytt!!.size);
-                    for (i in 0 until bytt.size) {
-                        if (bytt[i] < 0) {
-                            data[i] = bytt[i] + 256
-                        } else {
-                            data[i] = bytt[i].toInt()
-                        }
-                    }
-                    var c = Gson().toJson(data)
-                    img_list.add(FileModel(c, "111", "01", model.EmployeeId))
-                    map.put("file", Gson().toJson(img_list))
+                    img_list.add(FileModel(ImgUtils().Only_bitmapToBase64(user_bitmap), "从业人员证件照", "01", model.EmployeeId))
+                    map.put("files", Gson().toJson(img_list))
                 }
                 control!!.add_employee(map)
             }

@@ -106,14 +106,9 @@ class SearchVehicleActivity : BaseActivity<ActivitySearchVehicleBinding>(), AbsM
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        when (resultCode) {
-            12, 1 -> {
-                refresh_list(data)
-            }
-        }
-        if (requestCode == 12) {
-            refresh_list(data)
-        }
+
+        refresh_list(data)
+
     }
 
     fun refresh_list(data: Intent?) {
