@@ -53,7 +53,6 @@ class AddGetCarActivity : BaseActivity<ActivityAddGetCarBinding>(), AbsModule.On
     var db: FinalDb? = null
     var xc_img: Bitmap? = null//现场照片
     var user_img: Bitmap? = null//用户头像
-    var xc_url = ""
     var vehicleId = ""
     var dialog: LoadingDialog.Builder? = null//转圈的dialog
 
@@ -72,6 +71,7 @@ class AddGetCarActivity : BaseActivity<ActivityAddGetCarBinding>(), AbsModule.On
                     model.VehicleTakePersonCompare = ""
                     bi_tv.visibility = View.GONE
                 }
+                toast("通过率:" + key.FaceScore)
                 result_btn.visibility = View.VISIBLE
                 bi_tv.text = "识别率 " + model.VehicleTakePersonCompare
                 dialog!!.dismiss()
@@ -117,7 +117,13 @@ class AddGetCarActivity : BaseActivity<ActivityAddGetCarBinding>(), AbsModule.On
     fun check_two_img() {
         if (xc_img != null && user_img != null) {
             dialog!!.show()
-            control!!.check_two_img(xc_img!!, user_img!!)
+            var bit1 = ImgUtils().Only_bitmapToBase64(xc_img)
+            var bit2 = ImgUtils().Only_bitmapToBase64(user_img)
+            control!!.check_two_imgs(bit1, bit2)
+            var bi1 = ImgUtils().base64ToBitmap(bit1)
+            var bi2 = ImgUtils().base64ToBitmap(bit2)
+            real_user_iv.setImageBitmap(bi1)
+            card_user_iv.setImageBitmap(bi2)
         }
     }
 
@@ -237,18 +243,22 @@ class AddGetCarActivity : BaseActivity<ActivityAddGetCarBinding>(), AbsModule.On
         super.onActivityResult(requestCode, resultCode, data)
         //拍照成功将图片显示出来
         if (resultCode == 66) {
-            xc_url = data!!.getStringExtra("data")
-            var bmp = uu.compressImage(uu.rotaingImageView(90, uu.compressImage(uu.getimage(100, xc_url))))
             when (requestCode) {
                 1 -> {//身份证识别
+                    var url = data!!.getStringExtra("data")
+                    var bmp = uu.compressImage(uu.rotaingImageView(90, uu.compressImage(uu.getimage(100, url))))
                     dialog!!.show()
                     control!!.ocr_sfz(bmp)
                 }
                 2 -> {//驾驶证识别
+                    var url = data!!.getStringExtra("data")
+                    var bmp = uu.compressImage(uu.rotaingImageView(90, uu.compressImage(uu.getimage(100, url))))
                     dialog!!.show()
                     control!!.ocr_js(bmp)
                 }
-                else -> {
+                77 -> {
+                    var url = data!!.getStringExtra("data")
+                    var bmp = uu.compressImage(uu.rotaingImageView(90, uu.compressImage(uu.getimage(100, url))))
                     xc_img = bmp
                     real_user_iv.setImageBitmap(xc_img)
                     model.VehicleTakePersonCompare = ""

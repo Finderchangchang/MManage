@@ -39,11 +39,13 @@ class ImgUtils {
                 baos = ByteArrayOutputStream()
                 var options = 100
                 bitmap.compress(Bitmap.CompressFormat.JPEG, options, baos)
-                while (baos.toByteArray().size / 1024 > 100) {  //循环判断如果压缩后图片是否大于100kb,大于继续压缩
-                    Log.i("lgg", baos.toByteArray().size.toString())
-                    baos.reset()//重置baos即清空baos
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, options, baos)//这里压缩options%，把压缩后的数据存放到baos中
-                    options -= 10//每次都减少10
+                if (jd != 0) {
+                    while (baos.toByteArray().size / 1024 > 1000) {  //循环判断如果压缩后图片是否大于100kb,大于继续压缩
+                        Log.i("lgg", baos.toByteArray().size.toString())
+                        baos.reset()//重置baos即清空baos
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, options, baos)//这里压缩options%，把压缩后的数据存放到baos中
+                        options -= 10//每次都减少10
+                    }
                 }
                 baos.flush()
                 baos.close()

@@ -184,24 +184,7 @@ object uu {
         val baos = ByteArrayOutputStream()
         image.compress(Bitmap.CompressFormat.JPEG, 100, baos)//质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
         var options = 90
-        while (baos.toByteArray().size / 1024 > 100 * 2) {  //循环判断如果压缩后图片是否大于100kb,大于继续压缩
-            baos.reset()//重置baos即清空baos
-            if (options < 0) {
-                options = 1
-            }
-            image.compress(Bitmap.CompressFormat.JPEG, options, baos)//这里压缩options%，把压缩后的数据存放到baos中
-            options -= 10//每次都减少10
-        }
-        val isBm = ByteArrayInputStream(baos.toByteArray())//把压缩后的数据baos存放到ByteArrayInputStream中
-        val bitmap = BitmapFactory.decodeStream(isBm, null, null)//把ByteArrayInputStream数据生成图片
-        return bitmap
-    }
-
-    fun compressImage(image: Bitmap, bit: Int): Bitmap {
-        val baos = ByteArrayOutputStream()
-        image.compress(Bitmap.CompressFormat.JPEG, 100, baos)//质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
-        var options = 90
-        while (baos.toByteArray().size / 1024 > bit) {  //循环判断如果压缩后图片是否大于100kb,大于继续压缩
+        while (baos.toByteArray().size / 1024 > 1500) {  //循环判断如果压缩后图片是否大于100kb,大于继续压缩
             baos.reset()//重置baos即清空baos
             if (options < 0) {
                 options = 1
