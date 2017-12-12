@@ -121,4 +121,14 @@ class CarManageModule : BaseModule {
         map.put("image", ImgUtils().bitmapToBase64(bitmap1))
         HttpUtils<VehicleModel>().post(url.normal + "Other/DrivingCardRecognition", command.car_manage + 10, map, this)
     }
+
+    /**
+     * 通过ocr解析身份证
+     * @param bitmap1 行驶证bitmap
+     * */
+    fun ocr_sfz(bitmap1: Bitmap) {
+        var map = HashMap<String, String>()
+        map.put("image", ImgUtils().bitmapToBase64(bitmap1))
+        HttpUtils<VehicleModel>().post(url.normal + "Other/CardRecognition", command.car_manage + 11, map, this)
+    }
 }

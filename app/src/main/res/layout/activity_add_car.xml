@@ -335,12 +335,14 @@
                         android:id="@+id/car_iv"
                         android:layout_width="80dp"
                         android:layout_height="100dp"
-                        android:layout_marginRight="20dp" />
+                        android:layout_marginRight="20dp"
+                        android:src="@mipmap/main_xianchang" />
 
                     <ImageView
                         android:id="@+id/id_card_iv"
                         android:layout_width="80dp"
-                        android:layout_height="100dp" />
+                        android:layout_height="100dp"
+                        android:src="@mipmap/main_xianchang" />
                 </LinearLayout>
 
                 <TextView

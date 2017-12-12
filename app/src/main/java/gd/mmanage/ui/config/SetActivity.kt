@@ -54,6 +54,7 @@ class SetActivity : BaseActivity<ActivitySetBinding>() {
                 blue_array!![i] = device.name
             }
             if (listblue!!.size > 0) {
+                builder.setTitle("选择蓝牙")
                 builder.setItems(blue_array) { _, position ->
                     blue_set_mv.setRight_tv(blue_array!![position])
                     Utils.putCache("BlueToothName", listblue!![position].Name)

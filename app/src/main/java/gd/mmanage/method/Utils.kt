@@ -771,6 +771,16 @@ object Utils {
         }
 
     /**
+     * @return true 不是手机号 false 是手机号
+     * */
+    fun isChinaPhoneLegal(str: String): Boolean {
+        val regExp = "^((13[0-9])|(15[^4])|(18[0,2,3,5-9])|(17[0-8])|(147))\\d{8}$"
+        val p = Pattern.compile(regExp)
+        val m = p.matcher(str)
+        return !m.matches()
+    }
+
+    /**
      * 跳页传参的接口
      */
     interface putListener {

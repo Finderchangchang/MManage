@@ -54,7 +54,6 @@ class AddGetCarActivity : BaseActivity<ActivityAddGetCarBinding>(), AbsModule.On
     var xc_img: Bitmap? = null//现场照片
     var user_img: Bitmap? = null//用户头像
     var xc_url = ""
-    var user_url = ""
     var vehicleId = ""
     var dialog: LoadingDialog.Builder? = null//转圈的dialog
 
@@ -88,6 +87,23 @@ class AddGetCarActivity : BaseActivity<ActivityAddGetCarBinding>(), AbsModule.On
                     toast(success.message)
                 }
             }
+            command.car_manage + 11 -> {
+                success as NormalRequest<*>
+                var key = Gson().fromJson<CardUserModel>(success.obj.toString(), CardUserModel::class.java)
+                if (key != null) {
+                    user_img = ImgUtils().base64ToBitmap(key.PersonFaceImage)
+                    model.VehicleTakePersonCompare = ""
+                    card_user_iv.setImageBitmap(user_img)
+                    check_two_img()
+                    model.VehicleTakePerson = key.PersonName
+                    model.VehicleTakePersonCertNumber = key.IdentyNumber
+                    model.VehicleTakePersonAddress = key.PersonAddress
+                    binding.model = model
+                } else {
+                    toast("失败识别")
+                }
+                dialog!!.dismiss()
+            }
         }
     }
 
@@ -118,16 +134,30 @@ class AddGetCarActivity : BaseActivity<ActivityAddGetCarBinding>(), AbsModule.On
         //证件识别操作
         read_card_btn.setOnClickListener {
             //身份证读取
-            if (id_card_rb.isChecked) {
-                model.VehicleTakePersonCertType = "01"
-                if (TextUtils.isEmpty(Utils.getCache(sp.blueToothAddress))) {
-                    toast("请检查蓝牙读卡设备设置！")
-                } else {
-                    OnBnRead()
-                }
-            } else {//orc读取驾驶证
-                model.VehicleTakePersonCertType = "01"
+//            if (id_card_rb.isChecked) {
+//
+//            } else {//orc读取驾驶证
+//            }
+        }
+        //蓝牙识别
+        read_card_btn.setOnClickListener {
+            model.VehicleTakePersonCertType = "01"
+            if (TextUtils.isEmpty(Utils.getCache(sp.blueToothAddress))) {
+                toast("请检查蓝牙读卡设备设置！")
+            } else {
+                OnBnRead()
             }
+        }
+        read_ocr_btn.setOnClickListener {
+            model.VehicleTakePersonCertType = "01"
+            startActivityForResult(Intent(this@AddGetCarActivity, DemoActivity::class.java)
+                    .putExtra("position", "2"), 1)
+        }
+        read_driver_btn.setOnClickListener {
+            model.VehicleTakePersonCertType = "02"
+            startActivityForResult(Intent(this@AddGetCarActivity, DemoActivity::class.java)
+                    .putExtra("position", "2"), 2)
+
         }
         binding.model = model
         binding.nation = "汉"
@@ -194,7 +224,7 @@ class AddGetCarActivity : BaseActivity<ActivityAddGetCarBinding>(), AbsModule.On
         builder.setItems(key) { dialog, which ->
             when (method) {
                 3 -> {//民族
-                    model!!.VehiclePersonNation = nation_list!![which].ID
+                    model!!.VehicleTakePersonNation = nation_list!![which].ID
                     binding.nation = nation_list!![which].Name
                 }
             }
@@ -208,11 +238,24 @@ class AddGetCarActivity : BaseActivity<ActivityAddGetCarBinding>(), AbsModule.On
         //拍照成功将图片显示出来
         if (resultCode == 66) {
             xc_url = data!!.getStringExtra("data")
-            var bmp = uu.getimage(100, xc_url)
-            xc_img = uu.compressImage(uu.rotaingImageView(90, uu.compressImage(bmp)))
-            real_user_iv.setImageBitmap(xc_img)
-            model.VehicleTakePersonCompare = ""
-            check_two_img()
+            var bmp = uu.compressImage(uu.rotaingImageView(90, uu.compressImage(uu.getimage(100, xc_url))))
+            when (requestCode) {
+                1 -> {//身份证识别
+                    dialog!!.show()
+                    control!!.ocr_sfz(bmp)
+                }
+                2 -> {//驾驶证识别
+                    dialog!!.show()
+                    control!!.ocr_js(bmp)
+                }
+                else -> {
+                    xc_img = bmp
+                    real_user_iv.setImageBitmap(xc_img)
+                    model.VehicleTakePersonCompare = ""
+                    check_two_img()
+                }
+            }
+
         }
     }
 

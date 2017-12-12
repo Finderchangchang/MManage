@@ -55,7 +55,6 @@ class AddPersonActivity : BaseActivity<ActivityAddPersonBinding>(), AbsModule.On
     var xc_img: Bitmap? = null//现场照片
     var user_img: Bitmap? = null//用户头像
     var xc_url = ""
-    var camera_click_position = 0//相机点击的位置
     var dialog: LoadingDialog.Builder? = null
 
     companion object {
@@ -143,13 +142,35 @@ class AddPersonActivity : BaseActivity<ActivityAddPersonBinding>(), AbsModule.On
             command.car_manage + 9 -> {
                 success as NormalRequest<*>
                 var key = Gson().fromJson<UserCarModel>(success.obj.toString(), UserCarModel::class.java)
-                user_img = ImgUtils().base64ToBitmap(key.PersonFaceImage)
-                card_user_iv.setImageBitmap(user_img)
-                check_two_img()
-                model.VehiclePerson = key.PersonName
-                model.VehiclePersonCertNumber = key.IdentyNumber
-                model.VehiclePersonAddress = key.PersonAddress
-                binding.model = model
+                if (key != null) {
+                    user_img = ImgUtils().base64ToBitmap(key.PersonFaceImage)
+                    card_user_iv.setImageBitmap(user_img)
+                    model.VehicleTakePersonCompare = ""
+                    check_two_img()
+                    model.VehiclePerson = key.PersonName
+                    model.VehiclePersonCertNumber = key.IdentyNumber
+                    model.VehiclePersonAddress = key.PersonAddress
+                    binding.model = model
+                } else {
+                    toast("失败识别")
+                }
+                dialog!!.dismiss()
+            }
+            command.car_manage + 11 -> {
+                success as NormalRequest<*>
+                var key = Gson().fromJson<CardUserModel>(success.obj.toString(), CardUserModel::class.java)
+                if (key != null) {
+                    user_img = ImgUtils().base64ToBitmap(key.PersonFaceImage)
+                    model.VehicleTakePersonCompare = ""
+                    card_user_iv.setImageBitmap(user_img)
+                    check_two_img()
+                    model.VehiclePerson = key.PersonName
+                    model.VehiclePersonCertNumber = key.IdentyNumber
+                    model.VehiclePersonAddress = key.PersonAddress
+                    binding.model = model
+                } else {
+                    toast("失败识别")
+                }
                 dialog!!.dismiss()
             }
         }
@@ -183,19 +204,16 @@ class AddPersonActivity : BaseActivity<ActivityAddPersonBinding>(), AbsModule.On
         }
         //证件识别操作
         read_card_btn.setOnClickListener {
-            //身份证读取
-            if (id_card_rb.isChecked) {
-                if (TextUtils.isEmpty(Utils.getCache(sp.blueToothAddress))) {
-                    toast("请检查蓝牙读卡设备设置！")
-                } else {
-                    dialog!!.show()
-                    OnBnRead()
-                }
-            } else {//orc读取驾驶证
-                camera_click_position = 1
-                startActivityForResult(Intent(this@AddPersonActivity, DemoActivity::class.java)
-                        .putExtra("position", "2"), 77)
+            if (TextUtils.isEmpty(Utils.getCache(sp.blueToothAddress))) {
+                toast("请检查蓝牙读卡设备设置！")
+            } else {
+                dialog!!.show()
+                OnBnRead()
             }
+        }
+        read_ocr_btn.setOnClickListener {
+            startActivityForResult(Intent(this@AddPersonActivity, DemoActivity::class.java)
+                    .putExtra("position", "2"), 1)
         }
         model.VehiclePersonCertType = "01"
         binding.model = model
@@ -203,9 +221,12 @@ class AddPersonActivity : BaseActivity<ActivityAddPersonBinding>(), AbsModule.On
         //跳转到拍照页面
         real_user_iv.setOnClickListener {
             //control!!.get_vehicleByIdCard("130624198709183414")
-            camera_click_position = 0
             startActivityForResult(Intent(this@AddPersonActivity, DemoActivity::class.java)
                     .putExtra("position", "1"), 77)
+        }
+        read_driver_btn.setOnClickListener {
+            startActivityForResult(Intent(this@AddPersonActivity, DemoActivity::class.java)
+                    .putExtra("position", "2"), 2)
         }
         next_btn.setOnClickListener {
             if (check_null()) {
@@ -284,17 +305,24 @@ class AddPersonActivity : BaseActivity<ActivityAddPersonBinding>(), AbsModule.On
         if (resultCode == 66) {
             var url = data!!.getStringExtra("data")
             var bmp = uu.getimage(100, url)
-            if (camera_click_position == 0) {
-                xc_url = url
-                xc_img = compressImage(uu.rotaingImageView(90, compressImage(bmp)))
-                real_user_iv.setImageBitmap(xc_img)
-                dialog!!.show()
-                check_two_img()
-            } else {//证件照ocr识别(获得证件照片，进行ocr)
-                var card = compressImage(uu.rotaingImageView(0, compressImage(bmp)))
-                real_user_iv.setImageBitmap(card)
-                dialog!!.show()
-                control!!.ocr_js(card)
+
+            var card = compressImage(uu.rotaingImageView(0, compressImage(bmp)))
+            when (requestCode) {
+                1 -> {//身份证识别
+                    dialog!!.show()
+                    control!!.ocr_sfz(card)
+                }
+                2 -> {//驾驶证识别
+                    dialog!!.show()
+                    control!!.ocr_js(card)
+                }
+                else -> {//现场照片
+                    xc_url = url
+                    xc_img = compressImage(uu.rotaingImageView(90, compressImage(bmp)))
+                    real_user_iv.setImageBitmap(xc_img)
+                    dialog!!.show()
+                    check_two_img()
+                }
             }
         }
     }
@@ -396,53 +424,48 @@ class AddPersonActivity : BaseActivity<ActivityAddPersonBinding>(), AbsModule.On
 
     //读卡操作
     fun ReadCardInfo(): Boolean {
-
-        if (idCardReader != null && !idCardReader!!.sdtFindCard()) {
-            return false
-        } else {
-            if (!idCardReader!!.sdtSelectCard()) {
+        if (idCardReader != null) {
+            if (!idCardReader!!.sdtFindCard() || !idCardReader!!.sdtSelectCard()) run {
                 return false
-            }
-        }
-        runOnUiThread {
-            //textView.setText("正在读卡...")
-            //resetContent()
-        }
-        val idCardInfo = IDCardInfo()
-        if (idCardReader!!.sdtReadCard(1, idCardInfo)) {
-            val time = System.currentTimeMillis()
-            val mCalendar = Calendar.getInstance()
-            mCalendar.timeInMillis = time
-            runOnUiThread {
-                model.VehiclePerson = idCardInfo.name
-                model.VehiclePersonCertNumber = idCardInfo.id
-                model.VehiclePersonAddress = idCardInfo.address
-                binding.nation = idCardInfo.nation
-                binding.model = model
-                isRead = false
-            }
-
-
-            if (idCardInfo.photo != null) {
-                val buf = ByteArray(WLTService.imgLength)
-                if (1 == WLTService.wlt2Bmp(idCardInfo.photo, buf)) {
-                    user_img = IDPhotoHelper.Bgr2Bitmap(buf)
-                    if (null != user_img) {
-                        card_user_iv.post(Runnable { card_user_iv.setImageBitmap(user_img) })
-                        dialog!!.dismiss()
-                        check_two_img()
-
+            } else {
+                val idCardInfo = IDCardInfo()
+                if (idCardReader!!.sdtReadCard(1, idCardInfo)) {
+                    val time = System.currentTimeMillis()
+                    val mCalendar = Calendar.getInstance()
+                    mCalendar.timeInMillis = time
+                    runOnUiThread {
+                        model.VehiclePerson = idCardInfo.name
+                        model.VehiclePersonCertNumber = idCardInfo.id
+                        model.VehiclePersonAddress = idCardInfo.address
+                        binding.nation = idCardInfo.nation
+                        binding.model = model
+                        isRead = false
                     }
+
+
+                    if (idCardInfo.photo != null) {
+                        val buf = ByteArray(WLTService.imgLength)
+                        if (1 == WLTService.wlt2Bmp(idCardInfo.photo, buf)) {
+                            user_img = IDPhotoHelper.Bgr2Bitmap(buf)
+                            if (null != user_img) {
+                                card_user_iv.post(Runnable { card_user_iv.setImageBitmap(user_img) })
+                                dialog!!.dismiss()
+                                check_two_img()
+
+                            }
+                        }
+                    }
+                    dialog!!.dismiss()
+                    idCardReader!!.closeDevice()
+                    idCardReader = null
+                    return true
+                } else {
+                    return false
                 }
             }
-            return true
         } else {
-            //playSound(9, 0);
+            return false
         }
-        dialog!!.dismiss()
-
-
-        return false
     }
 
     //搜索结果处理
