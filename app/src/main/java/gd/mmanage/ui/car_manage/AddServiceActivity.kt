@@ -76,11 +76,11 @@ class AddServiceActivity : BaseActivity<ActivityAddServiceCarBinding>(), AbsModu
                     var model = yy_result!![i]
                     if (yy_result!![i]) {
                         ky_model.RepairType += yy_list[i].ID + ","
-                        result += yy_list!![i].Name + ","
+                        result += yy_list[i].Name + ","
                     }
                 }
                 binding.portName = result.substring(0, result.length - 1)
-                ky_model.RepairType = ky_model.RepairType.substring(0, ky_model.RepairType.length - 1)
+                ky_model.RepairType = binding.portName
             })
             builder.create().show()
         }

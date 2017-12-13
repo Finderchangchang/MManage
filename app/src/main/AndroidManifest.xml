@@ -57,9 +57,6 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".ui.employee.AddEmployeeActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
 
         <service android:name=".service.LongRunningService" />
 
@@ -79,11 +76,15 @@
         <activity android:name=".ui.vehicle.VehicleDetailActivity" />
         <activity android:name=".ui.vehicle.ChoiceVehicleActivity" />
         <activity android:name=".ui.main.HomeActivity" />
-        <activity android:name=".ui.employee.SearchEmployeeActivity" />
         <activity android:name=".ui.notice.SearchNoticeActivity" />
         <activity android:name=".ui.notice.NoticeDetailActivity" />
-
+        <activity android:name=".ui.employee.SearchEmployeeActivity" />
+        <activity android:name=".ui.employee.AddEmployeeActivity" />
         <activity android:name=".ui.employee.ChoiceEmployeeActivity" />
+
+        <activity android:name=".ui.inspect.SearchInspectActivity" />
+        <activity android:name=".ui.inspect.AddInspectActivity" />
+        <activity android:name=".ui.inspect.ChoiceInspectActivity" />
         <activity android:name=".ui.parts.SearchPartsActivity" />
         <activity android:name=".ui.parts.AddPartsActivity" />
         <activity android:name=".ui.parts.PartDetailActivity" />

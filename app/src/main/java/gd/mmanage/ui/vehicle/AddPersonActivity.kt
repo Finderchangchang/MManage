@@ -109,7 +109,6 @@ class AddPersonActivity : BaseActivity<ActivityAddPersonBinding>(), AbsModule.On
                     result_btn.text = "成功"
                     model.VehiclePersonCompare = key.FaceScore
                     bi_tv.visibility = View.VISIBLE
-                    control!!.get_vehicleByIdCard(binding.model.VehiclePersonCertNumber)
                     builder.setMessage("比对通过");
                 } else {
                     result_btn.text = "失败"
@@ -118,6 +117,10 @@ class AddPersonActivity : BaseActivity<ActivityAddPersonBinding>(), AbsModule.On
                     bi_tv.visibility = View.GONE
                 }
                 builder.setNegativeButton("取消", null);
+                builder.setNeutralButton("查看名下车辆") { a, b ->
+                    control!!.get_vehicleByIdCard(binding.model.VehiclePersonCertNumber)
+                }
+
                 dialog!!.dismiss()
                 builder.show();
                 bi_tv.text = "识别率 " + model.VehiclePersonCompare
@@ -222,9 +225,9 @@ class AddPersonActivity : BaseActivity<ActivityAddPersonBinding>(), AbsModule.On
         model.VehiclePersonCertType = "01"
         binding.model = model
         binding.nation = "汉族"
+        model.VehiclePersonPhone = ""
         //跳转到拍照页面
         real_user_iv.setOnClickListener {
-            //control!!.get_vehicleByIdCard("130624198709183414")
             startActivityForResult(Intent(this@AddPersonActivity, DemoActivity::class.java)
                     .putExtra("position", "1"), 77)
         }
@@ -268,7 +271,7 @@ class AddPersonActivity : BaseActivity<ActivityAddPersonBinding>(), AbsModule.On
             //修改图片可以为空
             toast("请先进行人像比对")
             return false
-        } else if (TextUtils.isEmpty(model!!.VehiclePersonPhone)) {
+        } else if (TextUtils.isEmpty(model.VehiclePersonPhone)) {
             toast("送车电话不能为空")
             return false
         }
@@ -313,7 +316,9 @@ class AddPersonActivity : BaseActivity<ActivityAddPersonBinding>(), AbsModule.On
         //拍照成功将图片显示出来
         if (resultCode == 66) {
             var url = data!!.getStringExtra("data")
+            var jd = uu.readPictureDegree(url) - 90//获得旋转角度
             var bmp = uu.getimage(100, url)
+            bmp = uu.rotaingImageView(jd, bmp)
 
             var card = compressImage(uu.rotaingImageView(0, compressImage(bmp)))
             when (requestCode) {
@@ -337,7 +342,7 @@ class AddPersonActivity : BaseActivity<ActivityAddPersonBinding>(), AbsModule.On
 
     internal var idCardReader: IDCardReader? = null
     private var workThread: WorkThread? = null
-    public var isRead = false
+    var isRead = false
     internal var mBluetoothAdapter: BluetoothAdapter? = null
     //设备连接
     fun OnBnRead() {

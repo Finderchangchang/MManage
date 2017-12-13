@@ -1,7 +1,6 @@
 package gd.mmanage.ui.employee
 
 import android.Manifest
-import android.app.ProgressDialog
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.content.BroadcastReceiver
@@ -11,31 +10,25 @@ import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.*
-import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityCompat
 import android.support.v7.app.AlertDialog
-import android.support.v7.app.AppCompatActivity
 import android.text.TextUtils
 import android.view.View
 import android.widget.Toast
 import com.arialyy.frame.module.AbsModule
 import com.google.gson.Gson
-import com.google.gson.JsonElement
 import com.jiangyy.easydialog.LoadingDialog
 import com.zkteco.android.IDReader.IDPhotoHelper
 import com.zkteco.android.IDReader.WLTService
 import com.zkteco.id3xx.IDCardReader
 import com.zkteco.id3xx.meta.IDCardInfo
 import gd.mmanage.R
-import gd.mmanage.R.id.textView
 import gd.mmanage.base.BaseActivity
 import gd.mmanage.config.command
 import gd.mmanage.config.sp
 import gd.mmanage.control.CarManageModule
 import gd.mmanage.control.EmployeeModule
-import gd.mmanage.control.LoginModule
 import gd.mmanage.databinding.ActivityAddEmployeeBinding
-import gd.mmanage.databinding.ActivityLoginBinding
 import gd.mmanage.method.ImgUtils
 import gd.mmanage.method.UtilControl
 import gd.mmanage.method.Utils
@@ -47,7 +40,6 @@ import gd.mmanage.ui.DemoActivity
 import kotlinx.android.synthetic.main.activity_add_employee.*
 import net.tsz.afinal.FinalDb
 import net.tsz.afinal.view.DatePickerDialog
-import java.io.*
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap

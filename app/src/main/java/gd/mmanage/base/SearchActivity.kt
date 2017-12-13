@@ -5,20 +5,14 @@ import android.os.Bundle
 import android.text.TextUtils
 import com.arialyy.frame.module.AbsModule
 import com.google.gson.Gson
-import com.google.gson.JsonElement
 import com.google.gson.JsonParser
-import com.jiangyy.easydialog.LoadingDialog
 import gd.mmanage.R
-import gd.mmanage.config.command
 import gd.mmanage.control.EmployeeModule
 import gd.mmanage.method.CommonAdapter
 import gd.mmanage.method.CommonViewHolder
 import gd.mmanage.model.EmployeeModel
-import gd.mmanage.model.NormalRequest
-import gd.mmanage.model.PageModel
 import gd.mmanage.ui.employee.AddEmployeeActivity
 import kotlinx.android.synthetic.main.activity_search_employee.*
-import java.util.ArrayList
 
 /**
  * 简单查询页面的父类

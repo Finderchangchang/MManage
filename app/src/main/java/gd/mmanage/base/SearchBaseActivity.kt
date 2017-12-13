@@ -1,29 +1,16 @@
 package gd.mmanage.base
 
-import android.content.Intent
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
-import android.text.TextUtils
-import android.view.View
-import android.widget.LinearLayout
-import android.widget.ListView
 import com.arialyy.frame.module.AbsModule
 import com.google.gson.Gson
 import com.google.gson.JsonElement
-import com.google.gson.JsonParser
 import com.jiangyy.easydialog.LoadingDialog
-import gd.mmanage.R
 import gd.mmanage.config.command
-import gd.mmanage.control.EmployeeModule
 import gd.mmanage.databinding.ActivityMainBinding
-import gd.mmanage.databinding.ActivitySearchEmployeeBinding
-import gd.mmanage.method.CommonAdapter
-import gd.mmanage.method.CommonViewHolder
 import gd.mmanage.method.OnlyLoadListView
-import gd.mmanage.model.EmployeeModel
 import gd.mmanage.model.NormalRequest
 import gd.mmanage.model.PageModel
-import gd.mmanage.ui.employee.AddEmployeeActivity
 import java.util.ArrayList
 
 /**

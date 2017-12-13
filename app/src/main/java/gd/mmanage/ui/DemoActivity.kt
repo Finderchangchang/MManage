@@ -21,7 +21,8 @@ import gd.mmanage.R
 import gd.mmanage.method.uu
 import kotlinx.android.synthetic.main.activity_demo.*
 import java.io.File
-import java.util.ArrayList
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * Created by Administrator on 2017/12/6.
@@ -64,7 +65,7 @@ class DemoActivity : AppCompatActivity() {
                         setResult(66, Intent().putExtra("data", filePath))
                         finish()
                     }
-                }, "/storage/self/primary", "photo0")
+                }, "/storage/self/primary", SimpleDateFormat("yyyyMMddHHmmssaa").format(Date()))
             }
         }
     }

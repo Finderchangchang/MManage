@@ -3,7 +3,6 @@ package gd.mmanage.ui.notice
 import android.content.Intent
 import android.os.Bundle
 import android.text.Html
-import android.text.TextUtils
 import com.arialyy.frame.module.AbsModule
 import com.jiangyy.easydialog.LoadingDialog
 import gd.mmanage.R
@@ -21,8 +20,6 @@ import com.google.gson.JsonParser
 import com.google.gson.Gson
 import gd.mmanage.method.UtilControl
 import gd.mmanage.model.PageModel
-import gd.mmanage.ui.employee.AddEmployeeActivity
-import gd.mmanage.ui.employee.ChoiceEmployeeActivity
 import kotlinx.android.synthetic.main.activity_search_notice.*
 
 

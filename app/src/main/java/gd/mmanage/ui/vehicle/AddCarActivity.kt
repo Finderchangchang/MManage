@@ -253,8 +253,6 @@ class AddCarActivity : BaseActivity<ActivityAddCarBinding>(), AbsModule.OnCallba
                 if (TextUtils.isEmpty(model!!.VehicleColor)) {
                     model!!.VehicleColor = "黑色"
                 }
-
-
                 if (user_img!!.FileContent != null) {
                     img_list.add(user_img!!)
                 }
@@ -285,10 +283,6 @@ class AddCarActivity : BaseActivity<ActivityAddCarBinding>(), AbsModule.OnCallba
         for (i in 0 until employees!!.size) {
             emp_array!![i] = employees!![i].EmployeeName
         }
-//        if (employees!!.isNotEmpty()) {//17343036592
-//            model!!.VehicleReceivePerson = employees!![0].EmployeeName
-//
-//        }
         zt_list = db!!.findAllByWhere(CodeModel::class.java, " CodeName='Code_VehicleType'")
         ve_array = arrayOfNulls(zt_list!!.size)
         var ve_id = "01"

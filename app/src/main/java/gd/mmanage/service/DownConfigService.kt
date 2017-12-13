@@ -111,6 +111,7 @@ class DownConfigService : Service() {
             command.config + 7 -> "Code_VehicleTakeState"//
             command.config + 8 -> "Code_EmployeeState"//企业状态
             command.config + 9 -> "Code_SuspiciousType"//修车状态
+            command.config + 9 -> "Code_InspectType"//检查项目
             else -> "Code_Nation"
         }
     }

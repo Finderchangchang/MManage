@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
-            app:center_tv="查询从业人员" />
+            app:center_tv="查询承接信息" />
 
         <LinearLayout
             android:layout_width="match_parent"
