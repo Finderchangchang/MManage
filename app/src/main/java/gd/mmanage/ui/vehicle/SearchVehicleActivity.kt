@@ -2,6 +2,7 @@ package gd.mmanage.ui.vehicle
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.TextUtils
 import com.arialyy.frame.module.AbsModule
 import com.google.gson.Gson
 import com.google.gson.JsonElement
@@ -57,9 +58,14 @@ class SearchVehicleActivity : BaseActivity<ActivitySearchVehicleBinding>(), AbsM
         adapter = object : CommonAdapter<VehicleModel>(this, answer_list, R.layout.item_vehicle) {
             override fun convert(holder: CommonViewHolder, model: VehicleModel, position: Int) {
                 holder.setText(R.id.name_tv, model.VehicleNumber)
-                holder.setText(R.id.price_tv, model.VehicleColor + model.VehicleBrand)
+                var right_tv = ""
+                if (!TextUtils.isEmpty(model.VehicleColor)) right_tv += model.VehicleColor
+                if (!TextUtils.isEmpty(model.VehicleBrand)) right_tv += model.VehicleBrand
+                holder.setText(R.id.price_tv, right_tv)
                 holder.setText(R.id.company_type_tv, model.VehiclePerson)
-                holder.setText(R.id.count_tv, model.VehiclePersonPhone)
+                if (!TextUtils.isEmpty(model.VehiclePersonPhone)) {
+                    holder.setText(R.id.count_tv, model.VehiclePersonPhone)
+                }
                 //修改操作
                 holder.setOnClickListener(R.id.update_ll) {
                     startActivityForResult(Intent(this@SearchVehicleActivity, AddPersonActivity::class.java)

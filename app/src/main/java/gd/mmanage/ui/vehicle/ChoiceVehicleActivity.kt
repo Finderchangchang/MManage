@@ -69,10 +69,10 @@ class ChoiceVehicleActivity : BaseActivity<ActivityChoiceVehicleBinding>() {
         }
 
         ve_list = db!!.findAllByWhere(CodeModel::class.java, " CodeName='Code_VehicleType'")
-        ve_array = arrayOfNulls(zt_list!!.size)
+        ve_array = arrayOfNulls(ve_list!!.size)
         var ve_id = "01"
-        if (!TextUtils.isEmpty(model!!.VehicleType)) {
-            ve_id = model!!.VehicleType
+        if (!TextUtils.isEmpty(model.VehicleType)) {
+            ve_id = model.VehicleType
         }
         for (id in 0 until ve_array!!.size) {
             var model = ve_list!![id]
@@ -92,11 +92,11 @@ class ChoiceVehicleActivity : BaseActivity<ActivityChoiceVehicleBinding>() {
         builder.setItems(key) { dialog, which ->
             when (method) {
                 1 -> {//车辆类型
-                    model!!.VehicleType = zt_list!![which].ID
+                    model.VehicleType = zt_list!![which].ID
                     car_type_tv.text = zt_list!![which].Name
                 }
                 2 -> {//取车状态
-                    model!!.VehicleTakeState = zt_list!![which].ID
+                    model.VehicleTakeState = zt_list!![which].ID
                     state_tv.text = zt_list!![which].Name
                 }
             }

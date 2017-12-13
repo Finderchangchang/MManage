@@ -45,10 +45,12 @@ class DemoActivity : AppCompatActivity() {
             }
         }
         record_button.setOnClickListener {
+            record_button.isClickable = false
             val cameraFragment = getCameraFragment()
             if (cameraFragment != null) {
                 cameraFragment.takePhotoOrCaptureVideo(object : CameraFragmentResultAdapter() {
                     override fun onVideoRecorded(filePath: String?) {
+                        record_button.isClickable = true
                         //Toast.makeText(baseContext, "onVideoRecorded " + filePath!!, Toast.LENGTH_SHORT).show()
                     }
 
@@ -58,6 +60,7 @@ class DemoActivity : AppCompatActivity() {
 //                        iv.setImageBitmap(bmp)
 //                        content.visibility = View.GONE
 //                        iv.visibility = View.VISIBLE
+                        record_button.isClickable = true
                         setResult(66, Intent().putExtra("data", filePath))
                         finish()
                     }

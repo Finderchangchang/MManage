@@ -59,20 +59,20 @@
                     android:background="@drawable/bg_button"
                     android:text="蓝牙识别"
                     android:textColor="@color/white"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
 
                 <Button
                     android:id="@+id/read_ocr_btn"
-                    android:layout_width="80dp"
+                    android:layout_width="90dp"
                     android:layout_height="32dp"
                     android:layout_marginRight="20dp"
                     android:background="@drawable/bg_button"
-                    android:text="OCR识别"
+                    android:text="身份证识别"
                     android:textColor="@color/white" />
 
                 <Button
                     android:id="@+id/read_driver_btn"
-                    android:layout_width="80dp"
+                    android:layout_width="90dp"
                     android:layout_height="32dp"
                     android:layout_marginRight="20dp"
                     android:background="@drawable/bg_button"
@@ -211,6 +211,34 @@
                     android:layout_marginLeft="20dp"
                     android:background="@null"
                     android:text="@={model.vehiclePersonAddress}"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/line_bg" />
+
+            <LinearLayout
+                android:id="@+id/ll8"
+                style="@style/center_ll"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="送车电话" />
+
+                <EditText
+                    android:id="@+id/tv8"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:background="@null"
+                    android:inputType="number"
+                    android:text="@={model.vehiclePersonPhone}"
                     android:textSize="14sp" />
             </LinearLayout>
 

@@ -8,6 +8,10 @@
         <variable
             name="model"
             type="gd.mmanage.model.VehicleModel" />
+
+        <variable
+            name="type"
+            type="String" />
     </data>
 
     <LinearLayout
@@ -105,7 +109,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="所  有   人" />
+                        android:text="所  有  人" />
 
                     <EditText
                         android:id="@+id/tv2"
@@ -133,25 +137,62 @@
                     android:background="@color/line_bg" />
 
                 <LinearLayout
-                    android:id="@+id/ll3"
-                    style="@style/center_ll"
                     android:layout_width="match_parent"
-                    android:layout_height="35dp"
-                    android:gravity="center_vertical">
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="车  牌   号" />
+                    <LinearLayout
+                        android:id="@+id/ll3"
+                        style="@style/center_ll"
+                        android:layout_width="0dp"
+                        android:layout_height="35dp"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical">
 
-                    <EditText
-                        android:id="@+id/tv3"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:background="@null"
-                        android:text="@={model.vehicleNumber}"
-                        android:textSize="14sp" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="车  牌  号" />
+
+                        <EditText
+                            android:id="@+id/tv3"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dp"
+                            android:background="@null"
+                            android:text="@={model.vehicleNumber}"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll4"
+                        style="@style/center_ll"
+                        android:layout_width="0dp"
+                        android:layout_height="35dp"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="车辆类型" />
+
+                        <TextView
+                            android:id="@+id/tv4"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dp"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:text="@{type}"
+                            android:textSize="14sp" />
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_marginRight="20dp"
+                            android:src="@mipmap/ic_launcher" />
+                    </LinearLayout>
                 </LinearLayout>
 
                 <TextView
@@ -160,7 +201,7 @@
                     android:background="@color/line_bg" />
 
                 <LinearLayout
-                    android:id="@+id/ll4"
+                    android:id="@+id/ll10"
                     style="@style/center_ll"
                     android:layout_width="match_parent"
                     android:layout_height="35dp"
@@ -169,15 +210,15 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="车辆品牌" />
+                        android:text="车身颜色" />
 
                     <EditText
-                        android:id="@+id/tv4"
+                        android:id="@+id/tv10"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
                         android:background="@null"
-                        android:text="@={model.vehicleBrand}"
+                        android:text="@={model.vehicleColor}"
                         android:textSize="14sp" />
                 </LinearLayout>
 
@@ -196,7 +237,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="车  架   号" />
+                        android:text="车  架  号" />
 
                     <EditText
                         android:id="@+id/tv5"
@@ -245,7 +286,8 @@
                     style="@style/center_ll"
                     android:layout_width="match_parent"
                     android:layout_height="35dp"
-                    android:gravity="center_vertical">
+                    android:gravity="center_vertical"
+                    android:visibility="gone">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -327,22 +369,53 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="120dp"
+                    android:layout_height="140dp"
                     android:gravity="center"
                     android:orientation="horizontal">
 
-                    <ImageView
-                        android:id="@+id/car_iv"
-                        android:layout_width="80dp"
-                        android:layout_height="100dp"
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_marginRight="20dp"
-                        android:src="@mipmap/main_xianchang" />
+                        android:gravity="center_vertical"
+                        android:orientation="vertical">
 
-                    <ImageView
-                        android:id="@+id/id_card_iv"
-                        android:layout_width="80dp"
-                        android:layout_height="100dp"
-                        android:src="@mipmap/main_xianchang" />
+                        <ImageView
+                            android:id="@+id/car_iv"
+                            android:layout_width="80dp"
+                            android:layout_height="100dp"
+                            android:scaleType="centerCrop"
+                            android:src="@mipmap/main_xianchang" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:gravity="center"
+                            android:text="车照片" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="20dp"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/id_card_iv"
+                            android:layout_width="80dp"
+                            android:layout_height="100dp"
+                            android:scaleType="centerCrop"
+                            android:src="@mipmap/main_xianchang" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:gravity="center"
+                            android:text="行驶证照片" />
+                    </LinearLayout>
                 </LinearLayout>
 
                 <TextView

@@ -39,7 +39,7 @@ class VehicleDetailActivity : BaseActivity<ActivityVehicleDetailBinding>(), AbsM
                 holder.setText(R.id.name_tv, model.PartsName + "  " + model.PartsSpecifications)
                 holder.setText(R.id.price_tv, "￥" + model.PartesPrice)
                 holder.setText(R.id.company_type_tv, model.PartsManufacturer)
-                holder.setText(R.id.count_tv, "共" + model.PartsNumber + "件")
+                holder.setText(R.id.count_tv, "共" + model.Number + "件")
                 holder.setVisible(R.id.bottom_rl, false)
                 holder.setVisible(R.id.bottom_line, false)
             }

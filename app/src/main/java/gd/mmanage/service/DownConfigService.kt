@@ -101,16 +101,16 @@ class DownConfigService : Service() {
      * */
     fun cmd_name(cmd: Int): String {
         return when (cmd) {
-            command.config -> "Code_EmployeeState"
-            command.config + 1 -> "Code_SuspiciousType"
+            command.config -> "Code_EnterpriseState"
+            command.config + 1 -> "Code_EnterpriseVehicleType"
             command.config + 2 -> "Code_RepairType"
             command.config + 3 -> "Code_RepairReasonType"
             command.config + 4 -> "Code_PartsType"
             command.config + 5 -> "Code_EquipmentType"//设备分类
             command.config + 6 -> "Code_VehicleType"//车辆类型
             command.config + 7 -> "Code_VehicleTakeState"//
-            command.config + 8 -> "Code_EnterpriseState"//企业状态
-            command.config + 9 -> "Code_EnterpriseVehicleType"//修车状态
+            command.config + 8 -> "Code_EmployeeState"//企业状态
+            command.config + 9 -> "Code_SuspiciousType"//修车状态
             else -> "Code_Nation"
         }
     }

@@ -4,4 +4,5 @@
 
     <string name="title_activity_login">LoginActivity</string>
     <string name="title_activity_add_employee">AddEmployeeActivity</string>
+    <string name="please_selected_nation">请选择民族</string>
 </resources>

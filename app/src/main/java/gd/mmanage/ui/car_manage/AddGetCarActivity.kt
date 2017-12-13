@@ -236,6 +236,8 @@ class AddGetCarActivity : BaseActivity<ActivityAddGetCarBinding>(), AbsModule.On
             }
             dialog.dismiss()
         }
+        builder.setTitle(R.string.please_selected_nation)
+        builder.setNegativeButton("确定") { a, b -> }
         builder.create().show()
     }
 

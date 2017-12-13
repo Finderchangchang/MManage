@@ -73,24 +73,29 @@ class AddPersonActivity : BaseActivity<ActivityAddPersonBinding>(), AbsModule.On
                     list.add(kk)
                 }
                 dialog!!.dismiss()
-                val builder = AlertDialog.Builder(this)
-                builder.setTitle("送车人名下车辆")
-                builder.setItems(array) { a, b ->
-                    var now_model = list[b]
-                    model.VehicleOwner = now_model.VehicleOwner
-                    model.VehicleType = now_model.VehicleType
-                    model.VehicleBrand = now_model.VehicleBrand
-                    model.VehicleColor = now_model.VehicleColor
-                    model.VehicleNumber = now_model.VehicleNumber
-                    model.VehicleEngine = now_model.VehicleEngine
-                    model.VehicleFrameNumber = now_model.VehicleFrameNumber
-                    startActivity(Intent(this@AddPersonActivity, AddCarActivity::class.java)
-                            .putExtra("model", model)
-                            .putExtra("click_position", b)
-                            .putExtra("xc_url", xc_url)//FileModel(user_img, "送车人证件照", "C2", "")
-                            .putExtra("user_file", FileModel(ImgUtils().Only_bitmapToBase64(user_img), "送车人证件照", "C2", "")))
+                if (list.size > 0) {
+                    val builder = AlertDialog.Builder(this)
+                    builder.setTitle("送车人名下车辆")
+                    builder.setItems(array) { a, b ->
+                        var now_model = list[b]
+                        model.VehicleOwner = now_model.VehicleOwner
+                        model.VehicleType = now_model.VehicleType
+                        model.VehicleBrand = now_model.VehicleBrand
+                        model.VehicleColor = now_model.VehicleColor
+                        model.VehicleNumber = now_model.VehicleNumber
+                        model.VehicleEngine = now_model.VehicleEngine
+                        model.VehicleFrameNumber = now_model.VehicleFrameNumber
+                        startActivity(Intent(this@AddPersonActivity, AddCarActivity::class.java)
+                                .putExtra("model", model)
+                                .putExtra("click_position", b)
+                                .putExtra("xc_url", xc_url)//FileModel(user_img, "送车人证件照", "C2", "")
+                                .putExtra("user_file", FileModel(ImgUtils().Only_bitmapToBase64(user_img), "送车人证件照", "C2", "")))
+                    }
+                    builder.setNegativeButton("确定") { a, b -> }
+                    builder.show()
+                } else {
+                    toast("当前送车人名下无车辆")
                 }
-                builder.show()
 
             }
             command.car_manage + 8 -> {
@@ -104,9 +109,7 @@ class AddPersonActivity : BaseActivity<ActivityAddPersonBinding>(), AbsModule.On
                     result_btn.text = "成功"
                     model.VehiclePersonCompare = key.FaceScore
                     bi_tv.visibility = View.VISIBLE
-                    builder.setNeutralButton("查看名下车辆") { a, b ->
-                        control!!.get_vehicleByIdCard(binding.model.VehiclePersonCertNumber)
-                    }
+                    control!!.get_vehicleByIdCard(binding.model.VehiclePersonCertNumber)
                     builder.setMessage("比对通过");
                 } else {
                     result_btn.text = "失败"
@@ -185,6 +188,7 @@ class AddPersonActivity : BaseActivity<ActivityAddPersonBinding>(), AbsModule.On
      * */
     fun check_two_img() {
         if (xc_img != null && user_img != null) {
+            dialog!!.show()
             control!!.check_two_img(xc_img!!, user_img!!)
         }
     }
@@ -264,6 +268,9 @@ class AddPersonActivity : BaseActivity<ActivityAddPersonBinding>(), AbsModule.On
             //修改图片可以为空
             toast("请先进行人像比对")
             return false
+        } else if (TextUtils.isEmpty(model!!.VehiclePersonPhone)) {
+            toast("送车电话不能为空")
+            return false
         }
         return true
     }
@@ -296,6 +303,8 @@ class AddPersonActivity : BaseActivity<ActivityAddPersonBinding>(), AbsModule.On
             }
             dialog.dismiss()
         }
+        builder.setTitle(R.string.please_selected_nation)
+        builder.setNegativeButton("确定") { a, b -> }
         builder.create().show()
     }
 
@@ -320,7 +329,6 @@ class AddPersonActivity : BaseActivity<ActivityAddPersonBinding>(), AbsModule.On
                     xc_url = url
                     xc_img = compressImage(uu.rotaingImageView(90, compressImage(bmp)))
                     real_user_iv.setImageBitmap(xc_img)
-                    dialog!!.show()
                     check_two_img()
                 }
             }

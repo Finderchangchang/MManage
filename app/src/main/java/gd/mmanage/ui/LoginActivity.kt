@@ -42,7 +42,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(), AbsModule.OnCallback
     var dialog: LoadingDialog.Builder? = null
     override fun init(savedInstanceState: Bundle?) {
         super.init(savedInstanceState)
-        dialog = LoadingDialog.Builder(this).setTitle("正在加载...")//初始化dialog
+        dialog = LoadingDialog.Builder(this)
         control = getModule(LoginModule::class.java, this)//初始化网络请求
         StatusBarUtil.setTransparent(this)//设置状态栏颜色
         //登录按钮
@@ -57,6 +57,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(), AbsModule.OnCallback
                     TextUtils.isEmpty(name) -> toast("请输入用户名")
                     TextUtils.isEmpty(pwd) -> toast("请输入密码")
                     else -> {
+                        dialog!!.setTitle("登录中，请稍后...")
                         dialog!!.show()
                         control!!.user_login(name, pwd)//登录操作
                     }
@@ -71,6 +72,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(), AbsModule.OnCallback
         //if (TextUtils.isEmpty(Utils.getCache(sp.down_all))) {
         startService(Intent(this, DownConfigService::class.java))
         //}
+        binding.imei = "当前设备IMEI：" + Utils.imei
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
@@ -78,7 +80,6 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(), AbsModule.OnCallback
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
     }
 
-    var update_path = ""
     //成功
     override fun onPermissionsGranted(requestCode: Int, list: List<String>) {
 
