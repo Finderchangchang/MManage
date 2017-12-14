@@ -66,42 +66,44 @@ class AddPersonActivity : BaseActivity<ActivityAddPersonBinding>(), AbsModule.On
         when (result) {
             command.car_manage + 5 -> {//根据身份证号获得车的记录(解析list然后用dialog的形式展示出来)
                 success as NormalRequest<JsonArray>
-                var array = arrayOfNulls<String>(success.obj!!.size())
-                var list = ArrayList<VehicleModel>()
-                for (key in 0 until success.obj!!.size()) {
-                    var kk = Gson().fromJson(success.obj!![key], VehicleModel::class.java)
-                    array[key] = kk.VehicleNumber
-                    list.add(kk)
-                }
-                dialog!!.dismiss()
-                if (list.size > 0) {
-                    builder!!.setNegativeButton("取消", null);
-                    alert_builder!!.setNeutralButton("查看名下车辆(" + list.size + ")") { a, b ->
-                        builder = AlertDialog.Builder(this)
-                        builder!!.setTitle("送车人名下车辆")
-                        builder!!.setItems(array) { a, b ->
-                            var now_model = list[b]
-                            model.VehicleOwner = now_model.VehicleOwner
-                            model.VehicleType = now_model.VehicleType
-                            model.VehicleBrand = now_model.VehicleBrand
-                            model.VehicleColor = now_model.VehicleColor
-                            model.VehicleNumber = now_model.VehicleNumber
-                            model.VehicleEngine = now_model.VehicleEngine
-                            model.VehicleFrameNumber = now_model.VehicleFrameNumber
-                            startActivity(Intent(this@AddPersonActivity, AddCarActivity::class.java)
-                                    .putExtra("model", model)
-                                    .putExtra("click_position", b)
-                                    .putExtra("xc_url", xc_url)//FileModel(user_img, "送车人证件照", "C2", "")
-                                    .putExtra("user_file", FileModel(ImgUtils().Only_bitmapToBase64(user_img), "送车人证件照", "C2", "")))
-                        }
-                        builder.setNegativeButton("确定") { a, b -> }
-                        builder.show()
+                if (success != null && success.obj != null) {
+                    var array = arrayOfNulls<String>(success.obj!!.size())
+                    var list = ArrayList<VehicleModel>()
+                    for (key in 0 until success.obj!!.size()) {
+                        var kk = Gson().fromJson(success.obj!![key], VehicleModel::class.java)
+                        array[key] = kk.VehicleNumber
+                        list.add(kk)
                     }
+                    dialog!!.dismiss()
+                    if (list.size > 0) {
+                        builder!!.setNegativeButton("取消", null);
+                        alert_builder!!.setNeutralButton("查看名下车辆(" + list.size + ")") { a, b ->
+                            builder = AlertDialog.Builder(this)
+                            builder!!.setTitle("送车人名下车辆")
+                            builder!!.setItems(array) { a, b ->
+                                var now_model = list[b]
+                                model.VehicleOwner = now_model.VehicleOwner
+                                model.VehicleType = now_model.VehicleType
+                                model.VehicleBrand = now_model.VehicleBrand
+                                model.VehicleColor = now_model.VehicleColor
+                                model.VehicleNumber = now_model.VehicleNumber
+                                model.VehicleEngine = now_model.VehicleEngine
+                                model.VehicleFrameNumber = now_model.VehicleFrameNumber
+                                startActivity(Intent(this@AddPersonActivity, AddCarActivity::class.java)
+                                        .putExtra("model", model)
+                                        .putExtra("click_position", b)
+                                        .putExtra("xc_url", xc_url)//FileModel(user_img, "送车人证件照", "C2", "")
+                                        .putExtra("user_file", FileModel(ImgUtils().Only_bitmapToBase64(user_img), "送车人证件照", "C2", "")))
+                            }
+                            builder.setNegativeButton("确定") { a, b -> }
+                            builder.show()
+                        }
 
-                    alert_builder!!.show();
+                        alert_builder!!.show();
 
-                } else {
-                    toast("当前送车人名下无车辆")
+                    } else {
+                        toast("当前送车人名下无车辆")
+                    }
                 }
 
             }
