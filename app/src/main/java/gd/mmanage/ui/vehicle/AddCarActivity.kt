@@ -24,12 +24,15 @@ import gd.mmanage.method.Utils
 import gd.mmanage.method.uu
 import gd.mmanage.method.uu.compressImage
 import gd.mmanage.model.*
+import gd.mmanage.ui.CameraPersonActivity
 import gd.mmanage.ui.DemoActivity
+import gd.mmanage.ui.car_manage.AddServiceActivity
 import kotlinx.android.synthetic.main.activity_add_car.*
 import net.tsz.afinal.FinalDb
 import java.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * 添加车辆信息
@@ -42,6 +45,8 @@ class AddCarActivity : BaseActivity<ActivityAddCarBinding>(), AbsModule.OnCallba
     var click_position = -1
     var dialog: LoadingDialog.Builder? = null
     var zt_list: List<CodeModel>? = null
+    var files: List<FileModel>? = ArrayList<FileModel>()
+    var list: ArrayList<VehicleModel> = ArrayList<VehicleModel>()
     override fun onSuccess(result: Int, success: Any?) {
         when (result) {
             command.car_manage + 1 -> {
@@ -49,11 +54,19 @@ class AddCarActivity : BaseActivity<ActivityAddCarBinding>(), AbsModule.OnCallba
                 if (success.code == 0) {
                     if (TextUtils.isEmpty(model!!.VehicleId)) {
                         toast("添加成功")
+                        var v_model = Gson().fromJson<VehicleModel>(success.obj.toString(), VehicleModel::class.java)
+                        AddPersonActivity.context!!.finish()
+                        if (v_model != null && !TextUtils.isEmpty(v_model.VehicleId)) {
+                            startActivity(Intent(this@AddCarActivity, AddServiceActivity::class.java)
+                                    .putExtra("vehicleId", v_model.VehicleId))//跳转到维修业务
+                        }
+                        finish()
                     } else {
                         toast("修改成功")
+                        AddPersonActivity.context!!.finish()
+                        finish()
                     }
-                    AddPersonActivity.context!!.finish()
-                    finish()
+
                 } else {
                     if (TextUtils.isEmpty(model!!.VehicleId)) {
                         toast("添加失败")
@@ -66,7 +79,6 @@ class AddCarActivity : BaseActivity<ActivityAddCarBinding>(), AbsModule.OnCallba
             command.car_manage + 5 -> {//根据身份证号获得车的记录(解析list然后用dialog的形式展示出来)
                 success as NormalRequest<JsonArray>
                 var array = arrayOfNulls<String>(success.obj!!.size())
-                var list = ArrayList<VehicleModel>()
                 for (key in 0 until success.obj!!.size()) {
                     var kk = Gson().fromJson(success.obj!![key], VehicleModel::class.java)
                     array[key] = kk.VehicleNumber
@@ -93,6 +105,7 @@ class AddCarActivity : BaseActivity<ActivityAddCarBinding>(), AbsModule.OnCallba
                             }
                         }
                     }
+
                     list.add(kk)
                 }
                 cars_tv.text = list.size.toString() + "辆"
@@ -107,6 +120,27 @@ class AddCarActivity : BaseActivity<ActivityAddCarBinding>(), AbsModule.OnCallba
                     model!!.VehicleNumber = now_model.VehicleNumber
                     model!!.VehicleEngine = now_model.VehicleEngine
                     model!!.VehicleFrameNumber = now_model.VehicleFrameNumber
+                    try {
+                        if (model!!.files != null) {
+                            for (mo in model!!.files!!) {
+                                //根据前面选择的图片进行显示
+                                when (mo.FileType) {
+                                    "C1" -> {
+                                        left_bm = ImgUtils().base64ToBitmap(mo.FileContent)
+                                        car_iv.setImageBitmap(left_bm)
+                                    }
+                                    "C6" -> {
+                                        right_bm = ImgUtils().base64ToBitmap(mo.FileContent)
+                                        id_card_iv.setImageBitmap(right_bm)
+                                    }
+                                }
+                            }
+                        } else {
+                            var s = ""
+                        }
+                    } catch (e: Exception) {
+                        var s = ""
+                    }
                     binding.model = model//刷新一下数据
                 }
                 dialog!!.dismiss()
@@ -115,14 +149,16 @@ class AddCarActivity : BaseActivity<ActivityAddCarBinding>(), AbsModule.OnCallba
                 success as NormalRequest<*>
                 if (success.obj != null && !TextUtils.isEmpty(success.obj.toString())) {
                     var key = Gson().fromJson<CarModel>(success.obj.toString(), CarModel::class.java)
-                    model!!.VehicleOwner = key.Owner
-                    model!!.VehicleNumber = key.VehicleNumber//车牌
-                    model!!.VehicleBrand = key.VehicleBrand//品牌
-                    model!!.VehicleFrameNumber = key.FrameNumber//车架
-                    model!!.VehicleEngine = key.EngineNumber//发动机
-                    var type = key.VehicleType
+
                     //id_card_iv.setImageBitmap(right_bm)
                     try {
+                        model!!.VehicleOwner = key.Owner
+                        model!!.VehicleNumber = key.VehicleNumber//车牌
+                        model!!.VehicleBrand = key.VehicleBrand//品牌
+                        model!!.VehicleFrameNumber = key.FrameNumber//车架
+                        model!!.VehicleEngine = key.EngineNumber//发动机
+                        var type = key.VehicleType
+
                         if (model!!.files != null && model!!.files!!.isNotEmpty()) {
                             for (mo in model!!.files!!) {
                                 //根据前面选择的图片进行显示
@@ -189,7 +225,7 @@ class AddCarActivity : BaseActivity<ActivityAddCarBinding>(), AbsModule.OnCallba
                 dialog!!.show()
                 control!!.ocr_xs(right_bm!!)
             } else {
-                left_bm = compressImage(uu.rotaingImageView(0, compressImage(bmp)))
+                left_bm = compressImage(uu.rotaingImageView(90, compressImage(bmp)))
                 car_iv.setImageBitmap(left_bm)
             }
         }
@@ -228,17 +264,17 @@ class AddCarActivity : BaseActivity<ActivityAddCarBinding>(), AbsModule.OnCallba
         }
         car_iv.setOnClickListener {
             img_click_position = 0
-            startActivityForResult(Intent(this@AddCarActivity, DemoActivity::class.java)
+            startActivityForResult(Intent(this@AddCarActivity, CameraPersonActivity::class.java)
                     .putExtra("position", "2"), 77)
         }
         ocr_btn.setOnClickListener {
             img_click_position = 1
-            startActivityForResult(Intent(this@AddCarActivity, DemoActivity::class.java)
+            startActivityForResult(Intent(this@AddCarActivity, CameraPersonActivity::class.java)
                     .putExtra("position", "2"), 77)
         }
         id_card_iv.setOnClickListener {
             img_click_position = 1
-            startActivityForResult(Intent(this@AddCarActivity, DemoActivity::class.java)
+            startActivityForResult(Intent(this@AddCarActivity, CameraPersonActivity::class.java)
                     .putExtra("position", "2"), 77)
         }
         //选择车辆类型
@@ -282,6 +318,9 @@ class AddCarActivity : BaseActivity<ActivityAddCarBinding>(), AbsModule.OnCallba
         emp_array = arrayOfNulls(employees!!.size)
         for (i in 0 until employees!!.size) {
             emp_array!![i] = employees!![i].EmployeeName
+            if (TextUtils.isEmpty(model!!.VehicleReceivePerson)) {
+                model!!.VehicleReceivePerson = employees!![0].EmployeeName
+            }
         }
         zt_list = db!!.findAllByWhere(CodeModel::class.java, " CodeName='Code_VehicleType'")
         ve_array = arrayOfNulls(zt_list!!.size)
@@ -341,6 +380,9 @@ class AddCarActivity : BaseActivity<ActivityAddCarBinding>(), AbsModule.OnCallba
             return false
         } else if (right_bm == null) {
             toast("行驶证不能为空")
+            return false
+        } else if (TextUtils.isEmpty(binding.type)) {
+            toast("车辆类型不能为空")
             return false
         }
         return true

@@ -25,7 +25,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
-            app:center_tv="送车人信息登记" />
+            app:center_tv="送车人信息登记"
+            app:right_tv="承接查询" />
 
 
         <LinearLayout

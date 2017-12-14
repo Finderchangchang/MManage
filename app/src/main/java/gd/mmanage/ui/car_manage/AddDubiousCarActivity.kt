@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import com.arialyy.frame.module.AbsModule
 import com.google.gson.JsonElement
+import com.jiangyy.easydialog.LoadingDialog
 import gd.mmanage.R
 import gd.mmanage.base.BaseActivity
 import gd.mmanage.control.CarManageModule
@@ -24,7 +25,7 @@ class AddDubiousCarActivity : BaseActivity<ActivityAddDubiousCarBinding>(), AbsM
         if (success.code == 0) {
             finish()
             toast("添加成功")
-        }else{
+        } else {
             toast(success.message)
         }
     }
@@ -41,17 +42,20 @@ class AddDubiousCarActivity : BaseActivity<ActivityAddDubiousCarBinding>(), AbsM
     var emp_array: Array<String?>? = null//从业人员的集合
     var employees: List<EmployeeModel>? = null//从业人员model
     var vehicleId = ""
+    var dialog: LoadingDialog.Builder? = null
+
     override fun init(savedInstanceState: Bundle?) {
         super.init(savedInstanceState)
         db = FinalDb.create(this)
         vehicleId = intent.getStringExtra("vehicleId")
+        dialog = LoadingDialog.Builder(this).setTitle(R.string.save_loading)//初始化dialog
         control = getModule(CarManageModule::class.java, this)
         init_data()
         ll1.setOnClickListener {
             val builder = AlertDialog.Builder(this)  //先得到构造器
             builder.setItems(ky_array) { dialog, which ->
                 binding.kyType = ky_state_list[which].Name
-                ky_model.SuspiciousType = ky_state_list[which].ID
+                ky_model.SuspiciousType = ky_state_list[which].Name
             }
             builder.create().show()
         }
@@ -67,7 +71,7 @@ class AddDubiousCarActivity : BaseActivity<ActivityAddDubiousCarBinding>(), AbsM
         save_btn.setOnClickListener {
             ky_model.SuspiciousRemarks = ky_desc_et.text.toString().trim()
             ky_model.VehicleId = vehicleId
-            ky_model.SuspiciousTime = "2017-11-12"
+            dialog!!.show()
             control!!.save_warn(ky_model)
         }
     }
@@ -92,7 +96,7 @@ class AddDubiousCarActivity : BaseActivity<ActivityAddDubiousCarBinding>(), AbsM
         }
         if (ky_state_list.size > 0) {
             binding.kyType = ky_state_list[0].Name
-            ky_model.SuspiciousType = ky_state_list[0].ID
+            ky_model.SuspiciousType = ky_state_list[0].Name
         }
     }
 

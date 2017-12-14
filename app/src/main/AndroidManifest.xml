@@ -64,7 +64,7 @@
 
         <activity android:name=".ui.inbound.AddInBoundActivity" />
         <activity android:name=".ui.inbound.ChoiceInBoundActivity" />
-
+        <activity android:name=".ui.CameraPersonActivity" />
         <activity android:name=".ui.main.MainActivity">
 
         </activity>

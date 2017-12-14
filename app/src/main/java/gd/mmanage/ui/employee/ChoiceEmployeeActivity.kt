@@ -64,10 +64,11 @@ class ChoiceEmployeeActivity : BaseActivity<ActivityChoiceEmployeeBinding>() {
             zt_id = model!!.EmployeeState
         }
         for (id in 0 until zt_array!!.size) {
-            var model = zt_list!![id]
-            zt_array!![id] = model.Name
-            if (zt_id == model.ID) {
-                binding.state = model.Name
+            var m = zt_list!![id]
+            zt_array!![id] = m.Name
+            if (zt_id == m.ID) {
+                binding.state = m.Name
+                model!!.EmployeeState = zt_id
             }
         }
         if (!TextUtils.isEmpty(model.EmployeeSex)) {
@@ -101,7 +102,7 @@ class ChoiceEmployeeActivity : BaseActivity<ActivityChoiceEmployeeBinding>() {
                     }
                 }
                 2 -> {//人员状态
-                    model!!.EmployeeState = zt_list!![which].ID
+                    model.EmployeeState = zt_list!![which].ID
                     state_tv.text = zt_list!![which].Name
                 }
             }

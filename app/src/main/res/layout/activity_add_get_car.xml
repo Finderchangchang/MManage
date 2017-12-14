@@ -63,16 +63,16 @@
 
                 <Button
                     android:id="@+id/read_ocr_btn"
-                    android:layout_width="80dp"
+                    android:layout_width="90dp"
                     android:layout_height="32dp"
                     android:layout_marginRight="20dp"
                     android:background="@drawable/bg_button"
-                    android:text="OCR识别"
+                    android:text="身份证识别"
                     android:textColor="@color/white" />
 
                 <Button
                     android:id="@+id/read_driver_btn"
-                    android:layout_width="80dp"
+                    android:layout_width="90dp"
                     android:layout_height="32dp"
                     android:layout_marginRight="20dp"
                     android:background="@drawable/bg_button"
@@ -86,12 +86,26 @@
                 android:layout_height="10dp"
                 android:background="@color/line_bg" />
 
-            <TextView
+            <LinearLayout
                 style="@style/Top_lab"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="15dp"
-                android:text="取车人基本信息" />
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:paddingLeft="15dp"
+                    android:text="取车人基本信息" />
+
+                <TextView
+                    android:id="@+id/same_people_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:text="同送车人" />
+            </LinearLayout>
 
             <View
                 style="@style/center_line"

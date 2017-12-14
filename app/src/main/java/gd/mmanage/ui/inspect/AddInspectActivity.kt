@@ -35,6 +35,7 @@ import gd.mmanage.method.Utils
 import gd.mmanage.method.uu
 import gd.mmanage.method.uu.compressImage
 import gd.mmanage.model.*
+import gd.mmanage.ui.CameraPersonActivity
 import gd.mmanage.ui.DemoActivity
 
 import kotlinx.android.synthetic.main.activity_add_employee.*
@@ -88,7 +89,7 @@ class AddInspectActivity : BaseActivity<ActivityAddEmployeeBinding>(), AbsModule
         control = getModule(EmployeeModule::class.java, this)
 
         read_ocr_btn.setOnClickListener {
-            startActivityForResult(Intent(this@AddInspectActivity, DemoActivity::class.java)
+            startActivityForResult(Intent(this@AddInspectActivity, CameraPersonActivity::class.java)
                     .putExtra("position", "2"), 1)
         }
         when (intent.getIntExtra("is_cc", 0)) {

@@ -1,8 +1,9 @@
 <resources>
-    <string name="app_name">机动车修理业治安管理系统</string>
-    <string name="app_short_name">机修管理系统</string>
+    <string name="app_name">机修系统</string>
+    <string name="app_short_name">机修系统1</string>
 
     <string name="title_activity_login">LoginActivity</string>
     <string name="title_activity_add_employee">AddEmployeeActivity</string>
     <string name="please_selected_nation">请选择民族</string>
+    <string name="save_loading">保存中，请稍后...</string>
 </resources>

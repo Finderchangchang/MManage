@@ -8,6 +8,10 @@
         <variable
             name="model"
             type="gd.mmanage.model.DetailModel" />
+
+        <variable
+            name="ky"
+            type="String" />
     </data>
 
     <LinearLayout
@@ -506,7 +510,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="20dp"
-                            android:text="@{model.suspicious.SuspiciousType}" />
+                            android:text="@{ky}" />
                     </LinearLayout>
 
                     <TextView

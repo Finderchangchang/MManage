@@ -35,6 +35,7 @@ import gd.mmanage.method.Utils
 import gd.mmanage.method.uu
 import gd.mmanage.method.uu.compressImage
 import gd.mmanage.model.*
+import gd.mmanage.ui.CameraPersonActivity
 import gd.mmanage.ui.DemoActivity
 
 import kotlinx.android.synthetic.main.activity_add_employee.*
@@ -77,7 +78,7 @@ class AddEmployeeActivity : BaseActivity<ActivityAddEmployeeBinding>(), AbsModul
                 employee!!.EmployeeAddress = key.PersonAddress
                 binding.model = employee
             } else {
-                toast("失败识别")
+                toast("识别失败")
             }
             dialog!!.dismiss()
         } else {
@@ -141,11 +142,12 @@ class AddEmployeeActivity : BaseActivity<ActivityAddEmployeeBinding>(), AbsModul
             }
         }
         read_ocr_btn.setOnClickListener {
-            startActivityForResult(Intent(this@AddEmployeeActivity, DemoActivity::class.java)
+            startActivityForResult(Intent(this@AddEmployeeActivity, CameraPersonActivity::class.java)
                     .putExtra("position", "2"), 1)
         }
         when (intent.getIntExtra("is_cc", 0)) {
             1 -> {
+                title_btn_ll.visibility = View.GONE
                 save_btn.visibility = View.GONE
                 read_card_btn.visibility = View.GONE
                 title_bar.center_Tv.text = "从业人员信息"
@@ -234,11 +236,11 @@ class AddEmployeeActivity : BaseActivity<ActivityAddEmployeeBinding>(), AbsModul
         builder.setItems(key) { dialog, which ->
             when (method) {
                 1 -> {//性别
-                    employee!!.EmployeeSex = which.toString()
                     when (which) {
                         1 -> tv3.text = "女"
                         else -> tv3.text = "男"
                     }
+                    employee!!.EmployeeSex = (which + 1).toString()
                 }
                 2 -> {//人员状态
                     employee!!.EmployeeState = zt_list!![which].ID

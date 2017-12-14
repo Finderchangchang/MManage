@@ -65,13 +65,13 @@ class OnlySearchVehicleActivity : BaseActivity<ActivitySearchOnlyVehicleBinding>
                 title_bar.center_Tv.text = "取车登记"
             }
             "2" -> {
-                title_bar.center_Tv.text = "机修登记"
+                title_bar.center_Tv.text = "维修登记"
             }
             "3" -> {
                 title_bar.center_Tv.text = "可疑车辆登记"
             }
             "4" -> {
-                title_bar.center_Tv.text = "配件业务添加"
+                title_bar.center_Tv.text = "配件更换"
             }
         }
         control = getModule(CarManageModule::class.java, this)//初始化数据访问层

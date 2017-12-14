@@ -36,7 +36,7 @@ import gd.mmanage.method.ImgUtils
 import gd.mmanage.method.Utils
 import gd.mmanage.method.uu
 import gd.mmanage.model.*
-import gd.mmanage.ui.DemoActivity
+import gd.mmanage.ui.CameraPersonActivity
 import gd.mmanage.ui.vehicle.AddCarActivity
 import kotlinx.android.synthetic.main.activity_add_get_car.*
 import net.tsz.afinal.FinalDb
@@ -86,6 +86,40 @@ class AddGetCarActivity : BaseActivity<ActivityAddGetCarBinding>(), AbsModule.On
                 } else {
                     toast(success.message)
                 }
+                dialog!!.dismiss()
+            }
+            command.car_manage + 2 -> {//查询出来的结果
+                success as NormalRequest<*>
+                var kk = Gson().fromJson<DetailModel>(success.obj.toString(), DetailModel::class.java)
+                if (kk != null) {
+                    try {
+                        var key = kk.Vehicle
+                        model.VehicleTakePerson = key!!.VehiclePerson
+                        model.VehicleTakePersonCertNumber = key.VehiclePersonCertNumber
+                        model.VehicleTakePersonAddress = key.VehiclePersonAddress
+                        model.VehicleTakePersonCertType = key.VehiclePersonCertType
+                        model.VehicleTakePersonCompare = key.VehiclePersonCompare
+                        binding.model = model
+                        if (kk.Vehicle!!.files!!.isNotEmpty()) {
+                            for (mo in kk.Vehicle!!.files!!) {
+                                when (mo.FileType) {
+                                    "C2" -> {
+                                        xc_img = ImgUtils().base64ToBitmap(mo.FileContent)
+                                        card_user_iv.setImageBitmap(xc_img)
+                                    }
+                                    "C3" -> {
+                                        user_img = ImgUtils().base64ToBitmap(mo.FileContent)
+                                        real_user_iv.setImageBitmap(user_img)
+                                    }
+                                }
+                            }
+                        }
+                    } catch (e: Exception) {
+                        var s = ""
+                    }
+
+                }
+                dialog!!.dismiss()
             }
             command.car_manage + 11 -> {
                 success as NormalRequest<*>
@@ -100,7 +134,7 @@ class AddGetCarActivity : BaseActivity<ActivityAddGetCarBinding>(), AbsModule.On
                     model.VehicleTakePersonAddress = key.PersonAddress
                     binding.model = model
                 } else {
-                    toast("失败识别")
+                    toast("识别失败")
                 }
                 dialog!!.dismiss()
             }
@@ -154,14 +188,20 @@ class AddGetCarActivity : BaseActivity<ActivityAddGetCarBinding>(), AbsModule.On
                 OnBnRead()
             }
         }
+        //同送车人
+        same_people_tv.setOnClickListener {
+            dialog!!.setTitle("加载中，请稍后...")
+            dialog!!.show()
+            control!!.get_vehicleById(model.VehicleId)
+        }
         read_ocr_btn.setOnClickListener {
             model.VehicleTakePersonCertType = "01"
-            startActivityForResult(Intent(this@AddGetCarActivity, DemoActivity::class.java)
+            startActivityForResult(Intent(this@AddGetCarActivity, CameraPersonActivity::class.java)
                     .putExtra("position", "2"), 1)
         }
         read_driver_btn.setOnClickListener {
             model.VehicleTakePersonCertType = "02"
-            startActivityForResult(Intent(this@AddGetCarActivity, DemoActivity::class.java)
+            startActivityForResult(Intent(this@AddGetCarActivity, CameraPersonActivity::class.java)
                     .putExtra("position", "2"), 2)
 
         }
@@ -170,7 +210,7 @@ class AddGetCarActivity : BaseActivity<ActivityAddGetCarBinding>(), AbsModule.On
         //跳转到拍照页面
         real_user_iv.setOnClickListener {
             //control!!.get_vehicleByIdCard("130624198709183414")
-            startActivityForResult(Intent(this@AddGetCarActivity, DemoActivity::class.java)
+            startActivityForResult(Intent(this@AddGetCarActivity, CameraPersonActivity::class.java)
                     .putExtra("position", "1"), 77)
         }
         //执行保存操作
@@ -180,6 +220,7 @@ class AddGetCarActivity : BaseActivity<ActivityAddGetCarBinding>(), AbsModule.On
                 img_list.add(FileModel(ImgUtils().Only_bitmapToBase64(xc_img), "取车人实际照片", "C5", ""))
                 img_list.add(FileModel(ImgUtils().Only_bitmapToBase64(user_img), "取车人证件照片", "C4", ""))
                 model.files = img_list
+                dialog!!.show()
                 control!!.add_prat(model)
             }
         }

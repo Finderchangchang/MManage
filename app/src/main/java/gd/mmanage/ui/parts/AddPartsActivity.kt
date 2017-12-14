@@ -5,10 +5,13 @@ import android.support.v7.app.AlertDialog
 import android.text.TextUtils
 import com.arialyy.frame.module.AbsModule
 import com.google.gson.JsonElement
+import com.jiangyy.easydialog.LoadingDialog
 import gd.mmanage.R
 import gd.mmanage.base.BaseActivity
+import gd.mmanage.config.sp
 import gd.mmanage.databinding.ActivityAddEmployeeBinding
 import gd.mmanage.databinding.ActivityAddPartsBinding
+import gd.mmanage.method.Utils
 import gd.mmanage.model.CodeModel
 import gd.mmanage.model.NormalRequest
 import gd.mmanage.model.PartsModel
@@ -26,10 +29,13 @@ class AddPartsActivity : BaseActivity<ActivityAddPartsBinding>(), AbsModule.OnCa
     var db: FinalDb? = null
     var xm_list: List<CodeModel> = ArrayList<CodeModel>()
     var xm_array: Array<String?>? = null//配件类型集合
+    var dialog: LoadingDialog.Builder? = null
+
     override fun init(savedInstanceState: Bundle?) {
         super.init(savedInstanceState)
         model = intent.getSerializableExtra("model") as PartsModel
         db = FinalDb.create(this)
+        dialog = LoadingDialog.Builder(this).setTitle("保存中，请稍后...")//初始化dialog
         is_add = TextUtils.isEmpty(model!!.PartsId)//判断是添加还是修改
         if (!is_add) title_bar.setCentertv("配件修改")
         control = getModule(PratsModule::class.java, this)
@@ -38,9 +44,11 @@ class AddPartsActivity : BaseActivity<ActivityAddPartsBinding>(), AbsModule.OnCa
         //保存数据操作
         save_btn.setOnClickListener {
             model = binding.model
-            //model!!.PartsEnterpriseId="C021306020001"
+//            model!!.PartsEnterpriseId="C021306020001"
+            model!!.PartsEnterpriseId = Utils.getCache(sp.company_id)
+
             control!!.add_prat(model!!)
-            //builder.show()
+            dialog!!.show()
         }
         init_data()
         type_ll.setOnClickListener {
@@ -78,9 +86,11 @@ class AddPartsActivity : BaseActivity<ActivityAddPartsBinding>(), AbsModule.OnCa
                 if (is_add) toast("添加失败") else toast("修改失败")
             }
         }
+        dialog!!.dismiss()
     }
 
     override fun onError(result: Int, error: Any?) {
+        dialog!!.dismiss()
         if (is_add) toast("添加失败") else toast("修改失败")
     }
 

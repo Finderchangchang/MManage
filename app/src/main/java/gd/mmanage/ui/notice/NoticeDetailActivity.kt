@@ -25,7 +25,7 @@ class NoticeDetailActivity : BaseActivity<ActivityPartDetailBinding>(), AbsModul
         super.init(savedInstanceState)
         model = intent.getSerializableExtra("model") as NoticeModel
         title_tv.text = model!!.NewsTitle
-        web.loadData(model!!.NewsContent, "text/html", "UTF-8")
+        web.loadData(model!!.NewsContent, "text/html;charset=UTF-8", null)
     }
 
     override fun onSuccess(result: Int, success: Any?) {

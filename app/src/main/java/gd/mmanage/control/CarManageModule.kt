@@ -97,18 +97,18 @@ class CarManageModule : BaseModule {
      * */
     fun check_two_img(bitmap1: Bitmap, bitmap2: Bitmap) {
         var map = HashMap<String, String>()
-        var bit1 = ImgUtils().bitmapToBase64(bitmap1)
-        var bit2 = ImgUtils().bitmapToBase64(bitmap2)
         map.put("imageA", ImgUtils().Only_bitmapToBase64(bitmap1))
         map.put("imageB", ImgUtils().Only_bitmapToBase64(bitmap2))
         HttpUtils<VehicleModel>().post(url.normal + "Other/FaceRecognition", command.car_manage + 8, map, this)
     }
+
     fun check_two_imgs(bitmap1: String, bitmap2: String) {
         var map = HashMap<String, String>()
         map.put("imageA", bitmap1)
         map.put("imageB", bitmap2)
         HttpUtils<VehicleModel>().post(url.normal + "Other/FaceRecognition", command.car_manage + 8, map, this)
     }
+
     /**
      * 通过ocr解析驾驶证
      * @param bitmap1 驾驶证bitmap

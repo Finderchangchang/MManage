@@ -1,6 +1,7 @@
 package gd.mmanage.ui.car_manage
 
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.text.TextUtils
@@ -18,6 +19,7 @@ import gd.mmanage.model.*
 import kotlinx.android.synthetic.main.activity_add_service_car.*
 import net.tsz.afinal.FinalDb
 import gd.mmanage.R.layout.dialog
+import gd.mmanage.ui.parts.AddPartsServicesActivity
 
 
 /**
@@ -92,6 +94,11 @@ class AddServiceActivity : BaseActivity<ActivityAddServiceCarBinding>(), AbsModu
                 ky_model.RepairCreateTime = "2017-11-12"
                 control!!.save_repair(ky_model)
             }
+        }
+        //更换配件操作
+        change_btn.setOnClickListener {
+            startActivityForResult(Intent(this@AddServiceActivity, AddPartsServicesActivity::class.java)
+                    .putExtra("vehicleId", vehicleId), 14)
         }
     }
 

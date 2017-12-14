@@ -10,10 +10,12 @@ import gd.mmanage.R
 import gd.mmanage.base.BaseFragment
 import gd.mmanage.databinding.FragMainBinding
 import gd.mmanage.method.GlideImageLoader
+import gd.mmanage.model.VehicleModel
 import gd.mmanage.ui.config.SetActivity
 import gd.mmanage.ui.employee.SearchEmployeeActivity
 import gd.mmanage.ui.inbound.SearchInBoundsActivity
 import gd.mmanage.ui.notice.SearchNoticeActivity
+import gd.mmanage.ui.vehicle.AddPersonActivity
 import gd.mmanage.ui.vehicle.OnlySearchVehicleActivity
 import gd.mmanage.ui.vehicle.SearchVehicleActivity
 
@@ -65,7 +67,9 @@ class MainFragment : BaseFragment<FragMainBinding>() {
         ll1!!.setOnClickListener {
             //            startActivity(Intent(context, AddPersonActivity::class.java)
             //           .putExtra("model", VehicleModel()))
-            startActivity(Intent(context, SearchVehicleActivity::class.java))
+//            startActivity(Intent(context, SearchVehicleActivity::class.java))
+            startActivity(Intent(context, AddPersonActivity::class.java)
+                    .putExtra("model", VehicleModel()))//直接跳转到车辆承接
         }
         //取车登记
         ll2!!.setOnClickListener {

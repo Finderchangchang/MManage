@@ -3,6 +3,7 @@ package gd.mmanage.method;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.text.TextUtils;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.arialyy.frame.util.TextUtil;
 import com.bumptech.glide.Glide;
 
 import gd.mmanage.R;
@@ -103,7 +105,11 @@ public class CommonViewHolder {
      */
     public CommonViewHolder setText(int viewId, String text) {
         TextView view = getView(viewId);
-        view.setText(text + "");
+        if (TextUtils.isEmpty(text) || text == "null") {
+            view.setText("");
+        } else {
+            view.setText(text + "");
+        }
         view.setVisibility(View.VISIBLE);
         return this;
     }

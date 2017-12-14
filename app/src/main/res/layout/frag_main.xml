@@ -60,7 +60,7 @@
                             style="@style/main_item_tv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="承修登记" />
+                            android:text="承接登记" />
                     </LinearLayout>
 
                     <TextView
@@ -85,7 +85,7 @@
                             style="@style/main_item_tv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="修车登记" />
+                            android:text="维修登记" />
                     </LinearLayout>
 
                     <TextView

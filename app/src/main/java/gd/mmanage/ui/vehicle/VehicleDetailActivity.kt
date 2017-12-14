@@ -6,6 +6,7 @@ import android.view.View
 import com.arialyy.frame.module.AbsModule
 import com.google.gson.Gson
 import com.google.gson.JsonElement
+import com.jiangyy.easydialog.LoadingDialog
 import gd.mmanage.R
 import gd.mmanage.base.BaseActivity
 import gd.mmanage.config.command
@@ -21,6 +22,7 @@ import gd.mmanage.ui.car_manage.AddServiceActivity
 import gd.mmanage.ui.parts.AddPartsActivity
 import gd.mmanage.ui.parts.AddPartsServicesActivity
 import kotlinx.android.synthetic.main.activity_vehicle_detail.*
+import net.tsz.afinal.FinalDb
 
 /**
  * 车辆承接详细信息
@@ -30,10 +32,16 @@ class VehicleDetailActivity : BaseActivity<ActivityVehicleDetailBinding>(), AbsM
     var control: CarManageModule? = null
     var adapter: CommonAdapter<PartsModel>? = null//资讯
     var answer_list = ArrayList<PartsModel>()
+    var id = ""
+    var dialog: LoadingDialog.Builder? = null
+
     override fun init(savedInstanceState: Bundle?) {
         super.init(savedInstanceState)
         control = getModule(CarManageModule::class.java, this)
-        control!!.get_vehicleById(intent.getStringExtra("id"))
+        id = intent.getStringExtra("id")
+        dialog = LoadingDialog.Builder(this).setTitle("正在加载...")//初始化dialog
+        dialog!!.show()
+        control!!.get_vehicleById(id)
         adapter = object : CommonAdapter<PartsModel>(this, answer_list, R.layout.item_part) {
             override fun convert(holder: CommonViewHolder, model: PartsModel, position: Int) {
                 holder.setText(R.id.name_tv, model.PartsName + "  " + model.PartsSpecifications)
@@ -84,6 +92,10 @@ class VehicleDetailActivity : BaseActivity<ActivityVehicleDetailBinding>(), AbsM
                     }
                     if (model.Suspicious != null) {
                         bj_ll.visibility = View.VISIBLE
+                        var ky_state_list = FinalDb.create(this).findAllByWhere(CodeModel::class.java, " CodeName='Code_SuspiciousType' and ID='" + model.Suspicious!!.SuspiciousType + "'")
+                        if (ky_state_list != null && ky_state_list.size > 0) {
+                            binding.ky = ky_state_list[0].Name
+                        }
                     }
 //                    if (model.Vehicle!!.files!!.isNotEmpty()) {
 //                        iv.setImageBitmap(ImgUtils().base64ToBitmap(model.Vehicle!!.files!![0].FileContent))
@@ -92,12 +104,19 @@ class VehicleDetailActivity : BaseActivity<ActivityVehicleDetailBinding>(), AbsM
 //                        iv3.setImageBitmap(ImgUtils().base64ToBitmap(model.Vehicle!!.files!![3].FileContent))
 //                    }
                 }
+                dialog!!.dismiss()
             }
         }
     }
 
     override fun onError(result: Int, error: Any?) {
 
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        dialog!!.show()
+        control!!.get_vehicleById(id)
     }
 
     override fun setLayoutId(): Int {

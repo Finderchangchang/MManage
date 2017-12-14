@@ -1,6 +1,8 @@
 package gd.mmanage.ui
 
 import android.Manifest
+import android.content.ClipboardManager
+import android.content.Context
 import android.os.Bundle
 import com.arialyy.frame.module.AbsModule
 import gd.mmanage.R
@@ -35,6 +37,9 @@ import java.io.UnsupportedEncodingException
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 import kotlin.experimental.and
+import android.databinding.adapters.TextViewBindingAdapter.setText
+import android.content.Context.CLIPBOARD_SERVICE
+import android.widget.Toast
 
 
 class LoginActivity : BaseActivity<ActivityLoginBinding>(), AbsModule.OnCallback, EasyPermissions.PermissionCallbacks {
@@ -45,34 +50,38 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(), AbsModule.OnCallback
         dialog = LoadingDialog.Builder(this)
         control = getModule(LoginModule::class.java, this)//初始化网络请求
         StatusBarUtil.setTransparent(this)//设置状态栏颜色
+        imei_tv.setOnClickListener {
+            val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            // 将文本内容放到系统剪贴板里。
+            cm.text = Utils.imei
+            Toast.makeText(this, "复制成功", Toast.LENGTH_LONG).show()
+        }
         //登录按钮
         login_btn.setOnClickListener {
-            if (!EasyPermissions.hasPermissions(this@LoginActivity, Manifest.permission.READ_PHONE_STATE)) {
-                EasyPermissions.requestPermissions(this@LoginActivity, "您需要允许以下权限",
-                        2, Manifest.permission.READ_PHONE_STATE);
-            } else {
-                var name = id_et.text.toString().trim()
-                var pwd = pwd_et.text.toString().trim()
-                when {
-                    TextUtils.isEmpty(name) -> toast("请输入用户名")
-                    TextUtils.isEmpty(pwd) -> toast("请输入密码")
-                    else -> {
-                        dialog!!.setTitle("登录中，请稍后...")
-                        dialog!!.show()
-                        control!!.user_login(name, pwd)//登录操作
-                    }
+
+            var name = id_et.text.toString().trim()
+            var pwd = pwd_et.text.toString().trim()
+            when {
+                TextUtils.isEmpty(name) -> toast("请输入用户名")
+                TextUtils.isEmpty(pwd) -> toast("请输入密码")
+                else -> {
+                    dialog!!.setTitle("登录中，请稍后...")
+                    dialog!!.show()
+                    control!!.user_login(name, pwd)//登录操作
                 }
             }
         }
-        if (!EasyPermissions.hasPermissions(this@LoginActivity, Manifest.permission.READ_PHONE_STATE)) {
+        if (!EasyPermissions.hasPermissions(this@LoginActivity, Manifest.permission.READ_PHONE_STATE, Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)) {
             EasyPermissions.requestPermissions(this@LoginActivity, "您需要允许以下权限",
-                    2, Manifest.permission.READ_PHONE_STATE);
+                    2, Manifest.permission.READ_PHONE_STATE, Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE);
+
+        } else {
+            binding.imei = "当前设备IMEI：" + Utils.imei
         }
         //标志不存在，执行下载配置信息操作
         //if (TextUtils.isEmpty(Utils.getCache(sp.down_all))) {
         startService(Intent(this, DownConfigService::class.java))
         //}
-        binding.imei = "当前设备IMEI：" + Utils.imei
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
@@ -82,6 +91,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(), AbsModule.OnCallback
 
     //成功
     override fun onPermissionsGranted(requestCode: Int, list: List<String>) {
+        binding.imei = "当前设备IMEI：" + Utils.imei
 
     }
 
