@@ -38,4 +38,27 @@ class UserModule : BaseModule {
     fun get_equipments(id: String) {
         HttpUtils<List<CodeModel>>().post(url.normal + "/Equipment/GetEquipments?enterpriseId=" + id, command.user + 2, this)
     }
+
+    /**
+     * 修改密码操作
+     * @param new_pwd 新密码
+     * */
+    fun update_pwd(new_pwd: String) {
+        var map = HashMap<String, String>()
+        map.put("loginName", Utils.getCache(sp.user_id))
+        map.put("newPassword", Utils.string2MD5(new_pwd).toUpperCase())
+        HttpUtils<String>().post(url.login + "UpdatePassword", command.user + 3, map, this)
+    }
+
+    /**
+     * 企业绑定
+     * @param new_pwd 新密码
+     * */
+    fun reg_company(company_id: String) {
+        var map = HashMap<String, String>()
+        map.put("EnterpriseId", company_id)
+        map.put("EquipmentType", "04")
+        map.put("EquipmentCode", Utils.imei)
+        HttpUtils<String>().get(url.normal + "Equipment/AddEquipment", command.user + 4, map, this)
+    }
 }

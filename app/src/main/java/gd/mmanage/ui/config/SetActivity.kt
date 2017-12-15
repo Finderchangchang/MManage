@@ -28,6 +28,9 @@ class SetActivity : BaseActivity<ActivitySetBinding>() {
             getBluetooth()
         }
         blue_set_mv.setRight_tv(Utils.getCache(sp.blueToothName))
+        update_pwd_mv.setOnClickListener {
+            startActivity(Intent(this, UpdatePwdActivity::class.java))
+        }
     }
 
     override fun setLayoutId(): Int {

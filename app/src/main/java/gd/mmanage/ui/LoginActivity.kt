@@ -40,6 +40,7 @@ import kotlin.experimental.and
 import android.databinding.adapters.TextViewBindingAdapter.setText
 import android.content.Context.CLIPBOARD_SERVICE
 import android.widget.Toast
+import gd.mmanage.ui.config.RegCompanyActivity
 
 
 class LoginActivity : BaseActivity<ActivityLoginBinding>(), AbsModule.OnCallback, EasyPermissions.PermissionCallbacks {
@@ -49,13 +50,15 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(), AbsModule.OnCallback
         super.init(savedInstanceState)
         dialog = LoadingDialog.Builder(this)
         control = getModule(LoginModule::class.java, this)//初始化网络请求
-        StatusBarUtil.setTransparent(this)//设置状态栏颜色
+        //StatusBarUtil.setTransparent(this)//设置状态栏颜色
         imei_tv.setOnClickListener {
-            val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-            // 将文本内容放到系统剪贴板里。
-            cm.text = Utils.imei
-            Toast.makeText(this, "复制成功", Toast.LENGTH_LONG).show()
+            //            val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+//            // 将文本内容放到系统剪贴板里。
+//            cm.text = Utils.imei
+//            Toast.makeText(this, "复制成功", Toast.LENGTH_LONG).show()
+            startActivity(Intent(this@LoginActivity, RegCompanyActivity::class.java))
         }
+
         //登录按钮
         login_btn.setOnClickListener {
 

@@ -228,6 +228,33 @@
                     android:background="@color/line_bg" />
 
                 <LinearLayout
+                    android:id="@+id/ll11"
+                    style="@style/center_ll"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="车辆品牌" />
+
+                    <EditText
+                        android:id="@+id/tv11"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:background="@null"
+                        android:text="@={model.vehicleBrand}"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/line_bg" />
+
+                <LinearLayout
                     android:id="@+id/ll5"
                     style="@style/center_ll"
                     android:layout_width="match_parent"
@@ -385,7 +412,7 @@
                             android:layout_width="80dp"
                             android:layout_height="100dp"
                             android:scaleType="centerCrop"
-                            android:src="@mipmap/main_xianchang" />
+                            android:src="@mipmap/car_img" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -407,7 +434,7 @@
                             android:layout_width="80dp"
                             android:layout_height="100dp"
                             android:scaleType="centerCrop"
-                            android:src="@mipmap/main_xianchang" />
+                            android:src="@mipmap/xs_img" />
 
                         <TextView
                             android:layout_width="match_parent"

@@ -265,17 +265,17 @@ class AddCarActivity : BaseActivity<ActivityAddCarBinding>(), AbsModule.OnCallba
         car_iv.setOnClickListener {
             img_click_position = 0
             startActivityForResult(Intent(this@AddCarActivity, CameraPersonActivity::class.java)
-                    .putExtra("position", "2"), 77)
+                    .putExtra("position", "5"), 77)//不显示东西
         }
         ocr_btn.setOnClickListener {
             img_click_position = 1
             startActivityForResult(Intent(this@AddCarActivity, CameraPersonActivity::class.java)
-                    .putExtra("position", "2"), 77)
+                    .putExtra("position", "4"), 77)//显示行驶证（文字）
         }
         id_card_iv.setOnClickListener {
             img_click_position = 1
             startActivityForResult(Intent(this@AddCarActivity, CameraPersonActivity::class.java)
-                    .putExtra("position", "2"), 77)
+                    .putExtra("position", "4"), 77)//显示行驶证（文字）
         }
         //选择车辆类型
         ll4.setOnClickListener {
@@ -366,10 +366,12 @@ class AddCarActivity : BaseActivity<ActivityAddCarBinding>(), AbsModule.OnCallba
         } else if (TextUtils.isEmpty(model!!.VehicleNumber)) {
             toast("车牌号码不能为空")
             return false
-        } else if (TextUtils.isEmpty(model!!.VehicleBrand)) {
-            toast("车辆品牌不能为空")
-            return false
-        } else if (TextUtils.isEmpty(model!!.VehicleEngine)) {
+        }
+        // else if (TextUtils.isEmpty(model!!.VehicleBrand)) {
+//        toast("车辆品牌不能为空")
+//        return false
+//    }
+        else if (TextUtils.isEmpty(model!!.VehicleEngine)) {
             toast("车架号不能为空")
             return false
         } else if (TextUtils.isEmpty(model!!.VehiclePersonAddress)) {

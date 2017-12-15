@@ -42,6 +42,12 @@ class CameraPersonActivity : AppCompatActivity(), CameraSurfaceView.onScan {
             "2" -> {//证件照(横版)
                 iv.setImageResource(R.mipmap.card_bg)
             }
+            "3" -> {//驾驶证(横版)
+                iv.setImageResource(R.mipmap.js_car_bg)
+            }
+            "4" -> {//行驶证(横版)
+                iv.setImageResource(R.mipmap.xs_car_bg)
+            }
         }
         record_button.setOnClickListener {
             record_button.isClickable = false

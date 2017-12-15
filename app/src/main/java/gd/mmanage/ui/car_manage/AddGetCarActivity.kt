@@ -202,7 +202,7 @@ class AddGetCarActivity : BaseActivity<ActivityAddGetCarBinding>(), AbsModule.On
         read_driver_btn.setOnClickListener {
             model.VehicleTakePersonCertType = "02"
             startActivityForResult(Intent(this@AddGetCarActivity, CameraPersonActivity::class.java)
-                    .putExtra("position", "2"), 2)
+                    .putExtra("position", "3"), 2)//驾驶证识别
 
         }
         binding.model = model

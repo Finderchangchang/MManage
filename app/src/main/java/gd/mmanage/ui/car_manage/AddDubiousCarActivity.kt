@@ -9,6 +9,7 @@ import gd.mmanage.R
 import gd.mmanage.base.BaseActivity
 import gd.mmanage.control.CarManageModule
 import gd.mmanage.databinding.ActivityAddDubiousCarBinding
+import gd.mmanage.method.Utils
 import gd.mmanage.model.CodeModel
 import gd.mmanage.model.EmployeeModel
 import gd.mmanage.model.NormalRequest
@@ -28,6 +29,7 @@ class AddDubiousCarActivity : BaseActivity<ActivityAddDubiousCarBinding>(), AbsM
         } else {
             toast(success.message)
         }
+        dialog!!.dismiss()
     }
 
     override fun onError(result: Int, error: Any?) {
@@ -55,7 +57,7 @@ class AddDubiousCarActivity : BaseActivity<ActivityAddDubiousCarBinding>(), AbsM
             val builder = AlertDialog.Builder(this)  //先得到构造器
             builder.setItems(ky_array) { dialog, which ->
                 binding.kyType = ky_state_list[which].Name
-                ky_model.SuspiciousType = ky_state_list[which].Name
+                ky_model.SuspiciousType = ky_state_list[which].ID
             }
             builder.create().show()
         }
@@ -71,6 +73,7 @@ class AddDubiousCarActivity : BaseActivity<ActivityAddDubiousCarBinding>(), AbsM
         save_btn.setOnClickListener {
             ky_model.SuspiciousRemarks = ky_desc_et.text.toString().trim()
             ky_model.VehicleId = vehicleId
+            ky_model.SuspiciousTime = Utils.normalTime
             dialog!!.show()
             control!!.save_warn(ky_model)
         }
@@ -96,7 +99,7 @@ class AddDubiousCarActivity : BaseActivity<ActivityAddDubiousCarBinding>(), AbsM
         }
         if (ky_state_list.size > 0) {
             binding.kyType = ky_state_list[0].Name
-            ky_model.SuspiciousType = ky_state_list[0].Name
+            ky_model.SuspiciousType = ky_state_list[0].ID
         }
     }
 

@@ -21,6 +21,7 @@ import gd.mmanage.model.NormalRequest
 import gd.mmanage.model.PageModel
 import gd.mmanage.model.PartsModel
 import gd.mmanage.ui.inbound.ChoiceInBoundActivity
+import gd.mmanage.ui.inbound.SearchInBoundsActivity
 import kotlinx.android.synthetic.main.activity_search_parts.*
 
 /**
@@ -77,6 +78,9 @@ class SearchPartsActivity : BaseActivity<ActivitySearchPartsBinding>(), AbsModul
                     }
                 }
             }
+        }
+        inbound_btn.setOnClickListener {
+            startActivity(Intent(this@SearchPartsActivity, SearchInBoundsActivity::class.java))
         }
         //控制添加按钮显示隐藏
         if (only_selected) bottom_ll.visibility = View.VISIBLE else bottom_ll.visibility = View.GONE

@@ -247,7 +247,7 @@ class AddPersonActivity : BaseActivity<ActivityAddPersonBinding>(), AbsModule.On
         }
         read_driver_btn.setOnClickListener {
             startActivityForResult(Intent(this@AddPersonActivity, CameraPersonActivity::class.java)
-                    .putExtra("position", "2"), 2)
+                    .putExtra("position", "3"), 2)//驾驶证识别
         }
         next_btn.setOnClickListener {
             if (check_null()) {
