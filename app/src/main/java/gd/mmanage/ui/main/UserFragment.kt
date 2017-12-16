@@ -42,7 +42,7 @@ class UserFragment : BaseFragment<FragUserBinding>(), AbsModule.OnCallback {
                 var s = db!!.findAllByWhere(CodeModel::class.java, " CodeName='Code_EnterpriseVehicleType'")
                 xc_list = db!!.findAllByWhere(CodeModel::class.java, " CodeName='Code_EnterpriseVehicleType' and ID='" + model.EnterpriseVehicleType + "'")//修车类型
                 if (xc_list != null && xc_list!!.isNotEmpty()) binding.xc = xc_list!![0].Name
-                qy_list = db!!.findAllByWhere(CodeModel::class.java, " CodeName='Code_EnterpriseState' and ID='" + model.EnterpriseVehicleType + "'")//企业状态
+                qy_list = db!!.findAllByWhere(CodeModel::class.java, " CodeName='Code_EnterpriseState' and ID='" + model.EnterpriseState + "'")//企业状态
                 if (qy_list != null && qy_list!!.isNotEmpty()) binding.qy = qy_list!![0].Name
                 binding.model = model
             }

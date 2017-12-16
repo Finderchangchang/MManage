@@ -10,6 +10,7 @@ import com.arialyy.frame.module.AbsModule
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.internal.LinkedTreeMap
+import com.jiangyy.easydialog.LoadingDialog
 import gd.mmanage.R
 import gd.mmanage.base.BaseActivity
 import gd.mmanage.control.CarManageModule
@@ -35,10 +36,13 @@ class AddServiceActivity : BaseActivity<ActivityAddServiceCarBinding>(), AbsModu
         } else {
             toast(success.message)
         }
+        save_btn.isEnabled = true
+        dialog!!.dismiss()
     }
 
     override fun onError(result: Int, error: Any?) {
-        toast("")
+        save_btn.isEnabled = true
+        dialog!!.dismiss()
     }
 
     var db: FinalDb? = null
@@ -50,9 +54,12 @@ class AddServiceActivity : BaseActivity<ActivityAddServiceCarBinding>(), AbsModu
     var ky_model: RepairModel = RepairModel()
     var control: CarManageModule? = null
     var vehicleId = ""
+    var dialog: LoadingDialog.Builder? = null//转圈的dialog
+
     override fun init(savedInstanceState: Bundle?) {
         super.init(savedInstanceState)
         db = FinalDb.create(this)
+        dialog = LoadingDialog.Builder(this).setTitle(R.string.save_loading)//初始化dialog
         vehicleId = intent.getStringExtra("vehicleId")
         control = getModule(CarManageModule::class.java, this)
         init_data()
@@ -82,7 +89,7 @@ class AddServiceActivity : BaseActivity<ActivityAddServiceCarBinding>(), AbsModu
                     }
                 }
                 binding.portName = result.substring(0, result.length - 1)
-                ky_model.RepairType = binding.portName
+                ky_model.RepairType = ky_model.RepairType.substring(0, ky_model.RepairType.length - 1)
             })
             builder.create().show()
         }
@@ -90,6 +97,8 @@ class AddServiceActivity : BaseActivity<ActivityAddServiceCarBinding>(), AbsModu
             if (TextUtils.isEmpty(ky_model.RepairType)) {
                 toast("修理项目不能为空")
             } else {
+                save_btn.isEnabled = false
+                dialog!!.show()
                 ky_model.VehicleId = vehicleId
                 ky_model.RepairCreateTime = "2017-11-12"
                 control!!.save_repair(ky_model)
@@ -108,17 +117,17 @@ class AddServiceActivity : BaseActivity<ActivityAddServiceCarBinding>(), AbsModu
     fun init_data() {
         //初始化修理原因
         xm_list = db!!.findAllByWhere(CodeModel::class.java, " CodeName='Code_RepairReasonType'")//Code_RepairReasonType
-        xm_array = arrayOfNulls(xm_list!!.size)
+        xm_array = arrayOfNulls(xm_list.size)
         for (id in 0 until xm_array!!.size) {
-            var model = xm_list!![id]
+            var model = xm_list[id]
             xm_array!![id] = model.Name
         }
         //初始化修理原因
         yy_list = db!!.findAllByWhere(CodeModel::class.java, " CodeName='Code_RepairType'")//Code_RepairReasonType
-        yy_array = arrayOfNulls(yy_list!!.size)
-        yy_result = BooleanArray(yy_list!!.size)
+        yy_array = arrayOfNulls(yy_list.size)
+        yy_result = BooleanArray(yy_list.size)
         for (id in 0 until yy_array!!.size) {
-            var model = yy_list!![id]
+            var model = yy_list[id]
             yy_array!![id] = model.Name
             yy_result!![id] = false
         }

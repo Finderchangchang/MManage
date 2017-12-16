@@ -9,7 +9,9 @@ class RepairModel {
     var RepairId = ""
     var VehicleId = ""
     var RepairType = ""//修理类型
+    var RepairTypeName = ""//修理类型
     var RepairReasonType = ""//修理原因
+    var RepairReasonTypeName = ""//修理原因
     var RepairComment = ""
     var RepairCreateTime = ""
 }

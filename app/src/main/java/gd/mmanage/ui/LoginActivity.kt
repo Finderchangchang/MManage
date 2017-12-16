@@ -58,23 +58,29 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(), AbsModule.OnCallback
 //            Toast.makeText(this, "复制成功", Toast.LENGTH_LONG).show()
             startActivity(Intent(this@LoginActivity, RegCompanyActivity::class.java))
         }
-
+        id_et.setText(Utils.getCache(sp.user_id))
+        pwd_et.setText(Utils.getCache(sp.pwd))
         //登录按钮
         login_btn.setOnClickListener {
-
             var name = id_et.text.toString().trim()
             var pwd = pwd_et.text.toString().trim()
             when {
                 TextUtils.isEmpty(name) -> toast("请输入用户名")
                 TextUtils.isEmpty(pwd) -> toast("请输入密码")
                 else -> {
+                    login_btn.isEnabled = false
                     dialog!!.setTitle("登录中，请稍后...")
                     dialog!!.show()
                     control!!.user_login(name, pwd)//登录操作
                 }
             }
         }
-        if (!EasyPermissions.hasPermissions(this@LoginActivity, Manifest.permission.READ_PHONE_STATE, Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+//        if (!EasyPermissions.hasPermissions(this@LoginActivity, Manifest.permission.READ_PHONE_STATE, Manifest.permission.CAMERA)) {
+//            EasyPermissions.requestPermissions(this@LoginActivity, "您需要允许以下权限",
+//                    2, Manifest.permission.READ_PHONE_STATE, Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO);
+//
+//        }
+        if (!EasyPermissions.hasPermissions(this@LoginActivity, Manifest.permission.READ_PHONE_STATE, Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             EasyPermissions.requestPermissions(this@LoginActivity, "您需要允许以下权限",
                     2, Manifest.permission.READ_PHONE_STATE, Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE);
 
@@ -121,29 +127,8 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(), AbsModule.OnCallback
                 } else {
                     if (!TextUtils.isEmpty(success.message)) toast(success.message)
                 }
+                login_btn.isEnabled = true
                 dialog!!.dismiss()
-            }
-            command.login + 1 -> {//检查版本更新
-                success as NormalRequest<JsonElement>
-                if (success.code == 0) {//提示更新
-                    //toast(success.obj)
-                    var model = Gson().fromJson<UpdateModel>(success.obj, UpdateModel::class.java)
-                    var vv = Utils.version
-                    if (Utils.version != model.AndroidVersion) {
-                        if (!EasyPermissions.hasPermissions(this@LoginActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                            EasyPermissions.requestPermissions(this@LoginActivity, "需要下载新的apk",
-                                    2, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-                        } else {
-                            val builder = AlertDialog.Builder(this@LoginActivity)
-                            builder.setTitle("提示")
-                            builder.setMessage("您有新的版本，请及时更新~~")
-                            builder.setNegativeButton("确定") { dialog, which ->
-                                UpdateManager(this@LoginActivity).checkUpdateInfo(url.key + model.AndroidUpdateUrl)
-                            }
-                            builder.show()
-                        }
-                    }
-                }
             }
         }
         dialog!!.dismiss()
@@ -154,6 +139,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(), AbsModule.OnCallback
      * */
     override fun onError(result: Int, error: Any?) {
         dialog!!.dismiss()
+        login_btn.isEnabled = true
     }
 
     override fun setLayoutId(): Int {

@@ -1,5 +1,7 @@
 package gd.mmanage.model
 
+import gd.mmanage.config.sp
+import gd.mmanage.method.Utils
 import java.io.Serializable
 
 /**
@@ -42,7 +44,7 @@ class VehicleModel : Serializable {
 
     var VehicleReceiveTime = ""
     var VehicleId = ""
-    var EnterpriseId = "C021306020001"
+    var EnterpriseId = Utils.getCache(sp.company_id)
     var VehicleOwner = ""
     var VehicleType = ""
     var VehicleBrand = ""
@@ -71,4 +73,6 @@ class VehicleModel : Serializable {
     var CreateTimeBegin = ""
     var CreateTimeEnd = ""
     var files: List<FileModel>? = null
+    var RepairCount = ""//维修记录数量
+    var SuspiciousCount = ""//可疑记录
 }

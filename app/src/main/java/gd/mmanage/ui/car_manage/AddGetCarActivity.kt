@@ -57,6 +57,7 @@ class AddGetCarActivity : BaseActivity<ActivityAddGetCarBinding>(), AbsModule.On
     var dialog: LoadingDialog.Builder? = null//转圈的dialog
 
     override fun onSuccess(result: Int, success: Any?) {
+        next_btn.isEnabled = true
         when (result) {
             command.car_manage + 8 -> {
                 var ss = success as NormalRequest<JsonObject>
@@ -142,7 +143,8 @@ class AddGetCarActivity : BaseActivity<ActivityAddGetCarBinding>(), AbsModule.On
     }
 
     override fun onError(result: Int, error: Any?) {
-
+        next_btn.isEnabled = true
+        dialog!!.dismiss()
     }
 
     /**
@@ -181,7 +183,7 @@ class AddGetCarActivity : BaseActivity<ActivityAddGetCarBinding>(), AbsModule.On
         }
         //蓝牙识别
         read_card_btn.setOnClickListener {
-            model.VehicleTakePersonCertType = "01"
+            model.VehicleTakePersonCertType = "1"
             if (TextUtils.isEmpty(Utils.getCache(sp.blueToothAddress))) {
                 toast("请检查蓝牙读卡设备设置！")
             } else {
@@ -195,15 +197,14 @@ class AddGetCarActivity : BaseActivity<ActivityAddGetCarBinding>(), AbsModule.On
             control!!.get_vehicleById(model.VehicleId)
         }
         read_ocr_btn.setOnClickListener {
-            model.VehicleTakePersonCertType = "01"
+            model.VehicleTakePersonCertType = "1"
             startActivityForResult(Intent(this@AddGetCarActivity, CameraPersonActivity::class.java)
                     .putExtra("position", "2"), 1)
         }
         read_driver_btn.setOnClickListener {
-            model.VehicleTakePersonCertType = "02"
+            model.VehicleTakePersonCertType = "2"
             startActivityForResult(Intent(this@AddGetCarActivity, CameraPersonActivity::class.java)
                     .putExtra("position", "3"), 2)//驾驶证识别
-
         }
         binding.model = model
         binding.nation = "汉"
@@ -216,6 +217,7 @@ class AddGetCarActivity : BaseActivity<ActivityAddGetCarBinding>(), AbsModule.On
         //执行保存操作
         next_btn.setOnClickListener {
             if (check_null()) {
+                next_btn.isEnabled = false
                 var img_list = ArrayList<FileModel>()
                 img_list.add(FileModel(ImgUtils().Only_bitmapToBase64(xc_img), "取车人实际照片", "C5", ""))
                 img_list.add(FileModel(ImgUtils().Only_bitmapToBase64(user_img), "取车人证件照片", "C4", ""))

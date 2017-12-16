@@ -372,7 +372,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="20dp"
                             android:maxLines="2"
-                            android:text="@{model.repair.RepairType}" />
+                            android:text="@{model.repair.RepairTypeName}" />
                     </LinearLayout>
 
                     <TextView
@@ -394,7 +394,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="20dp"
-                            android:text="@{model.repair.RepairReasonType}" />
+                            android:text="@{model.repair.RepairReasonTypeName}" />
                     </LinearLayout>
 
                     <TextView
@@ -510,7 +510,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="20dp"
-                            android:text="@{ky}" />
+                            android:text="@{model.suspicious.SuspiciousTypeName}" />
                     </LinearLayout>
 
                     <TextView
@@ -583,18 +583,6 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/btn1"
-                android:layout_width="0dp"
-                android:layout_height="50dp"
-                android:layout_weight="1"
-                android:background="@color/colorPrimary"
-                android:text="取车登记"
-                android:textColor="@color/white" />
-
-            <View
-                android:layout_width="0.5dp"
-                android:layout_height="match_parent" />
 
             <Button
                 android:id="@+id/btn2"
@@ -602,7 +590,7 @@
                 android:layout_height="50dp"
                 android:layout_weight="1"
                 android:background="@color/colorPrimary"
-                android:text="机修登记"
+                android:text="维修登记"
                 android:textColor="@color/white" />
 
             <View
@@ -631,6 +619,18 @@
                 android:text="可疑车辆"
                 android:textColor="@color/white" />
 
+            <View
+                android:layout_width="0.5dp"
+                android:layout_height="match_parent" />
+
+            <Button
+                android:id="@+id/btn1"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:background="@color/colorPrimary"
+                android:text="取车登记"
+                android:textColor="@color/white" />
 
         </LinearLayout>
     </LinearLayout>

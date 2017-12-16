@@ -7,6 +7,7 @@ import android.support.v7.app.AlertDialog
 import android.text.TextUtils
 import com.arialyy.frame.module.AbsModule
 import com.google.gson.JsonElement
+import com.jiangyy.easydialog.LoadingDialog
 import gd.mmanage.R
 import gd.mmanage.base.BaseActivity
 import gd.mmanage.config.sp
@@ -22,6 +23,7 @@ import net.tsz.afinal.FinalDb
 import net.tsz.afinal.view.DatePickerDialog
 
 class AddInBoundActivity : BaseActivity<ActivityAddInBoundBinding>(), AbsModule.OnCallback {
+
     override fun onSuccess(result: Int, success: Any?) {
         success as NormalRequest<JsonElement>
         if (success.code == 0) {
@@ -31,11 +33,16 @@ class AddInBoundActivity : BaseActivity<ActivityAddInBoundBinding>(), AbsModule.
         } else {
             toast(success.message)
         }
+        save_btn.isEnabled = true
+        dialog!!.dismiss()
     }
 
     override fun onError(result: Int, error: Any?) {
-
+        save_btn.isEnabled = true
+        dialog!!.dismiss()
     }
+
+    var dialog: LoadingDialog.Builder? = null
 
     var model: StorageModel = StorageModel()
     var emp_array: Array<String?>? = null//从业人员的集合
@@ -45,6 +52,7 @@ class AddInBoundActivity : BaseActivity<ActivityAddInBoundBinding>(), AbsModule.
     override fun init(savedInstanceState: Bundle?) {
         super.init(savedInstanceState)
         db = FinalDb.create(this)
+        dialog = LoadingDialog.Builder(this).setTitle("正在加载...")//初始化dialog
         control = getModule(InBoundsModule::class.java, this)
         employees = db!!.findAll(EmployeeModel::class.java)
         emp_array = arrayOfNulls(employees!!.size)
@@ -71,6 +79,8 @@ class AddInBoundActivity : BaseActivity<ActivityAddInBoundBinding>(), AbsModule.
             if (model.StoragePartsId.isEmpty()) {
                 toast("请选择需要入库的配件信息")
             } else {
+                save_btn.isEnabled = true
+                dialog!!.show()
                 model.StorageNumber = et6.text.toString().trim()
                 model.StorageUser = Utils.getCache(sp.user_id)
                 model.StorageTime = Utils.normalTime

@@ -2,6 +2,7 @@ package gd.mmanage.ui.vehicle
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.TextUtils
 import com.arialyy.frame.module.AbsModule
 import com.google.gson.Gson
 import com.google.gson.JsonElement
@@ -81,6 +82,22 @@ class OnlySearchVehicleActivity : BaseActivity<ActivitySearchOnlyVehicleBinding>
                 holder.setText(R.id.price_tv, model.VehicleColor + model.VehicleBrand)
                 holder.setText(R.id.company_type_tv, model.VehiclePerson)
                 holder.setText(R.id.count_tv, model.VehiclePersonPhone)
+                when (intent.getStringExtra("id")) {
+                    "2" -> {
+                        if (TextUtils.isEmpty(model.RepairCount)) {
+                            holder.setText(R.id.btn, "登记")
+                        } else {
+                            holder.setText(R.id.btn, "修改")
+                        }
+                    }
+                    "3" -> {
+                        if (TextUtils.isEmpty(model.SuspiciousCount)) {
+                            holder.setText(R.id.btn, "登记")
+                        } else {
+                            holder.setText(R.id.btn, "修改")
+                        }
+                    }
+                }
                 holder.setOnClickListener(R.id.btn) {
                     when (intent.getStringExtra("id")) {
                         "1" -> {

@@ -47,7 +47,7 @@
                 android:padding="2dp"
                 app:tabIconNormal="@mipmap/main_user"
                 app:tabIconSelected="@mipmap/main_user"
-                app:tabText="我"
+                app:tabText="我的"
                 app:tabTextSize="10sp"
                 app:textColorNormal="@color/bottom_bg"
                 app:textColorSelected="@color/colorPrimary" />

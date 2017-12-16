@@ -56,9 +56,9 @@ class UserModule : BaseModule {
      * */
     fun reg_company(company_id: String) {
         var map = HashMap<String, String>()
-        map.put("EnterpriseId", company_id)
-        map.put("EquipmentType", "04")
-        map.put("EquipmentCode", Utils.imei)
-        HttpUtils<String>().get(url.normal + "Equipment/AddEquipment", command.user + 4, map, this)
+        map.put("enterpriseId", company_id)
+        map.put("equipmentType", "04")
+        map.put("equipmentCode", Utils.imei)
+        HttpUtils<String>().post(url.normal + "Equipment/AddEquipment", command.user + 4, map, this)
     }
 }

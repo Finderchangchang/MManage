@@ -21,6 +21,7 @@ import com.google.gson.JsonParser
 import com.google.gson.Gson
 import gd.mmanage.method.UtilControl
 import gd.mmanage.model.PageModel
+import net.tsz.afinal.FinalDb
 
 
 /**
@@ -33,6 +34,7 @@ class SearchEmployeeActivity : BaseActivity<ActivitySearchEmployeeBinding>(), Ab
     var control: EmployeeModule? = null
     var dialog: LoadingDialog.Builder? = null
     var chice_model: EmployeeModel = EmployeeModel()
+    var db: FinalDb? = null
     override fun init(savedInstanceState: Bundle?) {
         super.init(savedInstanceState)
         dialog = LoadingDialog.Builder(this).setTitle("正在加载...")//初始化dialog
@@ -59,7 +61,7 @@ class SearchEmployeeActivity : BaseActivity<ActivitySearchEmployeeBinding>(), Ab
                 }
             }
         }
-
+        db = FinalDb.create(this)
         title_bar.setLeftClick { finish() }
         title_bar.setRightClick {
             startActivityForResult(Intent(this@SearchEmployeeActivity, ChoiceEmployeeActivity::class.java)
@@ -129,9 +131,13 @@ class SearchEmployeeActivity : BaseActivity<ActivitySearchEmployeeBinding>(), Ab
                 }
                 var mode: PageModel<*> = Gson().fromJson<PageModel<*>>(success.obj, PageModel::class.java)
                 mode.data as List<EmployeeModel>
+                db!!.deleteAll(EmployeeModel::class.java)
                 var em = JsonParser().parse(success.obj.toString()).asJsonObject.getAsJsonArray("data")//解析data里面的数据
                 em.map { Gson().fromJson<EmployeeModel>(it, EmployeeModel::class.java) }
-                        .forEach { answer_list.add(it) }
+                        .forEach {
+                            answer_list.add(it)
+                            db!!.save(it)
+                        }
                 adapter!!.refresh(answer_list)
                 main_lv.getIndex(page_index, 20, mode.ItemCount)
             }

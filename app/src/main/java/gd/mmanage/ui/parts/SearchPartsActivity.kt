@@ -2,6 +2,7 @@ package gd.mmanage.ui.parts
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.View
 import com.arialyy.frame.module.AbsModule
 import com.google.gson.Gson
@@ -61,6 +62,9 @@ class SearchPartsActivity : BaseActivity<ActivitySearchPartsBinding>(), AbsModul
         control = getModule(PratsModule::class.java, this)//初始化数据访问层
         adapter = object : CommonAdapter<PartsModel>(this, answer_list, R.layout.item_part) {
             override fun convert(holder: CommonViewHolder, model: PartsModel, position: Int) {
+                if (TextUtils.isEmpty(model.PartsSpecifications) || model.PartsSpecifications == "null") {
+                    model.PartsSpecifications = ""
+                }
                 holder.setText(R.id.name_tv, model.PartsName + "  " + model.PartsSpecifications)
                 holder.setText(R.id.price_tv, "￥" + model.PartesPrice)
                 holder.setText(R.id.company_type_tv, model.PartsManufacturer)
@@ -139,7 +143,6 @@ class SearchPartsActivity : BaseActivity<ActivitySearchPartsBinding>(), AbsModul
         var map = UtilControl.change(choice_model)
         map.put("page_index", page_index.toString())
         control!!.get_prats(map)
-
     }
 
     var control: PratsModule? = null

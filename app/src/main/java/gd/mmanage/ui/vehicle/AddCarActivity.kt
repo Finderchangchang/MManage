@@ -42,7 +42,7 @@ class AddCarActivity : BaseActivity<ActivityAddCarBinding>(), AbsModule.OnCallba
     var emp_array: Array<String?>? = null//从业人员的集合
     var employees: List<EmployeeModel>? = null//从业人员model
     var db: FinalDb? = null
-    var click_position = -1
+    var click_position = ""
     var dialog: LoadingDialog.Builder? = null
     var zt_list: List<CodeModel>? = null
     var files: List<FileModel>? = ArrayList<FileModel>()
@@ -57,16 +57,16 @@ class AddCarActivity : BaseActivity<ActivityAddCarBinding>(), AbsModule.OnCallba
                         var v_model = Gson().fromJson<VehicleModel>(success.obj.toString(), VehicleModel::class.java)
                         AddPersonActivity.context!!.finish()
                         if (v_model != null && !TextUtils.isEmpty(v_model.VehicleId)) {
-                            startActivity(Intent(this@AddCarActivity, AddServiceActivity::class.java)
-                                    .putExtra("vehicleId", v_model.VehicleId))//跳转到维修业务
+                            startActivity(Intent(this@AddCarActivity, VehicleDetailActivity::class.java)
+                                    .putExtra("vehicleId", v_model.VehicleId))//跳转到维修详情页
                         }
+                        AddPersonActivity.context!!.finish()
                         finish()
                     } else {
                         toast("修改成功")
                         AddPersonActivity.context!!.finish()
                         finish()
                     }
-
                 } else {
                     if (TextUtils.isEmpty(model!!.VehicleId)) {
                         toast("添加失败")
@@ -75,54 +75,22 @@ class AddCarActivity : BaseActivity<ActivityAddCarBinding>(), AbsModule.OnCallba
                     }
                 }
                 dialog!!.dismiss()
+                save_btn.isEnabled = true
             }
-            command.car_manage + 5 -> {//根据身份证号获得车的记录(解析list然后用dialog的形式展示出来)
-                success as NormalRequest<JsonArray>
-                var array = arrayOfNulls<String>(success.obj!!.size())
-                for (key in 0 until success.obj!!.size()) {
-                    var kk = Gson().fromJson(success.obj!![key], VehicleModel::class.java)
-                    array[key] = kk.VehicleNumber
-                    if (click_position > -1) {
-                        if (key == click_position) {
-                            try {
-                                if (kk.files!!.isNotEmpty()) {
-                                    for (mo in kk.files!!) {
-                                        //根据前面选择的图片进行显示
-                                        when (mo.FileType) {
-                                            "C1" -> {
-                                                left_bm = ImgUtils().base64ToBitmap(mo.FileContent)
-                                                car_iv.setImageBitmap(left_bm)
-                                            }
-                                            "C6" -> {
-                                                right_bm = ImgUtils().base64ToBitmap(mo.FileContent)
-                                                id_card_iv.setImageBitmap(right_bm)
-                                            }
-                                        }
-                                    }
-                                }
-                            } catch (e: Exception) {
-                                var s = ""
-                            }
-                        }
-                    }
-
-                    list.add(kk)
-                }
-                cars_tv.text = list.size.toString() + "辆"
-                builder = AlertDialog.Builder(this)
-                builder.setTitle("送车人名下车辆")
-                builder.setItems(array) { a, b ->
-                    var now_model = list[b]
-                    model!!.VehicleOwner = now_model.VehicleOwner
-                    model!!.VehicleType = now_model.VehicleType
-                    model!!.VehicleBrand = now_model.VehicleBrand
-                    model!!.VehicleColor = now_model.VehicleColor
-                    model!!.VehicleNumber = now_model.VehicleNumber
-                    model!!.VehicleEngine = now_model.VehicleEngine
-                    model!!.VehicleFrameNumber = now_model.VehicleFrameNumber
+            command.car_manage + 2 -> {//查询出来的结果
+                success as NormalRequest<*>
+                var kk = Gson().fromJson<DetailModel>(success.obj.toString(), DetailModel::class.java)
+                if (kk != null) {
                     try {
-                        if (model!!.files != null) {
-                            for (mo in model!!.files!!) {
+                        var key = kk.Vehicle
+                        model!!.VehicleTakePerson = key!!.VehiclePerson
+                        model!!.VehicleTakePersonCertNumber = key.VehiclePersonCertNumber
+                        model!!.VehicleTakePersonAddress = key.VehiclePersonAddress
+                        model!!.VehicleTakePersonCertType = key.VehiclePersonCertType
+                        model!!.VehicleTakePersonCompare = key.VehiclePersonCompare
+                        binding.model = model
+                        if (key.files != null) {
+                            for (mo in key.files!!) {
                                 //根据前面选择的图片进行显示
                                 when (mo.FileType) {
                                     "C1" -> {
@@ -141,7 +109,56 @@ class AddCarActivity : BaseActivity<ActivityAddCarBinding>(), AbsModule.OnCallba
                     } catch (e: Exception) {
                         var s = ""
                     }
+
+                }
+                dialog!!.dismiss()
+            }
+            command.car_manage + 5 -> {//根据身份证号获得车的记录(解析list然后用dialog的形式展示出来)
+                success as NormalRequest<JsonArray>
+                var array = arrayOfNulls<String>(success.obj!!.size())
+                for (key in 0 until success.obj!!.size()) {
+                    var kk = Gson().fromJson(success.obj!![key], VehicleModel::class.java)
+                    array[key] = kk.VehicleNumber
+//                    if (click_position > -1) {
+//                        if (key == click_position) {
+//                            try {
+//                                if (kk.files!!.isNotEmpty()) {
+//                                    for (mo in kk.files!!) {
+//                                        //根据前面选择的图片进行显示
+//                                        when (mo.FileType) {
+//                                            "C1" -> {
+//                                                left_bm = ImgUtils().base64ToBitmap(mo.FileContent)
+//                                                car_iv.setImageBitmap(left_bm)
+//                                            }
+//                                            "C6" -> {
+//                                                right_bm = ImgUtils().base64ToBitmap(mo.FileContent)
+//                                                id_card_iv.setImageBitmap(right_bm)
+//                                            }
+//                                        }
+//                                    }
+//                                }
+//                            } catch (e: Exception) {
+//                                var s = ""
+//                            }
+//                        }
+//                    }
+                    list.add(kk)
+                }
+                cars_tv.text = list.size.toString() + "辆"
+                builder = AlertDialog.Builder(this)
+                builder.setTitle("修车记录")
+                builder.setItems(array) { a, b ->
+                    var now_model = list[b]//点击名下车辆
+                    model!!.VehicleOwner = now_model.VehicleOwner
+                    model!!.VehicleType = now_model.VehicleType
+                    model!!.VehicleBrand = now_model.VehicleBrand
+                    model!!.VehicleColor = now_model.VehicleColor
+                    model!!.VehicleNumber = now_model.VehicleNumber
+                    model!!.VehicleEngine = now_model.VehicleEngine
+                    model!!.VehicleFrameNumber = now_model.VehicleFrameNumber
+                    control!!.get_vehicleById(now_model.VehicleId)
                     binding.model = model//刷新一下数据
+                    dialog!!.show()
                 }
                 dialog!!.dismiss()
             }
@@ -208,6 +225,7 @@ class AddCarActivity : BaseActivity<ActivityAddCarBinding>(), AbsModule.OnCallba
 
     override fun onError(result: Int, error: Any?) {
         dialog!!.dismiss()
+        save_btn.isEnabled = true
     }
 
     var left_bm: Bitmap? = null
@@ -254,7 +272,10 @@ class AddCarActivity : BaseActivity<ActivityAddCarBinding>(), AbsModule.OnCallba
             img_list.add(FileModel(ImgUtils().Only_bitmapToBase64(xc_img), "送车人实际照片", "C3", ""))
         }
         user_img = intent.getSerializableExtra("user_file") as FileModel
-        click_position = intent.getIntExtra("click_position", -1)
+        click_position = intent.getStringExtra("click_position")
+        if (!TextUtils.isEmpty(click_position)) {
+            control!!.get_vehicleById(click_position)
+        }
         binding.model = model//刷新一下数据
         control!!.get_vehicleByIdCard(model!!.VehiclePersonCertNumber)
         //选择送车人名下车辆
@@ -283,6 +304,7 @@ class AddCarActivity : BaseActivity<ActivityAddCarBinding>(), AbsModule.OnCallba
         }
         save_btn.setOnClickListener {
             if (check_null()) {
+                save_btn.isEnabled = false
                 dialog!!.setTitle("保存中，请稍后...")
                 dialog!!.show()
                 model = binding.model
@@ -324,7 +346,7 @@ class AddCarActivity : BaseActivity<ActivityAddCarBinding>(), AbsModule.OnCallba
         }
         zt_list = db!!.findAllByWhere(CodeModel::class.java, " CodeName='Code_VehicleType'")
         ve_array = arrayOfNulls(zt_list!!.size)
-        var ve_id = "01"
+        var ve_id = "K"
         if (!TextUtils.isEmpty(model!!.VehicleType)) {
             ve_id = model!!.VehicleType
         }
@@ -366,15 +388,10 @@ class AddCarActivity : BaseActivity<ActivityAddCarBinding>(), AbsModule.OnCallba
         } else if (TextUtils.isEmpty(model!!.VehicleNumber)) {
             toast("车牌号码不能为空")
             return false
-        }
-        // else if (TextUtils.isEmpty(model!!.VehicleBrand)) {
-//        toast("车辆品牌不能为空")
-//        return false
-//    }
-        else if (TextUtils.isEmpty(model!!.VehicleEngine)) {
+        } else if (TextUtils.isEmpty(model!!.VehicleFrameNumber)) {
             toast("车架号不能为空")
             return false
-        } else if (TextUtils.isEmpty(model!!.VehiclePersonAddress)) {
+        } else if (TextUtils.isEmpty(model!!.VehicleEngine)) {
             toast("发动机号不能为空")
             return false
         } else if (left_bm == null) {

@@ -21,6 +21,34 @@
             android:background="@color/line_bg" />
 
 
+        <LinearLayout
+            android:id="@+id/ll1"
+            style="@style/add_et"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="设备编码" />
+
+            <TextView
+                android:id="@+id/et1"
+                style="@style/et_style"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="20dp"
+                android:layout_weight="1"
+                android:background="@null" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="@color/line_bg" />
 
         <LinearLayout
             android:id="@+id/ll2"

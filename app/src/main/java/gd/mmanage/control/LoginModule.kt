@@ -33,8 +33,9 @@ class LoginModule(context: Context?) : BaseModule(context) {
         if (!TextUtils.isEmpty(time) && time.length >= 2) {
             map.put("timeStamp", time.substring(0, time.length - 2))
         }
-//        map.put("imei", Utils.imei)//862387039569262
-        map.put("imei", "862387039569262")//862387039569262
+        map.put("imei", Utils.imei)//862387039569262
+        //
+//        map.put("imei", "866934036131178")//862387039569262
         HttpUtils<String>().get(url.login + "AndroidUserLogin", command.login, map, this)
     }
 

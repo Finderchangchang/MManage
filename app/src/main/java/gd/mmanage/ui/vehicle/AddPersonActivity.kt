@@ -76,11 +76,11 @@ class AddPersonActivity : BaseActivity<ActivityAddPersonBinding>(), AbsModule.On
                     }
                     dialog!!.dismiss()
                     if (list.size > 0) {
-                        builder!!.setNegativeButton("取消", null);
-                        alert_builder!!.setNeutralButton("查看名下车辆(" + list.size + ")") { a, b ->
+                        alert_builder!!.setNegativeButton("取消", null);
+                        alert_builder!!.setNeutralButton("修车记录(" + list.size + ")") { a, b ->
                             builder = AlertDialog.Builder(this)
-                            builder!!.setTitle("送车人名下车辆")
-                            builder!!.setItems(array) { a, b ->
+                            builder!!.setTitle("修车记录")
+                            builder!!.setItems(array) { _, b ->
                                 var now_model = list[b]
                                 model.VehicleOwner = now_model.VehicleOwner
                                 model.VehicleType = now_model.VehicleType
@@ -91,7 +91,7 @@ class AddPersonActivity : BaseActivity<ActivityAddPersonBinding>(), AbsModule.On
                                 model.VehicleFrameNumber = now_model.VehicleFrameNumber
                                 startActivity(Intent(this@AddPersonActivity, AddCarActivity::class.java)
                                         .putExtra("model", model)
-                                        .putExtra("click_position", b)
+                                        .putExtra("click_position", now_model.VehicleId)
                                         .putExtra("xc_url", xc_url)//FileModel(user_img, "送车人证件照", "C2", "")
                                         .putExtra("user_file", FileModel(ImgUtils().Only_bitmapToBase64(user_img), "送车人证件照", "C2", "")))
                             }
@@ -115,14 +115,13 @@ class AddPersonActivity : BaseActivity<ActivityAddPersonBinding>(), AbsModule.On
                 alert_builder = AlertDialog.Builder(this);
                 alert_builder!!.setTitle("提示");
                 if ("false" != key.SamePerson) {//比对为同一人
-                    result_btn.text = "成功"
+                    result_btn.setImageResource(R.mipmap.yes)
                     model.VehiclePersonCompare = key.FaceScore
                     control!!.get_vehicleByIdCard(binding.model.VehiclePersonCertNumber)
-
                     bi_tv.visibility = View.VISIBLE
                     alert_builder!!.setMessage("比对通过");
                 } else {
-                    result_btn.text = "失败"
+                    result_btn.setImageResource(R.mipmap.no)
                     alert_builder!!.setMessage("比对未通过，相似度为：" + key.FaceScore);
                     model.VehiclePersonCompare = ""
                     bi_tv.visibility = View.GONE
@@ -137,6 +136,8 @@ class AddPersonActivity : BaseActivity<ActivityAddPersonBinding>(), AbsModule.On
 //                //dialog!!.dismiss()
 //                builder.show();
                 bi_tv.text = "识别率 " + model.VehiclePersonCompare
+                dialog!!.dismiss()
+
             }
             command.car_manage + 2 -> {//查询出来的结果
                 success as NormalRequest<*>
@@ -236,16 +237,18 @@ class AddPersonActivity : BaseActivity<ActivityAddPersonBinding>(), AbsModule.On
             startActivityForResult(Intent(this@AddPersonActivity, CameraPersonActivity::class.java)
                     .putExtra("position", "2"), 1)
         }
-        model.VehiclePersonCertType = "01"
+        model.VehiclePersonCertType = "1"
         binding.model = model
         binding.nation = "汉族"
         model.VehiclePersonPhone = ""
         //跳转到拍照页面
         real_user_iv.setOnClickListener {
+            model.VehiclePersonCertType = "1"
             startActivityForResult(Intent(this@AddPersonActivity, CameraPersonActivity::class.java)
                     .putExtra("position", "1"), 77)
         }
         read_driver_btn.setOnClickListener {
+            model.VehiclePersonCertType = "2"
             startActivityForResult(Intent(this@AddPersonActivity, CameraPersonActivity::class.java)
                     .putExtra("position", "3"), 2)//驾驶证识别
         }
@@ -259,7 +262,8 @@ class AddPersonActivity : BaseActivity<ActivityAddPersonBinding>(), AbsModule.On
                 }
                 startActivity(intent
                         .putExtra("model", model)
-                        .putExtra("xc_url", xc_url))//FileModel(user_img, "送车人证件照", "C2", "")
+                        .putExtra("xc_url", xc_url)
+                        .putExtra("click_position", ""))//FileModel(user_img, "送车人证件照", "C2", "")
             }
         }
         nation_ll.setOnClickListener {

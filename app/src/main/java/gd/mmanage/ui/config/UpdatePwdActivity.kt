@@ -16,22 +16,24 @@ import kotlinx.android.synthetic.main.activity_update_pwd.*
 
 class UpdatePwdActivity : BaseActivity<ActivityAddPartsServicesBinding>(), AbsModule.OnCallback {
     override fun onSuccess(result: Int, success: Any?) {
-        var s = ""
         success as NormalRequest<String>
         when (success.code) {
             0 -> {
                 toast("修改成功")
+                Utils.putCache(sp.pwd, et2.text.toString().trim())
                 finish()
             }
             else -> {
                 toast("修改失败")
             }
         }
+        save_btn.isEnabled = true
         dialog!!.dismiss()
     }
 
     override fun onError(result: Int, error: Any?) {
         toast("修改失败")
+        save_btn.isEnabled = true
         dialog!!.dismiss()
     }
 
@@ -52,6 +54,7 @@ class UpdatePwdActivity : BaseActivity<ActivityAddPartsServicesBinding>(), AbsMo
             } else if (TextUtils.isEmpty(et2)) {
                 toast("新密码不能为空")
             } else {
+                save_btn.isEnabled = false
                 dialog!!.show()
                 getModule(UserModule::class.java, this).update_pwd(et2)
             }

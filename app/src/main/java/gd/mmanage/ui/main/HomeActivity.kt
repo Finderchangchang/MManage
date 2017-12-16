@@ -65,6 +65,7 @@ class HomeActivity : BaseActivity<ActivityMainBinding>(), AbsModule.OnCallback {
                     //toast(success.obj)
                     var model = Gson().fromJson<UpdateModel>(success.obj, UpdateModel::class.java)
                     var vv = Utils.version
+                    var ss=model.AndroidVersion
                     if (Utils.version != model.AndroidVersion) {
                         if (!EasyPermissions.hasPermissions(this@HomeActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                             EasyPermissions.requestPermissions(this@HomeActivity, "需要下载新的apk",
@@ -73,7 +74,7 @@ class HomeActivity : BaseActivity<ActivityMainBinding>(), AbsModule.OnCallback {
                             val builder = AlertDialog.Builder(this@HomeActivity)
                             builder.setTitle("提示")
                             builder.setMessage("您有新的版本，请及时更新~~")
-                            builder.setNegativeButton("确定") { dialog, which ->
+                            builder.setNegativeButton("确定") { _, _ ->
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                                     DownloadUtils(this).downloadAPK(url.key + model.AndroidUpdateUrl, "新版本Apk.apk")
                                 } else {

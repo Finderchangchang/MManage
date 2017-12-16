@@ -22,6 +22,7 @@ import net.tsz.afinal.FinalDb
  * */
 class AddDubiousCarActivity : BaseActivity<ActivityAddDubiousCarBinding>(), AbsModule.OnCallback {
     override fun onSuccess(result: Int, success: Any?) {
+        save_btn.isEnabled = true
         success as NormalRequest<JsonElement>
         if (success.code == 0) {
             finish()
@@ -33,7 +34,8 @@ class AddDubiousCarActivity : BaseActivity<ActivityAddDubiousCarBinding>(), AbsM
     }
 
     override fun onError(result: Int, error: Any?) {
-
+        save_btn.isEnabled = true
+        dialog!!.dismiss()
     }
 
     var db: FinalDb? = null
@@ -74,6 +76,7 @@ class AddDubiousCarActivity : BaseActivity<ActivityAddDubiousCarBinding>(), AbsM
             ky_model.SuspiciousRemarks = ky_desc_et.text.toString().trim()
             ky_model.VehicleId = vehicleId
             ky_model.SuspiciousTime = Utils.normalTime
+            save_btn.isEnabled = false
             dialog!!.show()
             control!!.save_warn(ky_model)
         }

@@ -2,6 +2,7 @@ package gd.mmanage.ui.vehicle
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.View
 import com.arialyy.frame.module.AbsModule
 import com.google.gson.Gson
@@ -37,6 +38,7 @@ class VehicleDetailActivity : BaseActivity<ActivityVehicleDetailBinding>(), AbsM
 
     override fun init(savedInstanceState: Bundle?) {
         super.init(savedInstanceState)
+        db = FinalDb.create(this)
         control = getModule(CarManageModule::class.java, this)
         id = intent.getStringExtra("id")
         dialog = LoadingDialog.Builder(this).setTitle("正在加载...")//初始化dialog
@@ -44,6 +46,9 @@ class VehicleDetailActivity : BaseActivity<ActivityVehicleDetailBinding>(), AbsM
         control!!.get_vehicleById(id)
         adapter = object : CommonAdapter<PartsModel>(this, answer_list, R.layout.item_part) {
             override fun convert(holder: CommonViewHolder, model: PartsModel, position: Int) {
+                if (TextUtils.isEmpty(model.PartsSpecifications)||model.PartsSpecifications=="null") {
+                    model.PartsSpecifications = ""
+                }
                 holder.setText(R.id.name_tv, model.PartsName + "  " + model.PartsSpecifications)
                 holder.setText(R.id.price_tv, "￥" + model.PartesPrice)
                 holder.setText(R.id.company_type_tv, model.PartsManufacturer)
@@ -76,33 +81,37 @@ class VehicleDetailActivity : BaseActivity<ActivityVehicleDetailBinding>(), AbsM
         when (result) {
             command.car_manage + 2 -> {//查询出来的结果
                 success as NormalRequest<*>
-                var model = Gson().fromJson<DetailModel>(success.obj.toString(), DetailModel::class.java)
-                if (model.Vehicle!!.VehicleTakeState == "01") bottom_ll.visibility = View.VISIBLE
-                else bottom_ll.visibility = View.GONE
-                binding.model = model
-                if (model != null) {
-                    if (model.Parts != null && model.Parts!!.isNotEmpty()) {
-                        pj_ll.visibility = View.VISIBLE
-                        pj_tv.visibility = View.VISIBLE
-                        adapter!!.refresh(model.Parts)
-                    }
-                    if (model.Repair != null) {
-                        xl_ll.visibility = View.VISIBLE
-                        xl_tv.visibility = View.VISIBLE
-                    }
-                    if (model.Suspicious != null) {
-                        bj_ll.visibility = View.VISIBLE
-                        var ky_state_list = FinalDb.create(this).findAllByWhere(CodeModel::class.java, " CodeName='Code_SuspiciousType' and ID='" + model.Suspicious!!.SuspiciousType + "'")
-                        if (ky_state_list != null && ky_state_list.size > 0) {
-                            binding.ky = ky_state_list[0].Name
+                if (success != null && success.obj != null) {
+                    var model = Gson().fromJson<DetailModel>(success.obj.toString(), DetailModel::class.java)
+                    if (model.Vehicle!!.VehicleTakeState == "01") bottom_ll.visibility = View.VISIBLE
+                    else bottom_ll.visibility = View.GONE
+                    binding.model = model
+                    if (model != null) {
+                        if (model.Parts != null && model.Parts!!.isNotEmpty()) {
+                            pj_ll.visibility = View.VISIBLE
+                            pj_tv.visibility = View.VISIBLE
+                            adapter!!.refresh(model.Parts)
                         }
-                    }
+                        //修理记录
+                        if (model.Repair != null) {
+                            xl_ll.visibility = View.VISIBLE
+                            xl_tv.visibility = View.VISIBLE
+                        }
+                        //报警记录
+                        if (model.Suspicious != null) {
+                            bj_ll.visibility = View.VISIBLE
+//                        var ky_state_list = FinalDb.create(this).findAllByWhere(CodeModel::class.java, " CodeName='Code_SuspiciousType' and ID='" + model.Suspicious!!.SuspiciousType + "'")
+//                        if (ky_state_list != null && ky_state_list.size > 0) {
+//                            binding.ky = ky_state_list[0].Name
+//                        }
+                        }
 //                    if (model.Vehicle!!.files!!.isNotEmpty()) {
 //                        iv.setImageBitmap(ImgUtils().base64ToBitmap(model.Vehicle!!.files!![0].FileContent))
 //                        iv1.setImageBitmap(ImgUtils().base64ToBitmap(model.Vehicle!!.files!![1].FileContent))
 //                        iv2.setImageBitmap(ImgUtils().base64ToBitmap(model.Vehicle!!.files!![2].FileContent))
 //                        iv3.setImageBitmap(ImgUtils().base64ToBitmap(model.Vehicle!!.files!![3].FileContent))
 //                    }
+                    }
                 }
                 dialog!!.dismiss()
             }
@@ -113,6 +122,7 @@ class VehicleDetailActivity : BaseActivity<ActivityVehicleDetailBinding>(), AbsM
 
     }
 
+    var db: FinalDb? = null
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         dialog!!.show()

@@ -52,10 +52,10 @@ class AddEmployeeActivity : BaseActivity<ActivityAddEmployeeBinding>(), AbsModul
     private var control: EmployeeModule? = null
     var is_add = true//true:添加。false：删除
     var employee: EmployeeModel? = null//传递过来的从业人员信息
-    var datePickerDialog: DatePickerDialog? = null
     var dialog: LoadingDialog.Builder? = null
 
     override fun onSuccess(result: Int, success: Any?) {
+        save_btn.isEnabled = true
         if (result == command.employee + 2) {
             success as NormalRequest<*>
             var model: EmployeeModel = Gson().fromJson(success.obj.toString(), EmployeeModel::class.java)
@@ -72,7 +72,8 @@ class AddEmployeeActivity : BaseActivity<ActivityAddEmployeeBinding>(), AbsModul
                 employee!!.EmployeeCertNumber = key.IdentyNumber
                 if (!TextUtils.isEmpty(key.IdentyNumber)) {
                     if (key.IdentyNumber.length == 18) {
-                        employee!!.EmployeeSex = key.IdentyNumber.substring(16)
+                        var nu = key.IdentyNumber.substring(16, 17)
+                        employee!!.EmployeeSex = nu
                     }
                 }
                 employee!!.EmployeeAddress = key.PersonAddress
@@ -113,6 +114,8 @@ class AddEmployeeActivity : BaseActivity<ActivityAddEmployeeBinding>(), AbsModul
 
     override fun onError(result: Int, error: Any?) {
         toast(error as String)
+        dialog!!.dismiss()
+        save_btn.isEnabled = true
     }
 
     override fun onResume() {
@@ -169,6 +172,7 @@ class AddEmployeeActivity : BaseActivity<ActivityAddEmployeeBinding>(), AbsModul
         //添加从业人员
         save_btn.setOnClickListener {
             if (check_null()) {
+                save_btn.isEnabled = false
                 dialog!!.show()
                 var map = HashMap<String, String>()
                 var model = binding.model
@@ -176,7 +180,7 @@ class AddEmployeeActivity : BaseActivity<ActivityAddEmployeeBinding>(), AbsModul
                 map = UtilControl.change(model)
                 if (user_bitmap != null) {
                     var img_list = ArrayList<FileModel>()
-                    img_list.add(FileModel(ImgUtils().Only_bitmapToBase64(user_bitmap), "从业人员证件照", "01", model.EmployeeId))
+                    img_list.add(FileModel(ImgUtils().Only_bitmapToBase64(user_bitmap), "从业人员证件照", "1", model.EmployeeId))
                     map.put("files", Gson().toJson(img_list))
                 }
                 control!!.add_employee(map)

@@ -46,7 +46,7 @@ class AddPartsActivity : BaseActivity<ActivityAddPartsBinding>(), AbsModule.OnCa
             model = binding.model
 //            model!!.PartsEnterpriseId="C021306020001"
             model!!.PartsEnterpriseId = Utils.getCache(sp.company_id)
-
+            save_btn.isEnabled = false
             control!!.add_prat(model!!)
             dialog!!.show()
         }
@@ -86,10 +86,12 @@ class AddPartsActivity : BaseActivity<ActivityAddPartsBinding>(), AbsModule.OnCa
                 if (is_add) toast("添加失败") else toast("修改失败")
             }
         }
+        save_btn.isEnabled = true
         dialog!!.dismiss()
     }
 
     override fun onError(result: Int, error: Any?) {
+        save_btn.isEnabled = true
         dialog!!.dismiss()
         if (is_add) toast("添加失败") else toast("修改失败")
     }
