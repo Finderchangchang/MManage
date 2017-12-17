@@ -64,11 +64,11 @@ class AddGetCarActivity : BaseActivity<ActivityAddGetCarBinding>(), AbsModule.On
                 var a = ss.obj as JsonObject
                 var key = Gson().fromJson<FaceRecognitionModel>(a, FaceRecognitionModel::class.java)
                 if ("false" != key.SamePerson) {//比对为同一人
-                    result_btn.text = "成功"
+                    result_btn.setImageResource(R.mipmap.yes)
                     model.VehicleTakePersonCompare = key.FaceScore
                     bi_tv.visibility = View.VISIBLE
                 } else {
-                    result_btn.text = "失败"
+                    result_btn.setImageResource(R.mipmap.no)
                     model.VehicleTakePersonCompare = ""
                     bi_tv.visibility = View.GONE
                 }
@@ -207,7 +207,6 @@ class AddGetCarActivity : BaseActivity<ActivityAddGetCarBinding>(), AbsModule.On
                     .putExtra("position", "3"), 2)//驾驶证识别
         }
         binding.model = model
-        binding.nation = "汉"
         //跳转到拍照页面
         real_user_iv.setOnClickListener {
             //control!!.get_vehicleByIdCard("130624198709183414")
@@ -222,6 +221,7 @@ class AddGetCarActivity : BaseActivity<ActivityAddGetCarBinding>(), AbsModule.On
                 img_list.add(FileModel(ImgUtils().Only_bitmapToBase64(xc_img), "取车人实际照片", "C5", ""))
                 img_list.add(FileModel(ImgUtils().Only_bitmapToBase64(user_img), "取车人证件照片", "C4", ""))
                 model.files = img_list
+                model.VehicleTakeTime = Utils.normalTime
                 dialog!!.show()
                 control!!.add_prat(model)
             }
@@ -230,7 +230,7 @@ class AddGetCarActivity : BaseActivity<ActivityAddGetCarBinding>(), AbsModule.On
             dialog(mz_array!!, 3)
         }
         init_data()
-        init_blue()
+        //init_blue()
     }
 
     //检测输入的是不是为空
@@ -260,6 +260,7 @@ class AddGetCarActivity : BaseActivity<ActivityAddGetCarBinding>(), AbsModule.On
             mz_array!![id] = mo.Name
             if (nation_id == mo.ID) {
                 binding.nation = mo.Name
+                model.VehicleTakePersonNation = mo.ID
             }
         }
     }
@@ -514,8 +515,8 @@ class AddGetCarActivity : BaseActivity<ActivityAddGetCarBinding>(), AbsModule.On
     override fun onDestroy() {
         super.onDestroy()
         dialog!!.dismiss()
-        unregisterReceiver(mReceiver)
-        OnBnDisconn()
+//        unregisterReceiver(mReceiver)
+//        OnBnDisconn()
     }
 
     //断开连接

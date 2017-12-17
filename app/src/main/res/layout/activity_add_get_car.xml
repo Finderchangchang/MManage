@@ -303,7 +303,7 @@
                     android:padding="10dp"
                     android:src="@mipmap/main_touxiang" />
 
-                <Button
+                <ImageView
                     android:id="@+id/result_btn"
                     android:layout_width="50dp"
                     android:layout_height="50dp"

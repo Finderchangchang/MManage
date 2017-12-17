@@ -11,6 +11,7 @@ import gd.mmanage.config.sp
 import gd.mmanage.databinding.ActivitySetBinding
 import gd.mmanage.method.Utils
 import gd.mmanage.model.CodeModel
+import gd.mmanage.service.DownConfigService
 import kotlinx.android.synthetic.main.activity_set.*
 import java.util.ArrayList
 
@@ -30,6 +31,9 @@ class SetActivity : BaseActivity<ActivitySetBinding>() {
         blue_set_mv.setRight_tv(Utils.getCache(sp.blueToothName))
         update_pwd_mv.setOnClickListener {
             startActivity(Intent(this, UpdatePwdActivity::class.java))
+        }
+        update_code_mv.setOnClickListener {
+            startService(Intent(this, DownConfigService::class.java))
         }
     }
 

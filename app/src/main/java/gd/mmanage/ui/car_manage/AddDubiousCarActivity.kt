@@ -2,11 +2,14 @@ package gd.mmanage.ui.car_manage
 
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
+import android.text.TextUtils
 import com.arialyy.frame.module.AbsModule
+import com.google.gson.Gson
 import com.google.gson.JsonElement
 import com.jiangyy.easydialog.LoadingDialog
 import gd.mmanage.R
 import gd.mmanage.base.BaseActivity
+import gd.mmanage.config.command
 import gd.mmanage.control.CarManageModule
 import gd.mmanage.databinding.ActivityAddDubiousCarBinding
 import gd.mmanage.method.Utils
@@ -22,14 +25,34 @@ import net.tsz.afinal.FinalDb
  * */
 class AddDubiousCarActivity : BaseActivity<ActivityAddDubiousCarBinding>(), AbsModule.OnCallback {
     override fun onSuccess(result: Int, success: Any?) {
-        save_btn.isEnabled = true
-        success as NormalRequest<JsonElement>
-        if (success.code == 0) {
-            finish()
-            toast("添加成功")
-        } else {
-            toast(success.message)
+        success as NormalRequest<*>
+        when (result) {
+            command.car_manage + 12 -> {
+                success as NormalRequest<*>
+                if (success.obj != null) {
+                    var s = ""
+                    var model: SuspiciousModel = Gson().fromJson(success.obj.toString(), SuspiciousModel::class.java)
+                    ky_model.SuspiciousRemarks = model.SuspiciousRemarks
+                    ky_model.SuspiciousId = model.SuspiciousId
+                    ky_model.SuspiciousType = model.SuspiciousType
+                    ky_model.SuspiciousPerson = model.SuspiciousPerson
+                    ky_desc_et.setText(model.SuspiciousRemarks)
+                    binding.kyType = model.SuspiciousTypeName
+                    binding.portName = model.SuspiciousPerson
+                }
+            }
+            else -> {
+                save_btn.isEnabled = true
+                success as NormalRequest<JsonElement>
+                if (success.code == 0) {
+                    finish()
+                    toast("添加成功")
+                } else {
+                    toast(success.message)
+                }
+            }
         }
+
         dialog!!.dismiss()
     }
 
@@ -54,6 +77,9 @@ class AddDubiousCarActivity : BaseActivity<ActivityAddDubiousCarBinding>(), AbsM
         vehicleId = intent.getStringExtra("vehicleId")
         dialog = LoadingDialog.Builder(this).setTitle(R.string.save_loading)//初始化dialog
         control = getModule(CarManageModule::class.java, this)
+        if (!TextUtils.isEmpty(vehicleId)) {
+            control!!.get_dubious_detail(vehicleId)
+        }
         init_data()
         ll1.setOnClickListener {
             val builder = AlertDialog.Builder(this)  //先得到构造器
@@ -89,9 +115,11 @@ class AddDubiousCarActivity : BaseActivity<ActivityAddDubiousCarBinding>(), AbsM
         for (i in 0 until employees!!.size) {
             emp_array!![i] = employees!![i].EmployeeName
         }
-        if (employees!!.isNotEmpty()) {
-            ky_model.SuspiciousPerson = employees!![0].EmployeeName
-            binding.portName = employees!![0].EmployeeName
+        if (TextUtils.isEmpty(vehicleId)) {
+            if (employees!!.isNotEmpty()) {
+                ky_model.SuspiciousPerson = employees!![0].EmployeeName
+                binding.portName = employees!![0].EmployeeName
+            }
         }
         //初始化可疑状态
         ky_state_list = db!!.findAllByWhere(CodeModel::class.java, " CodeName='Code_SuspiciousType'")
@@ -100,9 +128,11 @@ class AddDubiousCarActivity : BaseActivity<ActivityAddDubiousCarBinding>(), AbsM
             var model = ky_state_list!![id]
             ky_array!![id] = model.Name
         }
-        if (ky_state_list.size > 0) {
-            binding.kyType = ky_state_list[0].Name
-            ky_model.SuspiciousType = ky_state_list[0].ID
+        if (TextUtils.isEmpty(vehicleId)) {
+            if (ky_state_list.size > 0) {
+                binding.kyType = ky_state_list[0].Name
+                ky_model.SuspiciousType = ky_state_list[0].ID
+            }
         }
     }
 

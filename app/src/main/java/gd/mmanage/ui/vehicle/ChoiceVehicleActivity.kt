@@ -92,8 +92,8 @@ class ChoiceVehicleActivity : BaseActivity<ActivityChoiceVehicleBinding>() {
         builder.setItems(key) { dialog, which ->
             when (method) {
                 1 -> {//车辆类型
-                    model.VehicleType = zt_list!![which].ID
-                    car_type_tv.text = zt_list!![which].Name
+                    model.VehicleType = ve_list!![which].ID
+                    car_type_tv.text = ve_list!![which].Name
                 }
                 2 -> {//取车状态
                     model.VehicleTakeState = zt_list!![which].ID

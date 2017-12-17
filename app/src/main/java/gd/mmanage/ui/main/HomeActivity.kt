@@ -25,7 +25,9 @@ import net.tsz.afinal.FinalDb
 import pub.devrel.easypermissions.EasyPermissions
 import android.R.attr.path
 import android.os.Build
+import android.view.View
 import gd.mmanage.DownloadUtils
+import kotlinx.android.synthetic.main.frag_main.*
 import org.mozilla.universalchardet.Constants
 import java.io.File
 
@@ -65,7 +67,7 @@ class HomeActivity : BaseActivity<ActivityMainBinding>(), AbsModule.OnCallback {
                     //toast(success.obj)
                     var model = Gson().fromJson<UpdateModel>(success.obj, UpdateModel::class.java)
                     var vv = Utils.version
-                    var ss=model.AndroidVersion
+                    var ss = model.AndroidVersion
                     if (Utils.version != model.AndroidVersion) {
                         if (!EasyPermissions.hasPermissions(this@HomeActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                             EasyPermissions.requestPermissions(this@HomeActivity, "需要下载新的apk",
@@ -83,6 +85,18 @@ class HomeActivity : BaseActivity<ActivityMainBinding>(), AbsModule.OnCallback {
                             }
                             builder.show()
                         }
+                    }
+                }
+            }
+            command.employee + 5 -> {
+                var s = success as NormalRequest<String>
+                if (success.obj != null) {
+                    var s = success.obj!!.toString().split(",")
+                    if (s.size == 2) {
+                        tv3.visibility = View.VISIBLE
+                        tv3.text = s[0]
+                        tv2.visibility = View.VISIBLE
+                        tv2.text = s[1]
                     }
                 }
             }
@@ -114,5 +128,6 @@ class HomeActivity : BaseActivity<ActivityMainBinding>(), AbsModule.OnCallback {
         tab_pager.offscreenPageLimit = 2
         alphaIndicator!!.setViewPager(tab_pager)
         getModule(EmployeeModule::class.java, this).get_employees(HashMap())
+        getModule(EmployeeModule::class.java, this).get_num()
     }
 }

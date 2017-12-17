@@ -150,8 +150,8 @@ class OnlySearchVehicleActivity : BaseActivity<ActivitySearchOnlyVehicleBinding>
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        when (resultCode) {
-            12, 1 -> {//刷新数据
+        //when (resultCode) {
+            //12, 1 -> {//刷新数据
                 page_index = 1
                 try {
                     choice_model = data!!.getSerializableExtra("model") as VehicleModel
@@ -159,8 +159,8 @@ class OnlySearchVehicleActivity : BaseActivity<ActivitySearchOnlyVehicleBinding>
 
                 }
                 load_data()
-            }
-        }
+           // }
+        //}
     }
 
     var control: CarManageModule? = null

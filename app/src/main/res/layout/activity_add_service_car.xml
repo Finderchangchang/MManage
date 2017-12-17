@@ -28,7 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
-            app:center_tv="机修登记" />
+            app:center_tv="维修登记" />
 
         <View
             android:layout_width="match_parent"

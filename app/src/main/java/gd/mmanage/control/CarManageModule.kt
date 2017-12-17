@@ -92,6 +92,22 @@ class CarManageModule : BaseModule {
     }
 
     /**
+     * 获得维修业务
+     * @param model 维修数据
+     * */
+    fun get_repair_detail(id: String) {
+        HttpUtils<VehicleModel>().get(url.get_repair + "GetRepairByVehicleId?vehicleId=" + id, command.car_manage + 11, this)
+    }
+
+    /**
+     * 获得报警信息
+     * @param model 维修数据
+     * */
+    fun get_dubious_detail(id: String) {
+        HttpUtils<VehicleModel>().get(url.normal + "Suspicious/GetSuspiciousByVehicleId?vehicleId=" + id, command.car_manage + 12, this)
+    }
+
+    /**
      * 添加维修业务
      * @param model 维修数据
      * */

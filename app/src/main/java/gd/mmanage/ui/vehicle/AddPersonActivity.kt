@@ -239,7 +239,6 @@ class AddPersonActivity : BaseActivity<ActivityAddPersonBinding>(), AbsModule.On
         }
         model.VehiclePersonCertType = "1"
         binding.model = model
-        binding.nation = "汉族"
         model.VehiclePersonPhone = ""
         //跳转到拍照页面
         real_user_iv.setOnClickListener {
@@ -270,7 +269,7 @@ class AddPersonActivity : BaseActivity<ActivityAddPersonBinding>(), AbsModule.On
             dialog(mz_array!!, 3)
         }
         init_data()
-        init_blue()
+        //init_blue()
     }
 
     //检测输入的是不是为空
@@ -301,10 +300,11 @@ class AddPersonActivity : BaseActivity<ActivityAddPersonBinding>(), AbsModule.On
         nation_list = db!!.findAllByWhere(CodeModel::class.java, " CodeName='Code_Nation'")
         mz_array = arrayOfNulls(nation_list!!.size)
         for (id in 0 until nation_list!!.size) {
-            var model = nation_list!![id]
-            mz_array!![id] = model.Name
-            if (nation_id == model.ID) {
-                binding.nation = model.Name
+            var mo = nation_list!![id]
+            mz_array!![id] = mo.Name
+            if (nation_id == mo.ID) {
+                binding.nation = mo.Name
+                model.VehiclePersonNation = mo.ID
             }
         }
     }
@@ -529,8 +529,8 @@ class AddPersonActivity : BaseActivity<ActivityAddPersonBinding>(), AbsModule.On
     //页面关闭处理
     override fun onDestroy() {
         super.onDestroy()
-        unregisterReceiver(mReceiver)
-        OnBnDisconn()
+//        unregisterReceiver(mReceiver)
+//        OnBnDisconn()
     }
 
     //断开连接

@@ -187,7 +187,7 @@ class AddEmployeeActivity : BaseActivity<ActivityAddEmployeeBinding>(), AbsModul
             }
         }
         ll4.setOnClickListener { if (is_cc != 1) dialog(mz_array!!, 3) }
-        init_blue()
+        //init_blue()
         initNation()
     }
 
@@ -528,7 +528,7 @@ class AddEmployeeActivity : BaseActivity<ActivityAddEmployeeBinding>(), AbsModul
     //页面关闭处理
     override fun onDestroy() {
         super.onDestroy()
-        unregisterReceiver(mReceiver)
-        OnBnDisconn()
+//        unregisterReceiver(mReceiver)
+//        OnBnDisconn()
     }
 }

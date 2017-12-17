@@ -7,6 +7,7 @@ import android.support.v7.app.AlertDialog
 import android.text.TextUtils
 import android.view.View
 import com.arialyy.frame.module.AbsModule
+import com.google.gson.Gson
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.internal.LinkedTreeMap
@@ -20,6 +21,8 @@ import gd.mmanage.model.*
 import kotlinx.android.synthetic.main.activity_add_service_car.*
 import net.tsz.afinal.FinalDb
 import gd.mmanage.R.layout.dialog
+import gd.mmanage.config.command
+import gd.mmanage.method.Utils
 import gd.mmanage.ui.parts.AddPartsServicesActivity
 
 
@@ -29,15 +32,44 @@ import gd.mmanage.ui.parts.AddPartsServicesActivity
 class AddServiceActivity : BaseActivity<ActivityAddServiceCarBinding>(), AbsModule.OnCallback {
 
     override fun onSuccess(result: Int, success: Any?) {
-        success as NormalRequest<JsonElement>
-        if (success.code == 0) {
-            finish()
-            toast("添加成功")
-        } else {
-            toast(success.message)
+        when (result) {
+            command.car_manage + 7 -> {
+                success as NormalRequest<JsonElement>
+                if (success.code == 0) {
+                    finish()
+                    toast("添加成功")
+                } else {
+                    toast(success.message)
+                }
+                save_btn.isEnabled = true
+                dialog!!.dismiss()
+            }
+            command.car_manage + 11 -> {
+                success as NormalRequest<*>
+                if (success.obj != null) {
+                    var s = ""
+                    var model: RepairModel = Gson().fromJson(success.obj.toString(), RepairModel::class.java)
+                    ky_model.RepairId = model.RepairId
+                    ky_model.RepairType = model.RepairType
+                    ky_model.RepairReasonType = model.RepairReasonType
+                    for (mo in 0 until yy_list.size) {//循环codelist
+                        var kk = yy_list[mo]//当前循环的codemodel
+                        //检测当前id
+                        for (i in model.RepairType.split(",")) {
+                            if (kk.ID == i) {
+                                yy_result!![mo] = true
+                            }
+                        }
+                    }
+                    if (!TextUtils.isEmpty(ky_model.RepairReasonType)) {
+                        ky_model.RepairType += ","
+                    }
+                    ky_desc_et.setText(model.RepairComment)
+                    binding.kyType = model.RepairReasonTypeName
+                    binding.portName = model.RepairTypeName
+                }
+            }
         }
-        save_btn.isEnabled = true
-        dialog!!.dismiss()
     }
 
     override fun onError(result: Int, error: Any?) {
@@ -62,6 +94,9 @@ class AddServiceActivity : BaseActivity<ActivityAddServiceCarBinding>(), AbsModu
         dialog = LoadingDialog.Builder(this).setTitle(R.string.save_loading)//初始化dialog
         vehicleId = intent.getStringExtra("vehicleId")
         control = getModule(CarManageModule::class.java, this)
+        if (!TextUtils.isEmpty(vehicleId)) {
+            control!!.get_repair_detail(vehicleId)
+        }
         init_data()
         ll1.setOnClickListener {
             val builder = AlertDialog.Builder(this)  //先得到构造器
@@ -81,6 +116,7 @@ class AddServiceActivity : BaseActivity<ActivityAddServiceCarBinding>(), AbsModu
             builder.setNegativeButton("取消", DialogInterface.OnClickListener { dialog, which -> })
             builder.setPositiveButton("确定", DialogInterface.OnClickListener { dialog, which ->
                 var result = ""
+                ky_model.RepairType = ""
                 for (i in 0 until yy_result!!.size) {
                     var model = yy_result!![i]
                     if (yy_result!![i]) {
@@ -100,7 +136,8 @@ class AddServiceActivity : BaseActivity<ActivityAddServiceCarBinding>(), AbsModu
                 save_btn.isEnabled = false
                 dialog!!.show()
                 ky_model.VehicleId = vehicleId
-                ky_model.RepairCreateTime = "2017-11-12"
+                ky_model.RepairCreateTime = Utils.normalTime
+                ky_model.RepairComment = ky_desc_et.text.toString().trim()
                 control!!.save_repair(ky_model)
             }
         }
@@ -122,7 +159,7 @@ class AddServiceActivity : BaseActivity<ActivityAddServiceCarBinding>(), AbsModu
             var model = xm_list[id]
             xm_array!![id] = model.Name
         }
-        //初始化修理原因
+        //初始化修理部位
         yy_list = db!!.findAllByWhere(CodeModel::class.java, " CodeName='Code_RepairType'")//Code_RepairReasonType
         yy_array = arrayOfNulls(yy_list.size)
         yy_result = BooleanArray(yy_list.size)
@@ -131,10 +168,10 @@ class AddServiceActivity : BaseActivity<ActivityAddServiceCarBinding>(), AbsModu
             yy_array!![id] = model.Name
             yy_result!![id] = false
         }
-        if (yy_list.isNotEmpty()) {
-            binding.kyType = xm_list[0].Name
-            ky_model.RepairReasonType = xm_list[0].ID
-        }
+//        if (yy_list.isNotEmpty()) {
+//            binding.kyType = xm_list[0].Name
+//            ky_model.RepairReasonType = xm_list[0].ID
+//        }
     }
 
     override fun setLayoutId(): Int {

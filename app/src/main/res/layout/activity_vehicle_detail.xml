@@ -59,8 +59,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical">
 
                     <TextView
@@ -68,7 +67,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingLeft="15dp"
-                        android:text="车辆交接信息" />
+                        android:text="送车信息" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -479,8 +478,7 @@
                 <LinearLayout
                     android:id="@+id/bj_ll"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:visibility="gone">
 
@@ -572,6 +570,102 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="20dp"
                             android:text="@{model.suspicious.suspiciousTime}" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/pj_tv1"
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    android:background="@color/line_bg"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:id="@+id/qc_ll"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        style="@style/Top_lab"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="15dp"
+                        android:text="取车信息" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:background="@color/line_bg" />
+
+                    <LinearLayout
+                        android:id="@+id/ll71"
+                        style="@style/center_ll"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="取  车  人" />
+
+                        <TextView
+                            android:id="@+id/tv71"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dp"
+                            android:text="@{model.vehicle.VehicleTakePerson}" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:background="@color/line_bg" />
+
+                    <LinearLayout
+                        android:id="@+id/ll81"
+                        style="@style/center_ll"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="取车电话" />
+
+                        <TextView
+                            android:id="@+id/tv81"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dp"
+                            android:text="@{model.vehicle.VehicleTakePersonCertNumber}" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:background="@color/line_bg" />
+
+
+                    <LinearLayout
+                        android:id="@+id/ll101"
+                        style="@style/center_ll"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="取车时间" />
+
+                        <TextView
+                            android:id="@+id/tv101"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dp"
+                            android:text="@{model.vehicle.vehicleTakeTime}" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>

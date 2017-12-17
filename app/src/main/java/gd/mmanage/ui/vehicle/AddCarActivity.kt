@@ -58,7 +58,7 @@ class AddCarActivity : BaseActivity<ActivityAddCarBinding>(), AbsModule.OnCallba
                         AddPersonActivity.context!!.finish()
                         if (v_model != null && !TextUtils.isEmpty(v_model.VehicleId)) {
                             startActivity(Intent(this@AddCarActivity, VehicleDetailActivity::class.java)
-                                    .putExtra("vehicleId", v_model.VehicleId))//跳转到维修详情页
+                                    .putExtra("id", v_model.VehicleId))//跳转到维修详情页
                         }
                         AddPersonActivity.context!!.finish()
                         finish()
@@ -83,11 +83,11 @@ class AddCarActivity : BaseActivity<ActivityAddCarBinding>(), AbsModule.OnCallba
                 if (kk != null) {
                     try {
                         var key = kk.Vehicle
-                        model!!.VehicleTakePerson = key!!.VehiclePerson
-                        model!!.VehicleTakePersonCertNumber = key.VehiclePersonCertNumber
-                        model!!.VehicleTakePersonAddress = key.VehiclePersonAddress
-                        model!!.VehicleTakePersonCertType = key.VehiclePersonCertType
-                        model!!.VehicleTakePersonCompare = key.VehiclePersonCompare
+                        model!!.VehiclePerson = key!!.VehiclePerson
+                        model!!.VehiclePersonCertNumber = key.VehiclePersonCertNumber
+                        model!!.VehiclePersonAddress = key.VehiclePersonAddress
+                        model!!.VehiclePersonCertType = key.VehiclePersonCertType
+                        model!!.VehiclePersonCompare = key.VehiclePersonCompare
                         binding.model = model
                         if (key.files != null) {
                             for (mo in key.files!!) {
@@ -115,10 +115,11 @@ class AddCarActivity : BaseActivity<ActivityAddCarBinding>(), AbsModule.OnCallba
             }
             command.car_manage + 5 -> {//根据身份证号获得车的记录(解析list然后用dialog的形式展示出来)
                 success as NormalRequest<JsonArray>
-                var array = arrayOfNulls<String>(success.obj!!.size())
-                for (key in 0 until success.obj!!.size()) {
-                    var kk = Gson().fromJson(success.obj!![key], VehicleModel::class.java)
-                    array[key] = kk.VehicleNumber
+                if (success.obj != null) {
+                    var array = arrayOfNulls<String>(success.obj!!.size())
+                    for (key in 0 until success.obj!!.size()) {
+                        var kk = Gson().fromJson(success.obj!![key], VehicleModel::class.java)
+                        array[key] = kk.VehicleNumber
 //                    if (click_position > -1) {
 //                        if (key == click_position) {
 //                            try {
@@ -142,23 +143,24 @@ class AddCarActivity : BaseActivity<ActivityAddCarBinding>(), AbsModule.OnCallba
 //                            }
 //                        }
 //                    }
-                    list.add(kk)
-                }
-                cars_tv.text = list.size.toString() + "辆"
-                builder = AlertDialog.Builder(this)
-                builder.setTitle("修车记录")
-                builder.setItems(array) { a, b ->
-                    var now_model = list[b]//点击名下车辆
-                    model!!.VehicleOwner = now_model.VehicleOwner
-                    model!!.VehicleType = now_model.VehicleType
-                    model!!.VehicleBrand = now_model.VehicleBrand
-                    model!!.VehicleColor = now_model.VehicleColor
-                    model!!.VehicleNumber = now_model.VehicleNumber
-                    model!!.VehicleEngine = now_model.VehicleEngine
-                    model!!.VehicleFrameNumber = now_model.VehicleFrameNumber
-                    control!!.get_vehicleById(now_model.VehicleId)
-                    binding.model = model//刷新一下数据
-                    dialog!!.show()
+                        list.add(kk)
+                    }
+                    cars_tv.text = list.size.toString() + "辆"
+                    builder = AlertDialog.Builder(this)
+                    builder.setTitle("修车记录")
+                    builder.setItems(array) { a, b ->
+                        var now_model = list[b]//点击名下车辆
+                        model!!.VehicleOwner = now_model.VehicleOwner
+                        model!!.VehicleType = now_model.VehicleType
+                        model!!.VehicleBrand = now_model.VehicleBrand
+                        model!!.VehicleColor = now_model.VehicleColor
+                        model!!.VehicleNumber = now_model.VehicleNumber
+                        model!!.VehicleEngine = now_model.VehicleEngine
+                        model!!.VehicleFrameNumber = now_model.VehicleFrameNumber
+                        control!!.get_vehicleById(now_model.VehicleId)
+                        binding.model = model//刷新一下数据
+                        dialog!!.show()
+                    }
                 }
                 dialog!!.dismiss()
             }

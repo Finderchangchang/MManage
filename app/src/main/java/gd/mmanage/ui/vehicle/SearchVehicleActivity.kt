@@ -66,6 +66,13 @@ class SearchVehicleActivity : BaseActivity<ActivitySearchVehicleBinding>(), AbsM
                 if (!TextUtils.isEmpty(model.VehiclePersonPhone)) {
                     holder.setText(R.id.count_tv, model.VehiclePersonPhone)
                 }
+                if (model.VehicleTakeState == "01") {
+                    holder.setVisible(R.id.update_line, true)
+                    holder.setVisible(R.id.update_rl, true)
+                } else {
+                    holder.setInVisible(R.id.update_line)
+                    holder.setInVisible(R.id.update_rl)
+                }
                 //修改操作
                 holder.setOnClickListener(R.id.update_ll) {
                     startActivityForResult(Intent(this@SearchVehicleActivity, AddPersonActivity::class.java)

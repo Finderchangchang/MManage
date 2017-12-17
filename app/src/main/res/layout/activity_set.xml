@@ -41,5 +41,16 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:menu_left_tv="密码修改" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/line_bg" />
+
+        <net.tsz.afinal.view.MenuView
+            android:id="@+id/update_code_mv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:menu_left_tv="字典更新" />
     </LinearLayout>
 </layout>

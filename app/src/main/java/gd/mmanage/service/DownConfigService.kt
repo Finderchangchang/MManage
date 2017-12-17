@@ -42,7 +42,7 @@ class DownConfigService : Service() {
                 model.CodeName = code_name
                 db!!.save(model)
             }
-            cmd = cmd + 1
+            cmd += 1
             if (cmd == command.config + 11) {
                 //全部下载完成
                 Utils.putCache(sp.down_all, "1")

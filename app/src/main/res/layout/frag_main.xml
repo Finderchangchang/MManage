@@ -69,24 +69,48 @@
                         android:background="@color/line_bg"
                         tools:ignore="Suspicious0dp" />
 
-                    <LinearLayout
-                        android:id="@+id/ll3"
+                    <RelativeLayout
                         android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:orientation="vertical">
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1">
 
-                        <ImageView
-                            style="@style/main_item_iv"
-                            android:src="@mipmap/ll3" />
 
-                        <TextView
-                            style="@style/main_item_tv"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="维修登记" />
-                    </LinearLayout>
+                        <LinearLayout
+                            android:id="@+id/ll3"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <RelativeLayout style="@style/main_item_iv">
+
+                                <ImageView
+                                    style="@style/main_item_iv"
+                                    android:src="@mipmap/ll3" />
+
+                                <TextView
+                                    android:id="@+id/tv3"
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:layout_alignParentRight="true"
+                                    android:background="@drawable/yuan"
+                                    android:gravity="center"
+                                    android:text="1"
+                                    android:textColor="@color/white"
+                                    android:textSize="14sp"
+                                    android:visibility="gone" />
+
+                            </RelativeLayout>
+
+
+                            <TextView
+                                style="@style/main_item_tv"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="维修登记" />
+                        </LinearLayout>
+                    </RelativeLayout>
+
 
                     <TextView
                         android:layout_width="1dp"
@@ -137,9 +161,25 @@
                         android:gravity="center"
                         android:orientation="vertical">
 
-                        <ImageView
-                            style="@style/main_item_iv"
-                            android:src="@mipmap/ll4" />
+                        <RelativeLayout style="@style/main_item_iv">
+
+                            <ImageView
+                                style="@style/main_item_iv"
+                                android:src="@mipmap/ll4" />
+
+                            <TextView
+                                android:id="@+id/tv4"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_alignParentRight="true"
+                                android:background="@drawable/yuan"
+                                android:gravity="center"
+                                android:text="1"
+                                android:textColor="@color/white"
+                                android:textSize="14sp"
+                                android:visibility="gone" />
+
+                        </RelativeLayout>
 
                         <TextView
                             style="@style/main_item_tv"
@@ -162,9 +202,25 @@
                         android:gravity="center"
                         android:orientation="vertical">
 
-                        <ImageView
-                            style="@style/main_item_iv"
-                            android:src="@mipmap/ll2" />
+                        <RelativeLayout style="@style/main_item_iv">
+
+                            <ImageView
+                                style="@style/main_item_iv"
+                                android:src="@mipmap/ll2" />
+
+                            <TextView
+                                android:id="@+id/tv2"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_alignParentRight="true"
+                                android:background="@drawable/yuan"
+                                android:gravity="center"
+                                android:text="1"
+                                android:textColor="@color/white"
+                                android:textSize="14sp"
+                                android:visibility="gone" />
+
+                        </RelativeLayout>
 
                         <TextView
                             style="@style/main_item_tv"

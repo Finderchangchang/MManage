@@ -12,4 +12,5 @@ object sp {
     var company_id = "company_id"//企业编码
     var blueToothName = "BlueToothName"
     var blueToothAddress = "BlueToothAddress"
+    var cy_ry = "cy_ry"//从业人员选择的id
 }

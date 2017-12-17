@@ -52,4 +52,11 @@ class EmployeeModule : BaseModule {
     fun get_notice(map: HashMap<String, String>) {
         HttpUtils<List<EmployeeModel>>().post(url.normal + "News/SearchNews", command.employee + 4, map, this)
     }
+
+    /**
+     * 获得首页数量
+     * */
+    fun get_num() {
+        HttpUtils<List<EmployeeModel>>().get(url.normal + "Vehicle/GetVehicleStatistics", command.employee + 5, this)
+    }
 }

@@ -60,6 +60,9 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(), AbsModule.OnCallback
         }
         id_et.setText(Utils.getCache(sp.user_id))
         pwd_et.setText(Utils.getCache(sp.pwd))
+        if (TextUtils.isEmpty(Utils.getCache(sp.cy_ry))) {
+            Utils.putCache(sp.cy_ry, "")
+        }
         //登录按钮
         login_btn.setOnClickListener {
             var name = id_et.text.toString().trim()
@@ -88,9 +91,9 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(), AbsModule.OnCallback
             binding.imei = "当前设备IMEI：" + Utils.imei
         }
         //标志不存在，执行下载配置信息操作
-        //if (TextUtils.isEmpty(Utils.getCache(sp.down_all))) {
-        startService(Intent(this, DownConfigService::class.java))
-        //}
+        if (TextUtils.isEmpty(Utils.getCache(sp.down_all))) {
+            startService(Intent(this, DownConfigService::class.java))
+        }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {

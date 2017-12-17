@@ -46,7 +46,7 @@ class VehicleDetailActivity : BaseActivity<ActivityVehicleDetailBinding>(), AbsM
         control!!.get_vehicleById(id)
         adapter = object : CommonAdapter<PartsModel>(this, answer_list, R.layout.item_part) {
             override fun convert(holder: CommonViewHolder, model: PartsModel, position: Int) {
-                if (TextUtils.isEmpty(model.PartsSpecifications)||model.PartsSpecifications=="null") {
+                if (TextUtils.isEmpty(model.PartsSpecifications) || model.PartsSpecifications == "null") {
                     model.PartsSpecifications = ""
                 }
                 holder.setText(R.id.name_tv, model.PartsName + "  " + model.PartsSpecifications)
@@ -81,7 +81,7 @@ class VehicleDetailActivity : BaseActivity<ActivityVehicleDetailBinding>(), AbsM
         when (result) {
             command.car_manage + 2 -> {//查询出来的结果
                 success as NormalRequest<*>
-                if (success != null && success.obj != null) {
+                if (success.obj != null) {
                     var model = Gson().fromJson<DetailModel>(success.obj.toString(), DetailModel::class.java)
                     if (model.Vehicle!!.VehicleTakeState == "01") bottom_ll.visibility = View.VISIBLE
                     else bottom_ll.visibility = View.GONE
@@ -104,6 +104,9 @@ class VehicleDetailActivity : BaseActivity<ActivityVehicleDetailBinding>(), AbsM
 //                        if (ky_state_list != null && ky_state_list.size > 0) {
 //                            binding.ky = ky_state_list[0].Name
 //                        }
+                        }
+                        if (!TextUtils.isEmpty(model.Vehicle!!.VehicleTakePerson)) {
+                            qc_ll.visibility = View.VISIBLE
                         }
 //                    if (model.Vehicle!!.files!!.isNotEmpty()) {
 //                        iv.setImageBitmap(ImgUtils().base64ToBitmap(model.Vehicle!!.files!![0].FileContent))
