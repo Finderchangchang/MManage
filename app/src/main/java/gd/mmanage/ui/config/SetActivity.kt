@@ -35,6 +35,7 @@ class SetActivity : BaseActivity<ActivitySetBinding>() {
         update_code_mv.setOnClickListener {
             startService(Intent(this, DownConfigService::class.java))
         }
+        version_mv.setRight_tv(Utils.version)
     }
 
     override fun setLayoutId(): Int {

@@ -344,6 +344,7 @@ class AddCarActivity : BaseActivity<ActivityAddCarBinding>(), AbsModule.OnCallba
             emp_array!![i] = employees!![i].EmployeeName
             if (TextUtils.isEmpty(model!!.VehicleReceivePerson)) {
                 model!!.VehicleReceivePerson = employees!![0].EmployeeName
+                binding.model = model//刷新数据
             }
         }
         zt_list = db!!.findAllByWhere(CodeModel::class.java, " CodeName='Code_VehicleType'")

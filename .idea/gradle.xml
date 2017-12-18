@@ -12,7 +12,6 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/easydialog" />
             <option value="$PROJECT_DIR$/mvvm2" />
-            <option value="$PROJECT_DIR$/readidcard" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

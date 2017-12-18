@@ -4,7 +4,9 @@ import android.content.Context
 import android.text.TextUtils
 import gd.mmanage.base.BaseModule
 import gd.mmanage.config.command
+import gd.mmanage.config.sp
 import gd.mmanage.config.url
+import gd.mmanage.method.Utils
 import gd.mmanage.model.EmployeeModel
 
 /**
@@ -57,6 +59,6 @@ class EmployeeModule : BaseModule {
      * 获得首页数量
      * */
     fun get_num() {
-        HttpUtils<List<EmployeeModel>>().get(url.normal + "Vehicle/GetVehicleStatistics", command.employee + 5, this)
+        HttpUtils<List<EmployeeModel>>().get(url.normal + "Vehicle/GetVehicleStatistics?enterpriseId="+Utils.getCache(sp.company_id), command.employee + 5, this)
     }
 }

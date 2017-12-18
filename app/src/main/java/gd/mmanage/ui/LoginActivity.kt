@@ -1,8 +1,6 @@
 package gd.mmanage.ui
 
 import android.Manifest
-import android.content.ClipboardManager
-import android.content.Context
 import android.os.Bundle
 import com.arialyy.frame.module.AbsModule
 import gd.mmanage.R
@@ -10,37 +8,18 @@ import gd.mmanage.base.BaseActivity
 import gd.mmanage.control.LoginModule
 import gd.mmanage.databinding.ActivityLoginBinding
 
-import kotlinx.android.synthetic.main.activity_login.*
 import android.content.Intent
-import android.databinding.repacked.apache.commons.codec.digest.DigestUtils
-import android.support.v7.app.AlertDialog
 import android.text.TextUtils
-import com.google.gson.Gson
-import com.google.gson.JsonElement
-import com.jaeger.library.StatusBarUtil
 import gd.mmanage.model.NormalRequest
 import com.jiangyy.easydialog.LoadingDialog
 import gd.mmanage.config.command
 import gd.mmanage.config.sp
-import gd.mmanage.config.url
-import gd.mmanage.method.Sha1
-import gd.mmanage.method.UpdateManager
 import gd.mmanage.method.Utils
-import gd.mmanage.model.CodeModel
-import gd.mmanage.model.UpdateModel
 import gd.mmanage.service.DownConfigService
-import gd.mmanage.ui.config.DownHotelActivity
 import gd.mmanage.ui.main.HomeActivity
-import kotlinx.android.synthetic.main.activity_add_parts.*
 import pub.devrel.easypermissions.EasyPermissions
-import java.io.UnsupportedEncodingException
-import java.security.MessageDigest
-import java.security.NoSuchAlgorithmException
-import kotlin.experimental.and
-import android.databinding.adapters.TextViewBindingAdapter.setText
-import android.content.Context.CLIPBOARD_SERVICE
-import android.widget.Toast
 import gd.mmanage.ui.config.RegCompanyActivity
+import kotlinx.android.synthetic.main.activity_login.*
 
 
 class LoginActivity : BaseActivity<ActivityLoginBinding>(), AbsModule.OnCallback, EasyPermissions.PermissionCallbacks {
@@ -78,11 +57,6 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(), AbsModule.OnCallback
                 }
             }
         }
-//        if (!EasyPermissions.hasPermissions(this@LoginActivity, Manifest.permission.READ_PHONE_STATE, Manifest.permission.CAMERA)) {
-//            EasyPermissions.requestPermissions(this@LoginActivity, "您需要允许以下权限",
-//                    2, Manifest.permission.READ_PHONE_STATE, Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO);
-//
-//        }
         if (!EasyPermissions.hasPermissions(this@LoginActivity, Manifest.permission.READ_PHONE_STATE, Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             EasyPermissions.requestPermissions(this@LoginActivity, "您需要允许以下权限",
                     2, Manifest.permission.READ_PHONE_STATE, Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE);
@@ -104,7 +78,6 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(), AbsModule.OnCallback
     //成功
     override fun onPermissionsGranted(requestCode: Int, list: List<String>) {
         binding.imei = "当前设备IMEI：" + Utils.imei
-
     }
 
     //失败

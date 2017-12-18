@@ -94,9 +94,9 @@ class HomeActivity : BaseActivity<ActivityMainBinding>(), AbsModule.OnCallback {
                     var s = success.obj!!.toString().split(",")
                     if (s.size == 2) {
                         tv3.visibility = View.VISIBLE
-                        tv3.text = s[0]
+                        tv2.text = s[0]//待取车
                         tv2.visibility = View.VISIBLE
-                        tv2.text = s[1]
+                        tv3.text = s[1]//
                     }
                 }
             }
@@ -128,6 +128,10 @@ class HomeActivity : BaseActivity<ActivityMainBinding>(), AbsModule.OnCallback {
         tab_pager.offscreenPageLimit = 2
         alphaIndicator!!.setViewPager(tab_pager)
         getModule(EmployeeModule::class.java, this).get_employees(HashMap())
+    }
+
+    override fun onResume() {
+        super.onResume()
         getModule(EmployeeModule::class.java, this).get_num()
     }
 }
