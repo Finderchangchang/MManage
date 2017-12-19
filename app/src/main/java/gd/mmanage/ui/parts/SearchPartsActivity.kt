@@ -38,13 +38,15 @@ class SearchPartsActivity : BaseActivity<ActivitySearchPartsBinding>(), AbsModul
                 if (page_index == 1) {
                     answer_list = java.util.ArrayList()
                 }
-                var mode: PageModel<*> = Gson().fromJson<PageModel<*>>(success.obj, PageModel::class.java)
-                mode.data as List<PartsModel>
-                var em = JsonParser().parse(success.obj.toString()).asJsonObject.getAsJsonArray("data")//解析data里面的数据
-                em.map { Gson().fromJson<PartsModel>(it, PartsModel::class.java) }
-                        .forEach { answer_list.add(it) }
-                adapter!!.refresh(answer_list)
-                main_lv.getIndex(page_index, 20, mode.ItemCount)
+                if (success.obj != null) {
+                    var mode: PageModel<*> = Gson().fromJson<PageModel<*>>(success.obj, PageModel::class.java)
+                    mode.data as List<PartsModel>
+                    var em = JsonParser().parse(success.obj.toString()).asJsonObject.getAsJsonArray("data")//解析data里面的数据
+                    em.map { Gson().fromJson<PartsModel>(it, PartsModel::class.java) }
+                            .forEach { answer_list.add(it) }
+                    adapter!!.refresh(answer_list)
+                    main_lv.getIndex(page_index, 20, mode.ItemCount)
+                }
             }
         }
     }

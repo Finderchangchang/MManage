@@ -37,21 +37,24 @@ class UserFragment : BaseFragment<FragUserBinding>(), AbsModule.OnCallback {
         when (result) {
             command.user -> {
                 success as NormalRequest<JsonElement>
-
-                var model: EnterpriseModel = Gson().fromJson(success.obj, EnterpriseModel::class.java)
-                var s = db!!.findAllByWhere(CodeModel::class.java, " CodeName='Code_EnterpriseVehicleType'")
-                xc_list = db!!.findAllByWhere(CodeModel::class.java, " CodeName='Code_EnterpriseVehicleType' and ID='" + model.EnterpriseVehicleType + "'")//修车类型
-                if (xc_list != null && xc_list!!.isNotEmpty()) binding.xc = xc_list!![0].Name
-                qy_list = db!!.findAllByWhere(CodeModel::class.java, " CodeName='Code_EnterpriseState' and ID='" + model.EnterpriseState + "'")//企业状态
-                if (qy_list != null && qy_list!!.isNotEmpty()) binding.qy = qy_list!![0].Name
-                binding.model = model
+                if (success.obj != null) {
+                    var model: EnterpriseModel = Gson().fromJson(success.obj, EnterpriseModel::class.java)
+                    var s = db!!.findAllByWhere(CodeModel::class.java, " CodeName='Code_EnterpriseVehicleType'")
+                    xc_list = db!!.findAllByWhere(CodeModel::class.java, " CodeName='Code_EnterpriseVehicleType' and ID='" + model.EnterpriseVehicleType + "'")//修车类型
+                    if (xc_list != null && xc_list!!.isNotEmpty()) binding.xc = xc_list!![0].Name
+                    qy_list = db!!.findAllByWhere(CodeModel::class.java, " CodeName='Code_EnterpriseState' and ID='" + model.EnterpriseState + "'")//企业状态
+                    if (qy_list != null && qy_list!!.isNotEmpty()) binding.qy = qy_list!![0].Name
+                    binding.model = model
+                }
             }
             command.user + 1 -> {//获得当前用户信息
                 success as NormalRequest<JsonElement>
-                var user: UserModel = Gson().fromJson<UserModel>(success.obj, UserModel::class.java)
-                if (user != null && user.EnterpriseId != null) {
-                    Utils.putCache(sp.company_id, user.EnterpriseId)
-                    control!!.get_company_info(user.EnterpriseId)
+                if (success.obj != null) {
+                    var user: UserModel = Gson().fromJson<UserModel>(success.obj, UserModel::class.java)
+                    if (user != null && user.EnterpriseId != null) {
+                        Utils.putCache(sp.company_id, user.EnterpriseId)
+                        control!!.get_company_info(user.EnterpriseId)
+                    }
                 }
             }
         }

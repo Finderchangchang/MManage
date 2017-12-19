@@ -245,13 +245,13 @@
 
                         <ImageView
                             style="@style/main_item_iv"
-                            android:src="@mipmap/ll5" />
+                            android:src="@mipmap/ll1" />
 
                         <TextView
                             style="@style/main_item_tv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="配件管理" />
+                            android:text="承接查询" />
                     </LinearLayout>
 
 
@@ -285,7 +285,7 @@
                             style="@style/main_item_tv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="系统设置" />
+                            android:text="配件管理" />
                     </LinearLayout>
 
                     <TextView

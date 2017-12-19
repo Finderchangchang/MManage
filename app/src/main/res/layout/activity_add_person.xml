@@ -25,8 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
-            app:center_tv="送车人信息登记"
-            app:right_tv="承接查询" />
+            app:center_tv="送车人信息登记" />
 
 
         <LinearLayout
@@ -171,7 +170,8 @@
                 android:id="@+id/ll4"
                 style="@style/center_ll"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="35dp"
+                android:gravity="center_vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -198,17 +198,20 @@
                 style="@style/center_ll"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical">
+                android:gravity="center_vertical"
+                >
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="家庭住址" />
+                    android:text="家庭住址"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"/>
 
                 <EditText
                     android:id="@+id/address_tv"
                     android:layout_width="match_parent"
-                    android:layout_height="35dp"
+                    android:layout_height="match_parent"
                     android:layout_marginLeft="20dp"
                     android:background="@null"
                     android:text="@={model.vehiclePersonAddress}"

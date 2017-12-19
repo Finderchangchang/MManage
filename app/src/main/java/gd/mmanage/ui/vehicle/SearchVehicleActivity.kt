@@ -32,13 +32,15 @@ class SearchVehicleActivity : BaseActivity<ActivitySearchVehicleBinding>(), AbsM
                 if (page_index == 1) {
                     answer_list = java.util.ArrayList()
                 }
-                var mode: PageModel<*> = Gson().fromJson<PageModel<*>>(success.obj, PageModel::class.java)
-                mode.data as List<VehicleModel>
-                var em = JsonParser().parse(success.obj.toString()).asJsonObject.getAsJsonArray("data")//解析data里面的数据
-                em.map { Gson().fromJson<VehicleModel>(it, VehicleModel::class.java) }
-                        .forEach { answer_list.add(it) }
-                adapter!!.refresh(answer_list)
-                main_lv.getIndex(page_index, 20, mode.ItemCount)
+                if (success.obj != null) {
+                    var mode: PageModel<*> = Gson().fromJson<PageModel<*>>(success.obj, PageModel::class.java)
+                    mode.data as List<VehicleModel>
+                    var em = JsonParser().parse(success.obj.toString()).asJsonObject.getAsJsonArray("data")//解析data里面的数据
+                    em.map { Gson().fromJson<VehicleModel>(it, VehicleModel::class.java) }
+                            .forEach { answer_list.add(it) }
+                    adapter!!.refresh(answer_list)
+                    main_lv.getIndex(page_index, 20, mode.ItemCount)
+                }
             }
         }
     }
@@ -127,7 +129,10 @@ class SearchVehicleActivity : BaseActivity<ActivitySearchVehicleBinding>(), AbsM
     fun refresh_list(data: Intent?) {
         page_index = 1
         if (data != null) {
-            choice_model = data.getSerializableExtra("model") as VehicleModel
+            try {
+                choice_model = data.getSerializableExtra("model") as VehicleModel
+            } catch (e: Exception) {
+            }
         }
         load_data()
     }

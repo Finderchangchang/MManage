@@ -66,7 +66,7 @@ class AddPersonActivity : BaseActivity<ActivityAddPersonBinding>(), AbsModule.On
         when (result) {
             command.car_manage + 5 -> {//根据身份证号获得车的记录(解析list然后用dialog的形式展示出来)
                 success as NormalRequest<JsonArray>
-                if (success != null && success.obj != null) {
+                if (success.obj != null) {
                     var array = arrayOfNulls<String>(success.obj!!.size())
                     var list = ArrayList<VehicleModel>()
                     for (key in 0 until success.obj!!.size()) {
@@ -109,48 +109,43 @@ class AddPersonActivity : BaseActivity<ActivityAddPersonBinding>(), AbsModule.On
             }
             command.car_manage + 8 -> {
                 var ss = success as NormalRequest<JsonObject>
-                var a = ss.obj as JsonObject
-                var key = Gson().fromJson<FaceRecognitionModel>(a, FaceRecognitionModel::class.java)
-                result_btn.visibility = View.VISIBLE
-                alert_builder = AlertDialog.Builder(this);
-                alert_builder!!.setTitle("提示");
-                if ("false" != key.SamePerson) {//比对为同一人
-                    result_btn.setImageResource(R.mipmap.yes)
-                    model.VehiclePersonCompare = key.FaceScore
-                    control!!.get_vehicleByIdCard(binding.model.VehiclePersonCertNumber)
-                    bi_tv.visibility = View.VISIBLE
-                    alert_builder!!.setMessage("比对通过");
-                } else {
-                    result_btn.setImageResource(R.mipmap.no)
-                    alert_builder!!.setMessage("比对未通过，相似度为：" + key.FaceScore);
-                    model.VehiclePersonCompare = ""
-                    bi_tv.visibility = View.GONE
+                if (ss.obj != null) {
+                    var a = ss.obj as JsonObject
+                    var key = Gson().fromJson<FaceRecognitionModel>(a, FaceRecognitionModel::class.java)
+                    result_btn.visibility = View.VISIBLE
+                    alert_builder = AlertDialog.Builder(this);
+                    alert_builder!!.setTitle("提示");
+                    if ("false" != key.SamePerson) {//比对为同一人
+                        result_btn.setImageResource(R.mipmap.yes)
+                        model.VehiclePersonCompare = key.FaceScore
+                        control!!.get_vehicleByIdCard(binding.model.VehiclePersonCertNumber)
+                        bi_tv.visibility = View.VISIBLE
+                        alert_builder!!.setMessage("比对通过");
+                    } else {
+                        result_btn.setImageResource(R.mipmap.no)
+                        alert_builder!!.setMessage("比对未通过，相似度为：" + key.FaceScore);
+                        model.VehiclePersonCompare = ""
+                        bi_tv.visibility = View.GONE
+                    }
+                    bi_tv.text = "识别率 " + model.VehiclePersonCompare
                 }
-//                builder!!.setNeutralButton("查看名下车辆") { a, b ->
-//                    //                    if (model.VehiclePersonCompare == "") {
-////
-////                    }
-////                    control!!.get_vehicleByIdCard(binding.model.VehiclePersonCertNumber)
-//                }
-//
-//                //dialog!!.dismiss()
-//                builder.show();
-                bi_tv.text = "识别率 " + model.VehiclePersonCompare
                 dialog!!.dismiss()
 
             }
             command.car_manage + 2 -> {//查询出来的结果
                 success as NormalRequest<*>
-                var model = Gson().fromJson<DetailModel>(success.obj.toString(), DetailModel::class.java)
-                if (model != null) {
-                    if (model.Vehicle!!.files!!.isNotEmpty()) {
-                        for (mo in model.Vehicle!!.files!!) {
-                            when (mo.FileType) {
-                                "C2" -> {
-                                    card_user_iv.setImageBitmap(ImgUtils().base64ToBitmap(mo.FileContent))
-                                }
-                                "C3" -> {
-                                    real_user_iv.setImageBitmap(ImgUtils().base64ToBitmap(mo.FileContent))
+                if (success.obj != null) {
+                    var model = Gson().fromJson<DetailModel>(success.obj.toString(), DetailModel::class.java)
+                    if (model != null) {
+                        if (model.Vehicle!!.files!!.isNotEmpty()) {
+                            for (mo in model.Vehicle!!.files!!) {
+                                when (mo.FileType) {
+                                    "C2" -> {
+                                        card_user_iv.setImageBitmap(ImgUtils().base64ToBitmap(mo.FileContent))
+                                    }
+                                    "C3" -> {
+                                        real_user_iv.setImageBitmap(ImgUtils().base64ToBitmap(mo.FileContent))
+                                    }
                                 }
                             }
                         }
@@ -161,35 +156,39 @@ class AddPersonActivity : BaseActivity<ActivityAddPersonBinding>(), AbsModule.On
         //显示详情数据
             command.car_manage + 9 -> {
                 success as NormalRequest<*>
-                var key = Gson().fromJson<UserCarModel>(success.obj.toString(), UserCarModel::class.java)
-                if (key != null) {
-                    user_img = ImgUtils().base64ToBitmap(key.PersonFaceImage)
-                    card_user_iv.setImageBitmap(user_img)
-                    model.VehicleTakePersonCompare = ""
-                    check_two_img()
-                    model.VehiclePerson = key.PersonName
-                    model.VehiclePersonCertNumber = key.IdentyNumber
-                    model.VehiclePersonAddress = key.PersonAddress
-                    binding.model = model
-                } else {
-                    toast("识别失败")
+                if (success.obj != null) {
+                    var key = Gson().fromJson<UserCarModel>(success.obj.toString(), UserCarModel::class.java)
+                    if (key != null) {
+                        user_img = ImgUtils().base64ToBitmap(key.PersonFaceImage)
+                        card_user_iv.setImageBitmap(user_img)
+                        model.VehicleTakePersonCompare = ""
+                        check_two_img()
+                        model.VehiclePerson = key.PersonName
+                        model.VehiclePersonCertNumber = key.IdentyNumber
+                        model.VehiclePersonAddress = key.PersonAddress
+                        binding.model = model
+                    } else {
+                        toast("识别失败")
+                    }
                 }
                 dialog!!.dismiss()
             }
             command.car_manage + 11 -> {
                 success as NormalRequest<*>
-                var key = Gson().fromJson<CardUserModel>(success.obj.toString(), CardUserModel::class.java)
-                if (key != null) {
-                    user_img = ImgUtils().base64ToBitmap(key.PersonFaceImage)
-                    model.VehicleTakePersonCompare = ""
-                    card_user_iv.setImageBitmap(user_img)
-                    check_two_img()
-                    model.VehiclePerson = key.PersonName
-                    model.VehiclePersonCertNumber = key.IdentyNumber
-                    model.VehiclePersonAddress = key.PersonAddress
-                    binding.model = model
-                } else {
-                    toast("识别失败")
+                if (success.obj != null) {
+                    var key = Gson().fromJson<CardUserModel>(success.obj.toString(), CardUserModel::class.java)
+                    if (key != null) {
+                        user_img = ImgUtils().base64ToBitmap(key.PersonFaceImage)
+                        model.VehicleTakePersonCompare = ""
+                        card_user_iv.setImageBitmap(user_img)
+                        check_two_img()
+                        model.VehiclePerson = key.PersonName
+                        model.VehiclePersonCertNumber = key.IdentyNumber
+                        model.VehiclePersonAddress = key.PersonAddress
+                        binding.model = model
+                    } else {
+                        toast("识别失败")
+                    }
                 }
                 dialog!!.dismiss()
             }

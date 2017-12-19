@@ -38,13 +38,15 @@ class OnlySearchVehicleActivity : BaseActivity<ActivitySearchOnlyVehicleBinding>
                 if (page_index == 1) {
                     answer_list = java.util.ArrayList()
                 }
-                var mode: PageModel<*> = Gson().fromJson<PageModel<*>>(success.obj, PageModel::class.java)
-                mode.data as List<VehicleModel>
-                var em = JsonParser().parse(success.obj.toString()).asJsonObject.getAsJsonArray("data")//解析data里面的数据
-                em.map { Gson().fromJson<VehicleModel>(it, VehicleModel::class.java) }
-                        .forEach { answer_list.add(it) }
-                adapter!!.refresh(answer_list)
-                main_lv.getIndex(page_index, 20, mode.ItemCount)
+                if (success.obj != null) {
+                    var mode: PageModel<*> = Gson().fromJson<PageModel<*>>(success.obj, PageModel::class.java)
+                    mode.data as List<VehicleModel>
+                    var em = JsonParser().parse(success.obj.toString()).asJsonObject.getAsJsonArray("data")//解析data里面的数据
+                    em.map { Gson().fromJson<VehicleModel>(it, VehicleModel::class.java) }
+                            .forEach { answer_list.add(it) }
+                    adapter!!.refresh(answer_list)
+                    main_lv.getIndex(page_index, 20, mode.ItemCount)
+                }
             }
         }
     }
@@ -151,15 +153,15 @@ class OnlySearchVehicleActivity : BaseActivity<ActivitySearchOnlyVehicleBinding>
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         //when (resultCode) {
-            //12, 1 -> {//刷新数据
-                page_index = 1
-                try {
-                    choice_model = data!!.getSerializableExtra("model") as VehicleModel
-                } catch (e: Exception) {
+        //12, 1 -> {//刷新数据
+        page_index = 1
+        try {
+            choice_model = data!!.getSerializableExtra("model") as VehicleModel
+        } catch (e: Exception) {
 
-                }
-                load_data()
-           // }
+        }
+        load_data()
+        // }
         //}
     }
 

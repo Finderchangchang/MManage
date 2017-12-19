@@ -58,28 +58,33 @@ class AddEmployeeActivity : BaseActivity<ActivityAddEmployeeBinding>(), AbsModul
         save_btn.isEnabled = true
         if (result == command.employee + 2) {
             success as NormalRequest<*>
-            var model: EmployeeModel = Gson().fromJson(success.obj.toString(), EmployeeModel::class.java)
-            if (model.file != null && !TextUtils.isEmpty(model.file!!.FileContent)) {
-                user_iv.setImageBitmap(ImgUtils().base64ToBitmap(model.file!!.FileContent))
+            if (success.obj != null) {
+                var model: EmployeeModel = Gson().fromJson(success.obj.toString(), EmployeeModel::class.java)
+                if (model.file != null && !TextUtils.isEmpty(model.file!!.FileContent)) {
+                    user_iv.setImageBitmap(ImgUtils().base64ToBitmap(model.file!!.FileContent))
+                }
             }
         } else if (result == command.car_manage + 11) {
             success as NormalRequest<*>
-            var key = Gson().fromJson<CardUserModel>(success.obj.toString(), CardUserModel::class.java)
-            if (key != null) {
-                user_bitmap = ImgUtils().base64ToBitmap(key.PersonFaceImage)
-                user_iv.setImageBitmap(user_bitmap)
-                employee!!.EmployeeName = key.PersonName
-                employee!!.EmployeeCertNumber = key.IdentyNumber
-                if (!TextUtils.isEmpty(key.IdentyNumber)) {
-                    if (key.IdentyNumber.length == 18) {
-                        var nu = key.IdentyNumber.substring(16, 17)
-                        employee!!.EmployeeSex = nu
+            if (success.obj != null) {
+
+                var key = Gson().fromJson<CardUserModel>(success.obj.toString(), CardUserModel::class.java)
+                if (key != null) {
+                    user_bitmap = ImgUtils().base64ToBitmap(key.PersonFaceImage)
+                    user_iv.setImageBitmap(user_bitmap)
+                    employee!!.EmployeeName = key.PersonName
+                    employee!!.EmployeeCertNumber = key.IdentyNumber
+                    if (!TextUtils.isEmpty(key.IdentyNumber)) {
+                        if (key.IdentyNumber.length == 18) {
+                            var nu = key.IdentyNumber.substring(16, 17)
+                            employee!!.EmployeeSex = nu
+                        }
                     }
+                    employee!!.EmployeeAddress = key.PersonAddress
+                    binding.model = employee
+                } else {
+                    toast("识别失败")
                 }
-                employee!!.EmployeeAddress = key.PersonAddress
-                binding.model = employee
-            } else {
-                toast("识别失败")
             }
             dialog!!.dismiss()
         } else {

@@ -54,14 +54,16 @@ class AddCarActivity : BaseActivity<ActivityAddCarBinding>(), AbsModule.OnCallba
                 if (success.code == 0) {
                     if (TextUtils.isEmpty(model!!.VehicleId)) {
                         toast("添加成功")
-                        var v_model = Gson().fromJson<VehicleModel>(success.obj.toString(), VehicleModel::class.java)
-                        AddPersonActivity.context!!.finish()
-                        if (v_model != null && !TextUtils.isEmpty(v_model.VehicleId)) {
-                            startActivity(Intent(this@AddCarActivity, VehicleDetailActivity::class.java)
-                                    .putExtra("id", v_model.VehicleId))//跳转到维修详情页
+                        if (success.obj != null) {
+                            var v_model = Gson().fromJson<VehicleModel>(success.obj.toString(), VehicleModel::class.java)
+                            AddPersonActivity.context!!.finish()
+                            if (v_model != null && !TextUtils.isEmpty(v_model.VehicleId)) {
+                                startActivity(Intent(this@AddCarActivity, VehicleDetailActivity::class.java)
+                                        .putExtra("id", v_model.VehicleId))//跳转到维修详情页
+                            }
+                            AddPersonActivity.context!!.finish()
+                            finish()
                         }
-                        AddPersonActivity.context!!.finish()
-                        finish()
                     } else {
                         toast("修改成功")
                         AddPersonActivity.context!!.finish()
@@ -79,37 +81,39 @@ class AddCarActivity : BaseActivity<ActivityAddCarBinding>(), AbsModule.OnCallba
             }
             command.car_manage + 2 -> {//查询出来的结果
                 success as NormalRequest<*>
-                var kk = Gson().fromJson<DetailModel>(success.obj.toString(), DetailModel::class.java)
-                if (kk != null) {
-                    try {
-                        var key = kk.Vehicle
-                        model!!.VehiclePerson = key!!.VehiclePerson
-                        model!!.VehiclePersonCertNumber = key.VehiclePersonCertNumber
-                        model!!.VehiclePersonAddress = key.VehiclePersonAddress
-                        model!!.VehiclePersonCertType = key.VehiclePersonCertType
-                        model!!.VehiclePersonCompare = key.VehiclePersonCompare
-                        binding.model = model
-                        if (key.files != null) {
-                            for (mo in key.files!!) {
-                                //根据前面选择的图片进行显示
-                                when (mo.FileType) {
-                                    "C1" -> {
-                                        left_bm = ImgUtils().base64ToBitmap(mo.FileContent)
-                                        car_iv.setImageBitmap(left_bm)
-                                    }
-                                    "C6" -> {
-                                        right_bm = ImgUtils().base64ToBitmap(mo.FileContent)
-                                        id_card_iv.setImageBitmap(right_bm)
+                if (success.obj != null) {
+                    var kk = Gson().fromJson<DetailModel>(success.obj.toString(), DetailModel::class.java)
+                    if (kk != null) {
+                        try {
+                            var key = kk.Vehicle
+                            model!!.VehiclePerson = key!!.VehiclePerson
+                            model!!.VehiclePersonCertNumber = key.VehiclePersonCertNumber
+                            model!!.VehiclePersonAddress = key.VehiclePersonAddress
+                            model!!.VehiclePersonCertType = key.VehiclePersonCertType
+                            model!!.VehiclePersonCompare = key.VehiclePersonCompare
+                            binding.model = model
+                            if (key.files != null) {
+                                for (mo in key.files!!) {
+                                    //根据前面选择的图片进行显示
+                                    when (mo.FileType) {
+                                        "C1" -> {
+                                            left_bm = ImgUtils().base64ToBitmap(mo.FileContent)
+                                            car_iv.setImageBitmap(left_bm)
+                                        }
+                                        "C6" -> {
+                                            right_bm = ImgUtils().base64ToBitmap(mo.FileContent)
+                                            id_card_iv.setImageBitmap(right_bm)
+                                        }
                                     }
                                 }
+                            } else {
+                                var s = ""
                             }
-                        } else {
+                        } catch (e: Exception) {
                             var s = ""
                         }
-                    } catch (e: Exception) {
-                        var s = ""
-                    }
 
+                    }
                 }
                 dialog!!.dismiss()
             }

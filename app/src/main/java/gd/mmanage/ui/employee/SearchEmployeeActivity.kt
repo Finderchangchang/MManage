@@ -129,17 +129,19 @@ class SearchEmployeeActivity : BaseActivity<ActivitySearchEmployeeBinding>(), Ab
                 if (page_index == 1) {
                     answer_list = ArrayList()
                 }
-                var mode: PageModel<*> = Gson().fromJson<PageModel<*>>(success.obj, PageModel::class.java)
-                mode.data as List<EmployeeModel>
-                db!!.deleteAll(EmployeeModel::class.java)
-                var em = JsonParser().parse(success.obj.toString()).asJsonObject.getAsJsonArray("data")//解析data里面的数据
-                em.map { Gson().fromJson<EmployeeModel>(it, EmployeeModel::class.java) }
-                        .forEach {
-                            answer_list.add(it)
-                            db!!.save(it)
-                        }
-                adapter!!.refresh(answer_list)
-                main_lv.getIndex(page_index, 20, mode.ItemCount)
+                if (success.obj != null) {
+                    var mode: PageModel<*> = Gson().fromJson<PageModel<*>>(success.obj, PageModel::class.java)
+                    mode.data as List<EmployeeModel>
+                    db!!.deleteAll(EmployeeModel::class.java)
+                    var em = JsonParser().parse(success.obj.toString()).asJsonObject.getAsJsonArray("data")//解析data里面的数据
+                    em.map { Gson().fromJson<EmployeeModel>(it, EmployeeModel::class.java) }
+                            .forEach {
+                                answer_list.add(it)
+                                db!!.save(it)
+                            }
+                    adapter!!.refresh(answer_list)
+                    main_lv.getIndex(page_index, 20, mode.ItemCount)
+                }
             }
         }
     }

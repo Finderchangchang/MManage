@@ -36,27 +36,30 @@ class HomeActivity : BaseActivity<ActivityMainBinding>(), AbsModule.OnCallback {
     override fun onSuccess(result: Int, success: Any?) {
         when (result) {
             command.employee + 3 -> {//存储从业人员信息
-                var s = success
                 success as NormalRequest<JsonElement>
-                var mode: PageModel<*> = Gson().fromJson<PageModel<*>>(success.obj, PageModel::class.java)
-                mode.data as List<EmployeeModel>
-                var em = JsonParser().parse(success.obj.toString()).asJsonObject.getAsJsonArray("data")//解析data里面的数据
-                db!!.deleteAll(EmployeeModel::class.java)
-                em.map { Gson().fromJson<EmployeeModel>(it, EmployeeModel::class.java) }.forEach { db!!.save(it) }
+                if (success.obj != null) {
+                    var mode: PageModel<*> = Gson().fromJson<PageModel<*>>(success.obj, PageModel::class.java)
+                    mode.data as List<EmployeeModel>
+                    var em = JsonParser().parse(success.obj.toString()).asJsonObject.getAsJsonArray("data")//解析data里面的数据
+                    db!!.deleteAll(EmployeeModel::class.java)
+                    em.map { Gson().fromJson<EmployeeModel>(it, EmployeeModel::class.java) }.forEach { db!!.save(it) }
+                }
             }
             command.user + 2 -> {//检测当前设备的蓝牙id
                 success as NormalRequest<JsonElement>
-                var model = success.obj as JsonArray
-                for (i in 0 until model.size()) {
+                if (success.obj != null) {
+                    var model = success.obj as JsonArray
+                    for (i in 0 until model.size()) {
 //                    var json: EquipmentModel = Gson().fromJson<EquipmentModel>(model[0], EquipmentModel::class.java)
 //                    if (json.equipmentStatus.equals("01")) {//设置读取出的蓝牙的id
 //                        Utils.putCache(sp.equipment_id, json.enterpriseId)
 //                        getModule(UserModule::class.java, this).get_equipments("C021306020001")
 //                    }
-                    var json: EquipmentModel = Gson().fromJson<EquipmentModel>(model[0], EquipmentModel::class.java)
-                    if (json.equipmentStatus.equals("01")) {//设置读取出的蓝牙的id
-                        Utils.putCache(sp.equipment_id, json.enterpriseId)
-                        getModule(UserModule::class.java, this).get_equipments(json.enterpriseId)
+                        var json: EquipmentModel = Gson().fromJson<EquipmentModel>(model[0], EquipmentModel::class.java)
+                        if (json.equipmentStatus.equals("01")) {//设置读取出的蓝牙的id
+                            Utils.putCache(sp.equipment_id, json.enterpriseId)
+                            getModule(UserModule::class.java, this).get_equipments(json.enterpriseId)
+                        }
                     }
                 }
             }
@@ -96,6 +99,16 @@ class HomeActivity : BaseActivity<ActivityMainBinding>(), AbsModule.OnCallback {
                         tv3.visibility = View.VISIBLE
                         tv2.text = s[0]//待取车
                         tv2.visibility = View.VISIBLE
+                        if ("0" == s[0]) {
+                            tv2.visibility = View.GONE
+                        } else {
+                            tv2.visibility = View.VISIBLE
+                        }
+                        if ("0" == s[1]) {
+                            tv3.visibility = View.GONE
+                        } else {
+                            tv3.visibility = View.VISIBLE
+                        }
                         tv3.text = s[1]//
                     }
                 }
