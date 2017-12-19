@@ -89,8 +89,8 @@ class MainFragment : BaseFragment<FragMainBinding>() {
         }
         //配件管理
         ll5!!.setOnClickListener {
-            startActivity(Intent(context, SearchPartsActivity::class.java))
-//            startActivity(Intent(context, SetActivity::class.java))
+//            startActivity(Intent(context, SearchPartsActivity::class.java))
+            startActivity(Intent(context, SetActivity::class.java))
         }
         //人员管理
         ll6!!.setOnClickListener {
@@ -108,8 +108,8 @@ class MainFragment : BaseFragment<FragMainBinding>() {
         //配件管理
         ll9!!.setOnClickListener {
             //            startActivity(Intent(context, SearchInBoundsActivity::class.java))
-//            startActivity(Intent(context, SearchPartsActivity::class.java))
-            startActivity(Intent(context, SearchVehicleActivity::class.java))
+            startActivity(Intent(context, SearchPartsActivity::class.java))
+//            startActivity(Intent(context, SearchVehicleActivity::class.java))
         }
     }
 
