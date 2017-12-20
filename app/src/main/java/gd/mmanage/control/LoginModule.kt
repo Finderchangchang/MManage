@@ -16,6 +16,7 @@ import okhttp3.Call
 import okhttp3.Response
 import wai.gr.cla.callback.JsonCallback
 import java.lang.Exception
+import java.lang.reflect.ParameterizedType
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -33,9 +34,14 @@ class LoginModule(context: Context?) : BaseModule(context) {
         if (!TextUtils.isEmpty(time) && time.length >= 2) {
             map.put("timeStamp", time.substring(0, time.length - 2))
         }
-        //map.put("imei", Utils.imei)//862387039569262
+        map.put("imei", Utils.imei)//862387039569262
         //map.put("imei", "354332070987184")//张泽的设备
-        map.put("imei", "35460207860591")//862387039569262
+//        map.put("imei", "867140036608871")//862387039569262  864566039449389 35460207860591
+//        val genType = javaClass.genericSuperclass
+//        val params = (genType as ParameterizedType).actualTypeArguments
+//        val type = params[0] as? ParameterizedType ?: throw IllegalStateException("没有填写泛型参数")
+//        val rawType = type.rawType
+//        val typeArgument = type.actualTypeArguments[0]
         HttpUtils<String>().get(url.login + "AndroidUserLogin", command.login, map, this)
     }
 

@@ -210,7 +210,8 @@ public class CameraSurfaceView extends SurfaceView implements SurfaceHolder.Call
         // 根据选出的PictureSize重新设置SurfaceView大小
         float w = picSize.width;
         float h = picSize.height;
-        parameters.setPictureSize(1920, 1080);
+
+        parameters.setPictureSize(picSize.width, picSize.height);
 
         this.setLayoutParams(new FrameLayout.LayoutParams((int) (height * (h / w)), height));
 
@@ -222,12 +223,12 @@ public class CameraSurfaceView extends SurfaceView implements SurfaceHolder.Call
         }
         Camera.Size preSize = getProperSize(previewSizeList, ((float) height) / width);
         if (null != preSize) {
-            Log.i(TAG, "preSize.width=" + preSize.width + "  preSize.height=" + preSize.height);
-            if (preSize.width < 400) {
-                parameters.setPreviewSize(preSize.width * 3, preSize.height * 3);
-            } else {
-                parameters.setPreviewSize(preSize.width, preSize.height);
-            }
+//            Log.i(TAG, "preSize.width=" + preSize.width + "  preSize.height=" + preSize.height);
+//            if (preSize.width < 400) {
+//                parameters.setPreviewSize(preSize.width * 3, preSize.height * 3);
+//            } else {
+            parameters.setPreviewSize(preSize.width, preSize.height);
+//            }
         }
 
         parameters.setJpegQuality(100); // 设置照片质量
@@ -259,15 +260,22 @@ public class CameraSurfaceView extends SurfaceView implements SurfaceHolder.Call
         }
 
         if (null == result) {
+            //Camera.Size s;
             for (Camera.Size size : pictureSizeList) {
-                float curRatio = ((float) size.width) / size.height;
-                if (curRatio == 4f / 3 && size.width > 1000) {// 默认w:h = 4:3
+                Log.i("TAG---", size.width + "--" + size.height);
+                if (result == null) {
                     result = size;
-                    break;
-                } else if (curRatio == 16f / 9) {
+                } else if (size.width > result.width) {
                     result = size;
-                    break;
                 }
+//                float curRatio = ((float) size.width) / size.height;
+//                if (curRatio == 4f / 3 && size.width > 600) {// 默认w:h = 4:3
+//                    result = size;
+//                    break;
+//                } else if (curRatio == 16f / 9) {
+//                    result = size;
+//                    break;
+//                }
 //                }else  if(curRatio==)
             }
         }

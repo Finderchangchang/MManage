@@ -93,25 +93,25 @@ class HomeActivity : BaseActivity<ActivityMainBinding>(), AbsModule.OnCallback {
             }
             command.employee + 5 -> {
                 var s = success as NormalRequest<String>
-                if (success.obj != null) {
-                    var s = success.obj!!.toString().split(",")
-                    if (s.size == 2) {
-                        tv3.visibility = View.GONE
-                        tv2.text = s[0]//待取车
-                        tv2.visibility = View.GONE
-                        if ("0" == s[0]) {
-                            tv2.visibility = View.GONE
-                        } else {
-                            tv2.visibility = View.GONE
-                        }
-                        if ("0" == s[1]) {
-                            tv3.visibility = View.GONE
-                        } else {
-                            tv3.visibility = View.GONE
-                        }
-                        tv3.text = s[1]//
-                    }
-                }
+//                if (success.obj != null) {
+//                    var s = success.obj!!.toString().split(",")
+//                    if (s.size == 2) {
+//                        tv3.visibility = View.GONE
+//                        tv2.text = s[0]//待取车
+//                        tv2.visibility = View.GONE
+//                        if ("0" == s[0]) {
+//                            tv2.visibility = View.GONE
+//                        } else {
+//                            tv2.visibility = View.GONE
+//                        }
+//                        if ("0" == s[1]) {
+//                            tv3.visibility = View.GONE
+//                        } else {
+//                            tv3.visibility = View.GONE
+//                        }
+//                        tv3.text = s[1]//
+//                    }
+//                }
             }
         }
     }

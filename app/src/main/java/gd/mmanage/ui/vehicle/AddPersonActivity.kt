@@ -136,7 +136,7 @@ class AddPersonActivity : BaseActivity<ActivityAddPersonBinding>(), AbsModule.On
                 success as NormalRequest<*>
                 if (success.obj != null) {
                     var model = Gson().fromJson<DetailModel>(success.obj.toString(), DetailModel::class.java)
-                    if (model != null) {
+                    if (model != null && model.Vehicle != null && model.Vehicle!!.files != null) {
                         if (model.Vehicle!!.files!!.isNotEmpty()) {
                             for (mo in model.Vehicle!!.files!!) {
                                 when (mo.FileType) {
