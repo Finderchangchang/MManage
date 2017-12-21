@@ -21,6 +21,8 @@ import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
+import com.gun0912.tedpermission.PermissionListener
+import com.gun0912.tedpermission.TedPermission
 import com.jiangyy.easydialog.LoadingDialog
 import com.zkteco.android.IDReader.IDPhotoHelper
 import com.zkteco.android.IDReader.WLTService
@@ -29,6 +31,10 @@ import com.zkteco.id3xx.meta.IDCardInfo
 import gd.mmanage.R
 import gd.mmanage.base.BaseActivity
 import gd.mmanage.callback.LzyResponse
+import gd.mmanage.camera.BitmapUtils
+import gd.mmanage.camera.Camera2Activity
+import gd.mmanage.camera.CameraActivity
+import gd.mmanage.camera.CommonUtils
 import gd.mmanage.config.command
 import gd.mmanage.config.sp
 import gd.mmanage.control.CarManageModule
@@ -42,6 +48,7 @@ import gd.mmanage.ui.CameraPersonActivity
 import kotlinx.android.synthetic.main.activity_add_person.*
 import net.tsz.afinal.FinalDb
 import java.io.ByteArrayOutputStream
+import java.io.File
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -57,6 +64,7 @@ class AddPersonActivity : BaseActivity<ActivityAddPersonBinding>(), AbsModule.On
     var xc_url = ""
     var dialog: LoadingDialog.Builder? = null
     var alert_builder: AlertDialog.Builder? = null
+    var mFile: File? = null
 
     companion object {
         var context: AddPersonActivity? = null
@@ -233,8 +241,68 @@ class AddPersonActivity : BaseActivity<ActivityAddPersonBinding>(), AbsModule.On
             }
         }
         read_ocr_btn.setOnClickListener {
-            startActivityForResult(Intent(this@AddPersonActivity, CameraPersonActivity::class.java)
-                    .putExtra("position", "2"), 1)
+            //            startActivityForResult(Intent(this@AddPersonActivity, CameraPersonActivity::class.java)
+//                    .putExtra("position", "2"), 1)
+            if (Build.VERSION.SDK_INT > 21) {
+                TedPermission.with(this)
+                        .setRationaleMessage("我们需要使用您设备上的相机以完成拍照。\n当 Android 系统请求将相机权限授予 HelloCamera2 时，请选择『允许』。")
+                        .setDeniedMessage("如果您不对 HelloCamera2 授予相机权限，您将不能完成拍照。")
+                        .setRationaleConfirmText("确定")
+                        .setDeniedCloseButtonText("关闭")
+                        .setGotoSettingButtonText("设定")
+                        .setPermissionListener(object : PermissionListener {
+                            override fun onPermissionGranted() {
+                                val intent: Intent
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                    intent = Intent(this@AddPersonActivity, Camera2Activity::class.java)
+                                } else {
+                                    AlertDialog.Builder(this@AddPersonActivity)
+                                            .setTitle("不支持的 API Level")
+                                            .setMessage("Camera2 API 仅在 API Level 21 以上可用, 当前 API Level : " + Build.VERSION.SDK_INT)
+                                            .setPositiveButton("确定") { dialog, which -> dialog.dismiss() }
+                                            .show()
+                                    return
+                                }
+                                mFile = CommonUtils.createImageFile(System.currentTimeMillis().toString() + ".jpg")
+                                //文件保存的路径和名称
+                                intent.putExtra("file", mFile.toString())
+                                //拍照时的提示文本
+                                intent.putExtra("hint", "请将证件放入框内。将裁剪图片，只保留框内区域的图像")
+                                //是否使用整个画面作为取景区域(全部为亮色区域)
+                                intent.putExtra("hideBounds", false)
+                                //最大允许的拍照尺寸（像素数）
+                                intent.putExtra("maxPicturePixels", 3840 * 2160)
+                                startActivityForResult(intent, 1)
+                            }
+
+                            override fun onPermissionDenied(arrayList: java.util.ArrayList<String>) {}
+                        }).setPermissions(*arrayOf(Manifest.permission.CAMERA)).check()
+            } else {
+                TedPermission.with(this)
+                        .setRationaleMessage("我们需要使用您设备上的相机以完成拍照。\n当 Android 系统请求将相机权限授予 HelloCamera2 时，请选择『允许』。")
+                        .setDeniedMessage("如果您不对 HelloCamera2 授予相机权限，您将不能完成拍照。")
+                        .setRationaleConfirmText("确定")
+                        .setDeniedCloseButtonText("关闭")
+                        .setGotoSettingButtonText("设定")
+                        .setPermissionListener(object : PermissionListener {
+                            override fun onPermissionGranted() {
+                                val intent: Intent
+                                intent = Intent(this@AddPersonActivity, CameraActivity::class.java)
+                                mFile = CommonUtils.createImageFile("mFile")
+                                //文件保存的路径和名称
+                                intent.putExtra("file", mFile.toString())
+                                //拍照时的提示文本
+                                intent.putExtra("hint", "请将证件放入框内。将裁剪图片，只保留框内区域的图像")
+                                //是否使用整个画面作为取景区域(全部为亮色区域)
+                                intent.putExtra("hideBounds", false)
+                                //最大允许的拍照尺寸（像素数）
+                                intent.putExtra("maxPicturePixels", 3840 * 2160)
+                                startActivityForResult(intent, 1)
+                            }
+
+                            override fun onPermissionDenied(arrayList: java.util.ArrayList<String>) {}
+                        }).setPermissions(*arrayOf(Manifest.permission.CAMERA)).check()
+            }
         }
         model.VehiclePersonCertType = "1"
         binding.model = model
@@ -242,13 +310,133 @@ class AddPersonActivity : BaseActivity<ActivityAddPersonBinding>(), AbsModule.On
         //跳转到拍照页面
         real_user_iv.setOnClickListener {
             model.VehiclePersonCertType = "1"
-            startActivityForResult(Intent(this@AddPersonActivity, CameraPersonActivity::class.java)
-                    .putExtra("position", "1"), 77)
+//            startActivityForResult(Intent(this@AddPersonActivity, CameraPersonActivity::class.java)
+//                    .putExtra("position", "1"), 77)
+            if (Build.VERSION.SDK_INT > 21) {
+                TedPermission.with(this)
+                        .setRationaleMessage("我们需要使用您设备上的相机以完成拍照。\n当 Android 系统请求将相机权限授予 HelloCamera2 时，请选择『允许』。")
+                        .setDeniedMessage("如果您不对 HelloCamera2 授予相机权限，您将不能完成拍照。")
+                        .setRationaleConfirmText("确定")
+                        .setDeniedCloseButtonText("关闭")
+                        .setGotoSettingButtonText("设定")
+                        .setPermissionListener(object : PermissionListener {
+                            override fun onPermissionGranted() {
+                                val intent: Intent
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                    intent = Intent(this@AddPersonActivity, Camera2Activity::class.java)
+                                } else {
+                                    AlertDialog.Builder(this@AddPersonActivity)
+                                            .setTitle("不支持的 API Level")
+                                            .setMessage("Camera2 API 仅在 API Level 21 以上可用, 当前 API Level : " + Build.VERSION.SDK_INT)
+                                            .setPositiveButton("确定") { dialog, which -> dialog.dismiss() }
+                                            .show()
+                                    return
+                                }
+                                mFile = CommonUtils.createImageFile(System.currentTimeMillis().toString() + ".jpg")
+                                //文件保存的路径和名称
+                                intent.putExtra("file", mFile.toString())
+                                //拍照时的提示文本
+                                intent.putExtra("hint", "请将证件放入框内。将裁剪图片，只保留框内区域的图像")
+                                //是否使用整个画面作为取景区域(全部为亮色区域)
+                                intent.putExtra("hideBounds", false)
+                                //最大允许的拍照尺寸（像素数）
+                                intent.putExtra("maxPicturePixels", 3840 * 2160)
+                                startActivityForResult(intent, 77)
+                            }
+
+                            override fun onPermissionDenied(arrayList: java.util.ArrayList<String>) {}
+                        }).setPermissions(*arrayOf(Manifest.permission.CAMERA)).check()
+            } else {
+                TedPermission.with(this)
+                        .setRationaleMessage("我们需要使用您设备上的相机以完成拍照。\n当 Android 系统请求将相机权限授予 HelloCamera2 时，请选择『允许』。")
+                        .setDeniedMessage("如果您不对 HelloCamera2 授予相机权限，您将不能完成拍照。")
+                        .setRationaleConfirmText("确定")
+                        .setDeniedCloseButtonText("关闭")
+                        .setGotoSettingButtonText("设定")
+                        .setPermissionListener(object : PermissionListener {
+                            override fun onPermissionGranted() {
+                                val intent: Intent
+                                intent = Intent(this@AddPersonActivity, CameraActivity::class.java)
+                                mFile = CommonUtils.createImageFile("mFile")
+                                //文件保存的路径和名称
+                                intent.putExtra("file", mFile.toString())
+                                //拍照时的提示文本
+                                intent.putExtra("hint", "请将证件放入框内。将裁剪图片，只保留框内区域的图像")
+                                //是否使用整个画面作为取景区域(全部为亮色区域)
+                                intent.putExtra("hideBounds", false)
+                                //最大允许的拍照尺寸（像素数）
+                                intent.putExtra("maxPicturePixels", 3840 * 2160)
+                                startActivityForResult(intent, 77)
+                            }
+
+                            override fun onPermissionDenied(arrayList: java.util.ArrayList<String>) {}
+                        }).setPermissions(*arrayOf(Manifest.permission.CAMERA)).check()
+            }
         }
         read_driver_btn.setOnClickListener {
             model.VehiclePersonCertType = "2"
-            startActivityForResult(Intent(this@AddPersonActivity, CameraPersonActivity::class.java)
-                    .putExtra("position", "3"), 2)//驾驶证识别
+//            startActivityForResult(Intent(this@AddPersonActivity, CameraPersonActivity::class.java)
+//                    .putExtra("position", "3"), 2)//驾驶证识别
+            if (Build.VERSION.SDK_INT > 21) {
+                TedPermission.with(this)
+                        .setRationaleMessage("我们需要使用您设备上的相机以完成拍照。\n当 Android 系统请求将相机权限授予 HelloCamera2 时，请选择『允许』。")
+                        .setDeniedMessage("如果您不对 HelloCamera2 授予相机权限，您将不能完成拍照。")
+                        .setRationaleConfirmText("确定")
+                        .setDeniedCloseButtonText("关闭")
+                        .setGotoSettingButtonText("设定")
+                        .setPermissionListener(object : PermissionListener {
+                            override fun onPermissionGranted() {
+                                val intent: Intent
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                    intent = Intent(this@AddPersonActivity, Camera2Activity::class.java)
+                                } else {
+                                    AlertDialog.Builder(this@AddPersonActivity)
+                                            .setTitle("不支持的 API Level")
+                                            .setMessage("Camera2 API 仅在 API Level 21 以上可用, 当前 API Level : " + Build.VERSION.SDK_INT)
+                                            .setPositiveButton("确定") { dialog, which -> dialog.dismiss() }
+                                            .show()
+                                    return
+                                }
+                                mFile = CommonUtils.createImageFile(System.currentTimeMillis().toString() + ".jpg")
+                                //文件保存的路径和名称
+                                intent.putExtra("file", mFile.toString())
+                                //拍照时的提示文本
+                                intent.putExtra("hint", "请将证件放入框内。将裁剪图片，只保留框内区域的图像")
+                                //是否使用整个画面作为取景区域(全部为亮色区域)
+                                intent.putExtra("hideBounds", false)
+                                //最大允许的拍照尺寸（像素数）
+                                intent.putExtra("maxPicturePixels", 3840 * 2160)
+                                startActivityForResult(intent, 2)
+                            }
+
+                            override fun onPermissionDenied(arrayList: java.util.ArrayList<String>) {}
+                        }).setPermissions(*arrayOf(Manifest.permission.CAMERA)).check()
+            } else {
+                TedPermission.with(this)
+                        .setRationaleMessage("我们需要使用您设备上的相机以完成拍照。\n当 Android 系统请求将相机权限授予 HelloCamera2 时，请选择『允许』。")
+                        .setDeniedMessage("如果您不对 HelloCamera2 授予相机权限，您将不能完成拍照。")
+                        .setRationaleConfirmText("确定")
+                        .setDeniedCloseButtonText("关闭")
+                        .setGotoSettingButtonText("设定")
+                        .setPermissionListener(object : PermissionListener {
+                            override fun onPermissionGranted() {
+                                val intent: Intent
+                                intent = Intent(this@AddPersonActivity, CameraActivity::class.java)
+                                mFile = CommonUtils.createImageFile("mFile")
+                                //文件保存的路径和名称
+                                intent.putExtra("file", mFile.toString())
+                                //拍照时的提示文本
+                                intent.putExtra("hint", "请将证件放入框内。将裁剪图片，只保留框内区域的图像")
+                                //是否使用整个画面作为取景区域(全部为亮色区域)
+                                intent.putExtra("hideBounds", false)
+                                //最大允许的拍照尺寸（像素数）
+                                intent.putExtra("maxPicturePixels", 3840 * 2160)
+                                startActivityForResult(intent, 2)
+                            }
+
+                            override fun onPermissionDenied(arrayList: java.util.ArrayList<String>) {}
+                        }).setPermissions(*arrayOf(Manifest.permission.CAMERA)).check()
+            }
         }
         next_btn.setOnClickListener {
             if (check_null()) {
@@ -354,7 +542,26 @@ class AddPersonActivity : BaseActivity<ActivityAddPersonBinding>(), AbsModule.On
                     check_two_img()
                 }
             }
+        } else if (resultCode == 200) {
+            var bit = BitmapUtils.compressToResolution(mFile, 1920 * 1080)
+            when (requestCode) {
+                1 -> {
+                    dialog!!.show()
+                    control!!.ocr_sfz(bit)
+                }
+                2 -> {
+                    dialog!!.show()
+                    control!!.ocr_js(bit)
+                }
+                77 -> {
+                    xc_url = mFile.toString()
+                    xc_img = compressImage(uu.rotaingImageView(90, compressImage(bit)))
+                    real_user_iv.setImageBitmap(xc_img)
+                    check_two_img()
+                }
+            }
         }
+
     }
 
     internal var idCardReader: IDCardReader? = null

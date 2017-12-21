@@ -61,7 +61,7 @@ class VehicleModel : Serializable {
     var VehiclePersonCompare = ""
     var VehicleReceivePerson = ""
     var VehicleReceiveUser = ""
-    var VehicleTakeState = "01"
+    var VehicleTakeState = ""
     var VehicleTakePerson = ""
     var VehicleTakePersonNation = ""
     var VehicleTakePersonCertType = ""

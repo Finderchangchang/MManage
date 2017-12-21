@@ -82,7 +82,7 @@ public class CameraSurfaceView extends SurfaceView implements SurfaceHolder.Call
             try {
                 mCamera.setPreviewDisplay(holder);//摄像头画面显示在Surface上
             } catch (IOException e) {
-                e.printStackTrace();
+
             }
             setCameraParams(mCamera, mScreenWidth, mScreenHeight);
         }
@@ -263,11 +263,7 @@ public class CameraSurfaceView extends SurfaceView implements SurfaceHolder.Call
             //Camera.Size s;
             for (Camera.Size size : pictureSizeList) {
                 Log.i("TAG---", size.width + "--" + size.height);
-                if (result == null) {
-                    result = size;
-                } else if (size.width > result.width) {
-                    result = size;
-                }
+                //if()
 //                float curRatio = ((float) size.width) / size.height;
 //                if (curRatio == 4f / 3 && size.width > 600) {// 默认w:h = 4:3
 //                    result = size;

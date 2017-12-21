@@ -8,18 +8,15 @@ import android.view.MenuItem;
 import com.zhy.autolayout.*;
 
 import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
 public abstract class BaseCameraActivity extends AutoLayoutActivity {
 
-    Unbinder mUnbinder;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getContentViewResId());
 
-        mUnbinder = ButterKnife.bind(this);
         preInitData();
     }
 
@@ -44,8 +41,5 @@ public abstract class BaseCameraActivity extends AutoLayoutActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (mUnbinder != null) {
-            mUnbinder.unbind();
-        }
     }
 }

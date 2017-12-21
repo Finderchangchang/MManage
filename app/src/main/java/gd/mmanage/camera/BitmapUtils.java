@@ -1,6 +1,5 @@
 package gd.mmanage.camera;
 
-import android.app.Application;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;

@@ -35,7 +35,7 @@
 
             <LinearLayout
                 android:id="@+id/view_camera_dark1"
-                android:layout_width="496px"
+                android:layout_width="516px"
                 android:layout_height="match_parent"
                 android:gravity="center_horizontal"
                 android:orientation="vertical">
@@ -47,7 +47,7 @@
                     android:background="#8A000000"
                     android:gravity="center"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="28px" />
+                    android:textSize="38px" />
 
                 <FrameLayout
                     android:layout_width="match_parent"
@@ -124,7 +124,7 @@
             android:layout_width="204px"
             android:layout_height="204px"
             android:layout_gravity="center_vertical|left"
-            android:layout_marginLeft="600px"
+            android:layout_marginLeft="550px"
             android:src="@drawable/selector" />
 
     </FrameLayout>

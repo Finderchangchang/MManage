@@ -54,16 +54,15 @@
         <meta-data
             android:name="design_height"
             android:value="1280"></meta-data>
-
         <activity
             android:name=".ui.LoginActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-        <service android:name=".service.LongRunningService" />
-
-        <receiver android:name=".service.AlarmReceiver" />
-
-        <activity android:name=".ui.inbound.AddInBoundActivity" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".camera.CameraActivity"
             android:configChanges="locale|layoutDirection|orientation|screenSize|keyboardHidden|keyboard|screenLayout"
@@ -76,13 +75,12 @@
             android:screenOrientation="landscape"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity android:name=".camera.DDActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <service android:name=".service.LongRunningService" />
+
+        <receiver android:name=".service.AlarmReceiver" />
+
+        <activity android:name=".ui.inbound.AddInBoundActivity" />
         <activity android:name=".ui.inbound.ChoiceInBoundActivity" />
         <activity android:name=".ui.CameraPersonActivity" />
         <activity android:name=".ui.main.MainActivity" />
@@ -121,8 +119,7 @@
         <activity android:name=".ui.SearchActivity" />
         <activity android:name=".ui.inbound.SearchInBoundsActivity" />
         <activity android:name=".ui.config.UpdatePwdActivity" />
-        <activity android:name=".ui.config.RegCompanyActivity" />
-        <activity android:name=".camera.DCActivity"></activity>
+        <activity android:name=".ui.config.RegCompanyActivity"></activity>
     </application>
 
 </manifest>

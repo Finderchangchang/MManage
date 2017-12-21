@@ -1,6 +1,7 @@
 package gd.mmanage.camera;
 
 import android.hardware.Camera;
+import android.view.TextureView;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
@@ -16,7 +17,6 @@ import java.io.FileOutputStream;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import butterknife.BindView;
 import gd.mmanage.R;
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
@@ -28,16 +28,11 @@ import io.reactivex.schedulers.Schedulers;
  */
 @SuppressWarnings("deprecation")
 public class CameraActivity extends BaseCameraActivity {
-
-    @BindView(R.id.fl_camera_preview)
+    TextureView mTextureView;
     FrameLayout mFlCameraPreview;
-    @BindView(R.id.iv_camera_button)
     ImageView mIvCameraButton;
-    @BindView(R.id.tv_camera_hint)
     TextView mTvCameraHint;
-    @BindView(R.id.view_camera_dark0)
     View mViewDark0;
-    @BindView(R.id.view_camera_dark1)
     LinearLayout mViewDark1;
 
     File mFile;
@@ -69,6 +64,11 @@ public class CameraActivity extends BaseCameraActivity {
     @SuppressWarnings("ResultOfMethodCallIgnored")
     @Override
     protected void preInitData() {
+        mTextureView = (TextureView) findViewById(R.id.texture_camera_preview);
+        mIvCameraButton = (ImageView) findViewById(R.id.iv_camera_button);
+        mTvCameraHint = (TextView) findViewById(R.id.tv_camera_hint);
+        mViewDark0 = findViewById(R.id.view_camera_dark0);
+        mViewDark1 = (LinearLayout) findViewById(R.id.view_camera_dark1);
         mFile = new File(getIntent().getStringExtra("file"));
         mTvCameraHint.setText(getIntent().getStringExtra("hint"));
         if (getIntent().getBooleanExtra("hideBounds", false)) {
@@ -78,33 +78,36 @@ public class CameraActivity extends BaseCameraActivity {
         mMaxPicturePixels = getIntent().getIntExtra("maxPicturePixels", 3840 * 2160);
         initCamera();
         RxView.clicks(mIvCameraButton)
-              //防止手抖连续多次点击造成错误
-              .throttleFirst(2, TimeUnit.SECONDS)
-              .observeOn(AndroidSchedulers.mainThread())
-              .subscribe(aVoid -> {
-                  if (mCamera == null) return;
-                  mCamera.takePicture(null, null, (data, camera) -> Observable
-                          .create((ObservableOnSubscribe<Integer>) emitter -> {
-                              try {
-                                  if (mFile.exists()) mFile.delete();
-                                  FileOutputStream fos = new FileOutputStream(mFile);
-                                  fos.write(data);
-                                  try {fos.close();} catch (Exception ignored) {}
-                                  emitter.onNext(200);
-                              } catch (Exception e) {
-                                  emitter.onError(e);
-                              }
-                          }).subscribeOn(Schedulers.io())
-                          .observeOn(AndroidSchedulers.mainThread())
-                          .subscribe(integer -> {
-                              setResult(integer, getIntent().putExtra("file", mFile.toString()));
-                              mFinishCalled = true;
-                              finish();
-                          }, throwable -> {
-                              throwable.printStackTrace();
-                              mCamera.startPreview();
-                          }));
-              });
+                //防止手抖连续多次点击造成错误
+                .throttleFirst(2, TimeUnit.SECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(aVoid -> {
+                    if (mCamera == null) return;
+                    mCamera.takePicture(null, null, (data, camera) -> Observable
+                            .create((ObservableOnSubscribe<Integer>) emitter -> {
+                                try {
+                                    if (mFile.exists()) mFile.delete();
+                                    FileOutputStream fos = new FileOutputStream(mFile);
+                                    fos.write(data);
+                                    try {
+                                        fos.close();
+                                    } catch (Exception ignored) {
+                                    }
+                                    emitter.onNext(200);
+                                } catch (Exception e) {
+                                    emitter.onError(e);
+                                }
+                            }).subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(integer -> {
+                                setResult(integer, getIntent().putExtra("file", mFile.toString()));
+                                mFinishCalled = true;
+                                finish();
+                            }, throwable -> {
+                                throwable.printStackTrace();
+                                mCamera.startPreview();
+                            }));
+                });
     }
 
     void initCamera() {
@@ -114,7 +117,8 @@ public class CameraActivity extends BaseCameraActivity {
                 .subscribe(camera -> {
                     mCamera = camera;
                     mPreview = new CameraPreview(CameraActivity.this, mCamera, (throwable, showToast) -> {
-                        if (showToast) Toast.makeText(this, "开启相机预览失败，再试一次吧", Toast.LENGTH_LONG).show();
+                        if (showToast)
+                            Toast.makeText(this, "开启相机预览失败，再试一次吧", Toast.LENGTH_LONG).show();
                         mFinishCalled = true;
                         finish();
                     });
@@ -132,7 +136,8 @@ public class CameraActivity extends BaseCameraActivity {
         Camera.Parameters params = mCamera.getParameters();
         //若相机支持自动开启/关闭闪光灯，则使用. 否则闪光灯总是关闭的.
         List<String> flashModes = params.getSupportedFlashModes();
-        if (flashModes != null && flashModes.contains(Camera.Parameters.FLASH_MODE_AUTO)) params.setFlashMode(Camera.Parameters.FLASH_MODE_AUTO);
+        if (flashModes != null && flashModes.contains(Camera.Parameters.FLASH_MODE_AUTO))
+            params.setFlashMode(Camera.Parameters.FLASH_MODE_AUTO);
         mPreviewBestFound = false;
         mPictureBestFound = false;
         //寻找最佳预览尺寸，即满足16:9比例，且不超过1920x1080的最大尺寸;若找不到，则使用满足16:9的最大尺寸.
@@ -199,7 +204,8 @@ public class CameraActivity extends BaseCameraActivity {
                 try {
                     params.setPictureSize(1920, 1080);
                     mCamera.setParameters(params);
-                } catch (Exception ignored) {}
+                } catch (Exception ignored) {
+                }
             }
         }
     }

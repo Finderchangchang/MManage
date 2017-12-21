@@ -29,13 +29,13 @@ class EmployeeModel : Serializable {
     /// <summary>
     /// 人员民族
     /// </summary>
-    var EmployeeNation = ""
+    var EmployeeNation = "01"
 
 
     /// <summary>
     /// 人员证件类型
     /// </summary>
-    var EmployeeCertType = "01"
+    var EmployeeCertType = "1"
     //企业编码
     var EnterpriseId = ""
 
