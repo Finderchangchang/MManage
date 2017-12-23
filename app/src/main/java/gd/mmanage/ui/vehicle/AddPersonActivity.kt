@@ -196,9 +196,9 @@ class AddPersonActivity : BaseActivity<ActivityAddPersonBinding>(), AbsModule.On
                         binding.model = model
                     } else {
                         toast("识别失败")
+                        dialog!!.dismiss()
                     }
                 }
-                dialog!!.dismiss()
             }
         }
     }
@@ -214,6 +214,8 @@ class AddPersonActivity : BaseActivity<ActivityAddPersonBinding>(), AbsModule.On
         if (xc_img != null && user_img != null) {
             dialog!!.show()
             control!!.check_two_img(xc_img!!, user_img!!)
+        } else {
+            dialog!!.dismiss()
         }
     }
 
@@ -263,7 +265,7 @@ class AddPersonActivity : BaseActivity<ActivityAddPersonBinding>(), AbsModule.On
                                             .show()
                                     return
                                 }
-                                mFile = CommonUtils.createImageFile(System.currentTimeMillis().toString() + ".jpg")
+                                mFile = CommonUtils.createImageFile("mFile")
                                 //文件保存的路径和名称
                                 intent.putExtra("file", mFile.toString())
                                 //拍照时的提示文本
@@ -332,11 +334,11 @@ class AddPersonActivity : BaseActivity<ActivityAddPersonBinding>(), AbsModule.On
                                             .show()
                                     return
                                 }
-                                mFile = CommonUtils.createImageFile(System.currentTimeMillis().toString() + ".jpg")
+                                mFile = CommonUtils.createImageFile("mFile")
                                 //文件保存的路径和名称
                                 intent.putExtra("file", mFile.toString())
                                 //拍照时的提示文本
-                                intent.putExtra("hint", "请将证件放入框内。将裁剪图片，只保留框内区域的图像")
+                                intent.putExtra("hint", "")
                                 //是否使用整个画面作为取景区域(全部为亮色区域)
                                 intent.putExtra("hideBounds", false)
                                 //最大允许的拍照尺寸（像素数）
@@ -361,7 +363,7 @@ class AddPersonActivity : BaseActivity<ActivityAddPersonBinding>(), AbsModule.On
                                 //文件保存的路径和名称
                                 intent.putExtra("file", mFile.toString())
                                 //拍照时的提示文本
-                                intent.putExtra("hint", "请将证件放入框内。将裁剪图片，只保留框内区域的图像")
+                                intent.putExtra("hint", "")
                                 //是否使用整个画面作为取景区域(全部为亮色区域)
                                 intent.putExtra("hideBounds", false)
                                 //最大允许的拍照尺寸（像素数）
@@ -397,7 +399,7 @@ class AddPersonActivity : BaseActivity<ActivityAddPersonBinding>(), AbsModule.On
                                             .show()
                                     return
                                 }
-                                mFile = CommonUtils.createImageFile(System.currentTimeMillis().toString() + ".jpg")
+                                mFile = CommonUtils.createImageFile("mFile")
                                 //文件保存的路径和名称
                                 intent.putExtra("file", mFile.toString())
                                 //拍照时的提示文本

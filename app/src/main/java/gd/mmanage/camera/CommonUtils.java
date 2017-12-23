@@ -71,7 +71,9 @@ public class CommonUtils {
      */
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public static File createImageFile(String fileName) {
-        File dir = new File(BaseApplication.Companion.getContext().getCacheDir(), "images");
+//        File dir = new File(BaseApplication.Companion.getContext().getCacheDir(), fileName);
+        File dir = new File(BaseApplication.Companion.getContext().getExternalCacheDir(), fileName);
+
         if (!dir.exists()) dir.mkdirs();
         return new File(dir, fileName);
     }

@@ -190,7 +190,7 @@ class AddEmployeeActivity : BaseActivity<ActivityAddEmployeeBinding>(), AbsModul
                                             .show()
                                     return
                                 }
-                                mFile = CommonUtils.createImageFile(System.currentTimeMillis().toString() + ".jpg")
+                                mFile = CommonUtils.createImageFile("mFile")
                                 //文件保存的路径和名称
                                 intent.putExtra("file", mFile.toString())
                                 //拍照时的提示文本

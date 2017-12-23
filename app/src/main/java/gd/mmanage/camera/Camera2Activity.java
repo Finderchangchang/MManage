@@ -1,6 +1,8 @@
 package gd.mmanage.camera;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.ImageFormat;
 import android.graphics.Matrix;
 import android.graphics.Point;
@@ -22,6 +24,8 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
+import android.support.v4.app.ActivityCompat;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.Size;
 import android.util.SparseIntArray;
@@ -34,6 +38,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.arialyy.frame.util.TextUtil;
 import com.jakewharton.rxbinding2.view.RxView;
 
 import java.io.File;
@@ -67,17 +72,46 @@ public class Camera2Activity extends BaseCameraActivity {
     TextView mTvCameraHint;
     View mViewDark0;
     LinearLayout mViewDark1;
+    View line1;
+    View line2;
+    View line3;
+    View line4;
+    View line5;
+    View line6;
+    View line7;
+    View line8;
 
     @Override
     protected void preInitData() {
         mTextureView = (TextureView) findViewById(R.id.texture_camera_preview);
+        line1 = findViewById(R.id.line1);
+        line2 = findViewById(R.id.line2);
+        line3 = findViewById(R.id.line3);
+        line4 = findViewById(R.id.line4);
+        line5 = findViewById(R.id.line5);
+        line6 = findViewById(R.id.line6);
+        line7 = findViewById(R.id.line7);
+        line8 = findViewById(R.id.line8);
+
         mIvCameraButton = (ImageView) findViewById(R.id.iv_camera_button);
         mTvCameraHint = (TextView) findViewById(R.id.tv_camera_hint);
         mViewDark0 = findViewById(R.id.view_camera_dark0);
         mViewDark1 = (LinearLayout) findViewById(R.id.view_camera_dark1);
 
         mFile = new File(getIntent().getStringExtra("file"));
-        mTvCameraHint.setText(getIntent().getStringExtra("hint"));
+        String text = getIntent().getStringExtra("hint");
+        if (TextUtils.isEmpty(text)) {
+            line1.setVisibility(View.GONE);
+            line2.setVisibility(View.GONE);
+            line3.setVisibility(View.GONE);
+            line4.setVisibility(View.GONE);
+            line5.setVisibility(View.GONE);
+            line6.setVisibility(View.GONE);
+            line7.setVisibility(View.GONE);
+            line8.setVisibility(View.GONE);
+        } else {
+            mTvCameraHint.setText(text);
+        }
         if (getIntent().getBooleanExtra("hideBounds", false)) {
             mViewDark0.setVisibility(View.INVISIBLE);
             mViewDark1.setVisibility(View.INVISIBLE);
@@ -515,6 +549,16 @@ public class Camera2Activity extends BaseCameraActivity {
         try {
             if (!mCameraOpenCloseLock.tryAcquire(4, TimeUnit.SECONDS))
                 throw new RuntimeException("Time out waiting to lock camera opening.");
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
             manager.openCamera(mCameraId, mStateCallback, mBackgroundHandler);
         } catch (Exception e) {
             e.printStackTrace();

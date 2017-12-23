@@ -1,6 +1,7 @@
 package gd.mmanage.camera;
 
 import android.hardware.Camera;
+import android.text.TextUtils;
 import android.view.TextureView;
 import android.view.View;
 import android.view.WindowManager;
@@ -34,7 +35,14 @@ public class CameraActivity extends BaseCameraActivity {
     TextView mTvCameraHint;
     View mViewDark0;
     LinearLayout mViewDark1;
-
+    View line1;
+    View line2;
+    View line3;
+    View line4;
+    View line5;
+    View line6;
+    View line7;
+    View line8;
     File mFile;
     Camera mCamera;
     CameraPreview mPreview;
@@ -64,13 +72,33 @@ public class CameraActivity extends BaseCameraActivity {
     @SuppressWarnings("ResultOfMethodCallIgnored")
     @Override
     protected void preInitData() {
+        line1 = findViewById(R.id.line1);
+        line2 = findViewById(R.id.line2);
+        line3 = findViewById(R.id.line3);
+        line4 = findViewById(R.id.line4);
+        line5 = findViewById(R.id.line5);
+        line6 = findViewById(R.id.line6);
+        line7 = findViewById(R.id.line7);
+        line8 = findViewById(R.id.line8);
         mTextureView = (TextureView) findViewById(R.id.texture_camera_preview);
         mIvCameraButton = (ImageView) findViewById(R.id.iv_camera_button);
         mTvCameraHint = (TextView) findViewById(R.id.tv_camera_hint);
         mViewDark0 = findViewById(R.id.view_camera_dark0);
         mViewDark1 = (LinearLayout) findViewById(R.id.view_camera_dark1);
         mFile = new File(getIntent().getStringExtra("file"));
-        mTvCameraHint.setText(getIntent().getStringExtra("hint"));
+        String text = getIntent().getStringExtra("hint");
+        if (TextUtils.isEmpty(text)) {
+            line1.setVisibility(View.GONE);
+            line2.setVisibility(View.GONE);
+            line3.setVisibility(View.GONE);
+            line4.setVisibility(View.GONE);
+            line5.setVisibility(View.GONE);
+            line6.setVisibility(View.GONE);
+            line7.setVisibility(View.GONE);
+            line8.setVisibility(View.GONE);
+        } else {
+            mTvCameraHint.setText(text);
+        }
         if (getIntent().getBooleanExtra("hideBounds", false)) {
             mViewDark0.setVisibility(View.INVISIBLE);
             mViewDark1.setVisibility(View.INVISIBLE);

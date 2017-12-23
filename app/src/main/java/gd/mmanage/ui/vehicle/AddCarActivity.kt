@@ -335,7 +335,7 @@ class AddCarActivity : BaseActivity<ActivityAddCarBinding>(), AbsModule.OnCallba
                                 //文件保存的路径和名称
                                 intent.putExtra("file", mFile.toString())
                                 //拍照时的提示文本
-                                intent.putExtra("hint", "请将证件放入框内。将裁剪图片，只保留框内区域的图像")
+                                intent.putExtra("hint", "")
                                 //是否使用整个画面作为取景区域(全部为亮色区域)
                                 intent.putExtra("hideBounds", false)
                                 //最大允许的拍照尺寸（像素数）
@@ -360,7 +360,7 @@ class AddCarActivity : BaseActivity<ActivityAddCarBinding>(), AbsModule.OnCallba
                                 //文件保存的路径和名称
                                 intent.putExtra("file", mFile.toString())
                                 //拍照时的提示文本
-                                intent.putExtra("hint", "请将证件放入框内。将裁剪图片，只保留框内区域的图像")
+                                intent.putExtra("hint", "")
                                 //是否使用整个画面作为取景区域(全部为亮色区域)
                                 intent.putExtra("hideBounds", false)
                                 //最大允许的拍照尺寸（像素数）
