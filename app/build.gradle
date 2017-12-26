@@ -12,8 +12,8 @@ android {
         applicationId "gd.mmanage"
         minSdkVersion 15
         targetSdkVersion 25
-        versionCode 4
-        versionName "1.0.0.4"
+        versionCode 5
+        versionName "1.0.0.5"
         multiDexEnabled true
     }
     buildTypes {
@@ -75,6 +75,9 @@ dependencies {
     compile 'gun0912.ted:tedpermission-rx2:2.+'
     compile 'com.facebook.fresco:fresco:+'
     compile 'com.zhy:autolayout:+'
+//    compile 'com.jph.takephoto:takephoto_library:4.0.3'
+//    compile 'com.lovedise:permissiongen:0.0.6'
+
 //    compile 'com.jakewharton:butterknife:+'
     /*apt 'com.jakewharton:butterknife-compiler:8.0.1'
     compile 'com.jakewharton:butterknife:8.0.1'*/

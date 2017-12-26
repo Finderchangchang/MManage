@@ -29,7 +29,8 @@
             android:id="@+id/blue_set_mv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:menu_left_tv="蓝牙选择" />
+            app:menu_left_tv="蓝牙选择"
+            app:menu_right_iv_show="true" />
 
         <View
             android:layout_width="match_parent"
@@ -40,7 +41,8 @@
             android:id="@+id/update_pwd_mv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:menu_left_tv="密码修改" />
+            app:menu_left_tv="密码修改"
+            app:menu_right_iv_show="true" />
 
         <View
             android:layout_width="match_parent"
@@ -51,7 +53,8 @@
             android:id="@+id/update_code_mv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:menu_left_tv="字典更新" />
+            app:menu_left_tv="字典更新"
+            app:menu_right_iv_show="true" />
 
         <View
             android:layout_width="match_parent"
@@ -62,6 +65,21 @@
             android:id="@+id/version_mv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:menu_left_tv="当前版本" />
+            app:menu_left_tv="当前版本"
+            app:menu_right_iv_show="true" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/line_bg" />
+
+        <net.tsz.afinal.view.MenuView
+            android:id="@+id/open_sys_camera_mv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:menu_left_tv="打开系统相机"
+            app:menu_right_iv_show="false"
+            app:menu_right_tv="√" />
+
     </LinearLayout>
 </layout>

@@ -37,7 +37,7 @@ class LoginModule(context: Context?) : BaseModule(context) {
         map.put("imei", Utils.imei)//862387039569262
         //map.put("imei", "866950027810265")//张泽的设备
 
-        //map.put("imei", "867140036608871")//862387039569262  864566039449389 35460207860591
+        map.put("imei", "867140036608871")//862387039569262  864566039449389 35460207860591
 
 //        val genType = javaClass.genericSuperclass
 //        val params = (genType as ParameterizedType).actualTypeArguments

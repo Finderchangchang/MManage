@@ -40,8 +40,8 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(), AbsModule.OnCallback
         }
         id_et.setText(Utils.getCache(sp.user_id))
         pwd_et.setText(Utils.getCache(sp.pwd))
-        if (TextUtils.isEmpty(Utils.getCache(sp.cy_ry))) {
-            Utils.putCache(sp.cy_ry, "")
+        if (TextUtils.isEmpty(Utils.getCache(sp.sys_camera_show))) {
+            Utils.putCache(sp.sys_camera_show, "×")
         }
         //登录按钮
         login_btn.setOnClickListener {

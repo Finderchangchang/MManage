@@ -4,6 +4,7 @@ import android.bluetooth.BluetoothAdapter
 import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
+import android.support.v7.app.AlertDialog
 import com.jiangyy.easydialog.LoadingDialog
 import gd.mmanage.R
 import gd.mmanage.base.BaseActivity
@@ -36,6 +37,34 @@ class SetActivity : BaseActivity<ActivitySetBinding>() {
             startService(Intent(this, DownConfigService::class.java))
         }
         version_mv.setRight_tv(Utils.version)
+        open_sys_camera_mv.setRight_tv(Utils.getCache(sp.sys_camera_show))
+        open_sys_camera_mv.setOnClickListener {
+            var show_result = Utils.getCache(sp.sys_camera_show)
+            when (show_result) {
+                "×" -> {//打开系统相机
+                    var builder = AlertDialog.Builder(this);
+                    builder.setTitle("提示");
+                    builder.setMessage("系统拍照功能将打开，请确保拍照方向");
+                    builder.setNegativeButton("取消", null);
+                    builder.setPositiveButton("确定") { a, b ->
+                        open_sys_camera_mv.setRight_tv("√")
+                        Utils.putCache(sp.sys_camera_show, "√")
+                    }
+                    builder.show();
+                }
+                "√" -> {//关闭系统相机
+                    var builder = AlertDialog.Builder(this);
+                    builder.setTitle("提示");
+                    builder.setMessage("您将关闭系统拍照功能将打开，请确保关闭以后，可以拍照");
+                    builder.setNegativeButton("取消", null);
+                    builder.setPositiveButton("确定") { a, b ->
+                        open_sys_camera_mv.setRight_tv("×")
+                        Utils.putCache(sp.sys_camera_show, "×")
+                    }
+                    builder.show();
+                }
+            }
+        }
     }
 
     override fun setLayoutId(): Int {

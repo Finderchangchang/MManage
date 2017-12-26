@@ -13,4 +13,5 @@ object sp {
     var blueToothName = "BlueToothName"
     var blueToothAddress = "BlueToothAddress"
     var cy_ry = "cy_ry"//从业人员选择的id
+    var sys_camera_show = "sys_camera_show"//控制系统相机打开的问题
 }

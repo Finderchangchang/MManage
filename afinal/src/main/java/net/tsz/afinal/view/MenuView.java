@@ -19,15 +19,17 @@ import net.tsz.afinal.R;
 
 public class MenuView extends LinearLayout {
     int str_left_iv;//左侧图
-    int str_right_iv;//右侧图（默认为箭头）
+    int str_right_iv = -1;//右侧图（默认为箭头）
     String str_left_tv;//左侧文字
     String str_right_tv;//右侧文字
     int str_left_tv_color;//左侧文字颜色
     int str_right_tv_color;//右侧文字颜色
+    boolean menu_right_iv_show;//右侧图片显示隐藏
     TextView left_tv;
     TextView right_tv;
     ImageView left_iv;
     ImageView right_iv;
+
     void init(Context context) {
         LayoutInflater.from(context).inflate(R.layout.v_menu, this);
         left_tv = (TextView) findViewById(R.id.left_tv);
@@ -47,20 +49,20 @@ public class MenuView extends LinearLayout {
                 right_tv.setTextColor(str_right_tv_color);
             }
         }
-        if (str_left_iv != 0) {
-            left_iv.setImageResource(str_left_iv);
-            left_iv.setVisibility(VISIBLE);
+//        if (str_left_iv != 0) {
+//            left_iv.setImageResource(str_left_iv);
+//            left_iv.setVisibility(VISIBLE);
+//        } else {
+//            left_iv.setVisibility(GONE);
+//        }
+
+
+        if (menu_right_iv_show) {
+            right_iv.setImageResource(str_right_iv);
+            right_iv.setVisibility(VISIBLE);
         } else {
-            left_iv.setVisibility(GONE);
+            right_iv.setVisibility(GONE);
         }
-
-
-        //if (str_right_iv != 0) {
-        //    right_iv.setImageResource(str_right_iv);
-        //    right_iv.setVisibility(VISIBLE);
-        //} else {
-        //    right_iv.setVisibility(GONE);
-        //}
     }
 
     public MenuView(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -72,7 +74,7 @@ public class MenuView extends LinearLayout {
         str_left_tv_color = a.getColor(R.styleable.MenuView_menu_left_tv_color, 0);
         str_right_tv_color = a.getColor(R.styleable.MenuView_menu_right_tv_color, 0);
         str_right_iv = a.getResourceId(R.styleable.MenuView_menu_right_iv, 0);
-
+        menu_right_iv_show = a.getBoolean(R.styleable.MenuView_menu_right_iv_show, true);
         a.recycle();
         init(context);
     }
