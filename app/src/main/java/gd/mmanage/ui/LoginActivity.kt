@@ -119,6 +119,11 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(), AbsModule.OnCallback
                     Utils.putCache(sp.token, obb)
                     Utils.putCache(sp.user_id, id_et.text.toString().trim())//姓名
                     Utils.putCache(sp.pwd, pwd_et.text.toString().trim())//姓名
+                    if (success.message == "0") {
+                        Utils.putCache(sp.can_update, "0")
+                    } else {
+                        Utils.putCache(sp.can_update, "1")
+                    }
                 } else {
                     if (!TextUtils.isEmpty(success.message)) toast(success.message)
                 }

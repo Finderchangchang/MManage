@@ -21,6 +21,7 @@ import gd.mmanage.model.EnterpriseModel
 import gd.mmanage.model.NormalRequest
 import gd.mmanage.model.UserModel
 import gd.mmanage.ui.config.SetActivity
+import kotlinx.android.synthetic.main.frag_user.*
 import net.tsz.afinal.FinalDb
 
 /**
@@ -68,7 +69,14 @@ class UserFragment : BaseFragment<FragUserBinding>(), AbsModule.OnCallback {
         control!!.get_user_info()
 
         db = FinalDb.create(context)
-
+        if (Utils.getCache(sp.can_update) == "0") {
+            update_iv.visibility = View.VISIBLE
+        } else {
+            update_iv.visibility = View.GONE
+        }
+        update_iv.setOnClickListener {
+            startActivity(Intent(HomeActivity.context, UpdateCompanyActivity::class.java).putExtra("model", binding.model))
+        }
     }
 
     override fun load_view(view: View?) {

@@ -6,6 +6,7 @@ package gd.mmanage.config
 object sp {
     var user_id = "user_id"
     var pwd = "pwd"
+    var can_update = "can_update"
     var token = "token"
     var down_all = "down_all"
     var equipment_id = "equipment_id"//设备id

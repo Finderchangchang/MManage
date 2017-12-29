@@ -1,10 +1,12 @@
 package gd.mmanage.model
 
+import java.io.Serializable
+
 /**
  * 企业信息
  * Created by Administrator on 2017/11/15.
  */
-class EnterpriseModel {
+class EnterpriseModel : Serializable {
     // 企业编码
     var EnterpriseId: String = ""
     // 企业名称
@@ -15,6 +17,8 @@ class EnterpriseModel {
     var EnterpriseUSCC: String = ""
     // 企业修车类型
     var EnterpriseVehicleType: String = ""
+    var EnterpriseVehicleTypeName: String = ""
+
     // 企业状态
     var EnterpriseState: String = ""
     // 企业地址
