@@ -47,7 +47,8 @@
                     android:paddingBottom="6dp"
                     android:paddingLeft="12dp"
                     android:paddingTop="6dp"
-                    android:text="企业信息只可修改一次，请认真核对" />
+                    android:text="企业信息只可修改一次，请认真核对"
+                    android:textColor="@color/red" />
 
                 <LinearLayout
                     android:id="@+id/ll1"
@@ -74,7 +75,7 @@
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_marginRight="20dp"
-                        android:src="@mipmap/user" />
+                        android:src="@mipmap/ic_launcher" />
                 </LinearLayout>
 
                 <View
@@ -86,7 +87,10 @@
                     android:id="@+id/ll3"
                     style="@style/user_et"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -96,7 +100,7 @@
                     <EditText
                         android:id="@+id/tv3"
                         android:layout_width="match_parent"
-                        android:layout_height="30dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
                         android:background="@null"
                         android:text="@={model.enterpriseAddress}"
@@ -307,7 +311,7 @@
                             android:layout_width="80dp"
                             android:layout_height="80dp"
                             android:scaleType="fitCenter"
-                            android:src="@mipmap/ic_launcher" />
+                            android:src="@mipmap/src" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -328,7 +332,7 @@
                             android:layout_width="80dp"
                             android:layout_height="80dp"
                             android:scaleType="fitCenter"
-                            android:src="@mipmap/ic_launcher" />
+                            android:src="@mipmap/src" />
 
                         <TextView
                             android:layout_width="wrap_content"

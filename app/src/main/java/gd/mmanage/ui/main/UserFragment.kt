@@ -1,5 +1,6 @@
 package gd.mmanage.ui.main
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -75,13 +76,22 @@ class UserFragment : BaseFragment<FragUserBinding>(), AbsModule.OnCallback {
             update_iv.visibility = View.GONE
         }
         update_iv.setOnClickListener {
-            startActivity(Intent(HomeActivity.context, UpdateCompanyActivity::class.java).putExtra("model", binding.model))
+            startActivityForResult(Intent(HomeActivity.context, UpdateCompanyActivity::class.java).putExtra("model", binding.model), 1)
         }
     }
 
     override fun load_view(view: View?) {
         set_iv = view!!.findViewById(R.id.set_iv) as ImageView
         set_iv!!.setOnClickListener { startActivity(Intent(HomeActivity.context, SetActivity::class.java)) }
+    }
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == 77) {
+            update_iv.visibility = View.GONE
+            control!!.get_user_info()
+        }
     }
 
     private var control: UserModule? = null

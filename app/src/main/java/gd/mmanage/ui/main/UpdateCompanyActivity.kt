@@ -1,27 +1,55 @@
 package gd.mmanage.ui.main
 
+import android.content.Intent
 import android.graphics.Bitmap
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
+import com.arialyy.frame.module.AbsModule
+import com.jiangyy.easydialog.LoadingDialog
 import gd.mmanage.R
 import gd.mmanage.base.BaseActivity
 import gd.mmanage.config.LQRPhotoSelectUtils
+import gd.mmanage.control.UserModule
 import gd.mmanage.databinding.ActivityUpdateCompanyBinding
+import gd.mmanage.method.ImgUtils
 import gd.mmanage.method.Utils.compressImage
 import gd.mmanage.method.uu
 import gd.mmanage.model.CodeModel
 import gd.mmanage.model.EnterpriseModel
+import gd.mmanage.model.FileModel
+import gd.mmanage.model.NormalRequest
 import kotlinx.android.synthetic.main.activity_update_company.*
 import net.tsz.afinal.FinalDb
+import org.json.JSONArray
 
-class UpdateCompanyActivity : BaseActivity<ActivityUpdateCompanyBinding>() {
+class UpdateCompanyActivity : BaseActivity<ActivityUpdateCompanyBinding>(), AbsModule.OnCallback {
+    override fun onSuccess(result: Int, success: Any?) {
+        success as NormalRequest<JSONArray>
+        if (success.code == 0) {
+            setResult(77)
+            toast("修改成功")
+            finish()
+        } else {
+            toast(success.message)
+        }
+        dialog!!.dismiss()
+    }
+
+    override fun onError(result: Int, error: Any?) {
+        toast("修改失败")
+        dialog!!.dismiss()
+    }
+
     var ve_array: Array<String?>? = null//车辆状态的集合
     var mLqrPhotoSelectUtils: LQRPhotoSelectUtils? = null
     var left_bitmap: Bitmap? = null
     var right_bitmap: Bitmap? = null
+    var dialog: LoadingDialog.Builder? = null
+    var model: EnterpriseModel = EnterpriseModel()
     override fun init(savedInstanceState: Bundle?) {
         super.init(savedInstanceState)
+        dialog = LoadingDialog.Builder(this).setTitle("正在加载...")//初始化dialog
         var model = intent.getSerializableExtra("model") as EnterpriseModel
         binding.model = model
         ll1.setOnClickListener {
@@ -56,11 +84,26 @@ class UpdateCompanyActivity : BaseActivity<ActivityUpdateCompanyBinding>() {
             mLqrPhotoSelectUtils = LQRPhotoSelectUtils(this, LQRPhotoSelectUtils.PhotoSelectListener { outputFile, outputUri ->
                 var bmp = uu.getimage(100, outputFile.absolutePath)
                 right_bitmap = compressImage(uu.rotaingImageView(0, compressImage(bmp)))
-                iv1.setImageBitmap(right_bitmap)
-
+                iv2.setImageBitmap(right_bitmap)
             }, false)
             mLqrPhotoSelectUtils!!.takePhoto()
         }
+        save_btn.setOnClickListener {
+            if (left_bitmap == null || right_bitmap == null) {
+                toast("请将照片补充完整")
+            } else {
+                dialog!!.show()
+                model = binding.model
+                model.files.add(FileModel(ImgUtils().Only_bitmapToBase64(left_bitmap), "工商营业执照", "A1", model.EnterpriseId))
+                model.files.add(FileModel(ImgUtils().Only_bitmapToBase64(right_bitmap), "法人身份证", "A2", model.EnterpriseId))
+                getModule(UserModule::class.java, this).update_company_details(binding.model)
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        mLqrPhotoSelectUtils!!.attachToActivityForResult(requestCode, resultCode, data)
     }
 
     override fun setLayoutId(): Int {

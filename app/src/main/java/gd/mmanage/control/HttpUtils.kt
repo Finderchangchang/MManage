@@ -87,7 +87,6 @@ class HttpUtils<T> {
                 } else {
                     control.callback(back_id, NormalRequest(1, t.Message, t.Data))
                 }
-
             }
 
             override fun onError(call: Call?, response: Response?, e: Exception?) {

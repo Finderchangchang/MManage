@@ -52,6 +52,12 @@
         <item name="android:paddingTop">4dp</item>
         <item name="android:paddingLeft">15dp</item>
     </style>
+    <style name="main_user_et">
+        <item name="android:orientation">horizontal</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingLeft">15dp</item>
+    </style>
 
     <style name="et_style">
         <item name="android:textSize">14sp</item>

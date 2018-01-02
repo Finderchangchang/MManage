@@ -59,4 +59,6 @@ class EnterpriseModel : Serializable {
     var EnterpriseCreateUser: String = ""
     // 备注
     var EnterpriseComment: String = ""
+    var files: ArrayList<FileModel> = ArrayList()
+
 }
