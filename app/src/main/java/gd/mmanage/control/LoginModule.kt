@@ -36,8 +36,8 @@ class LoginModule(context: Context?) : BaseModule(context) {
         }
         //正式地址 登录账号jie 密码 123456 862387039569262
         map.put("imei", Utils.imei)//862387039569262
-        //map.put("imei", "862387039569262")//张泽的设备
-
+//        map.put("imei", "862387039569262")//张泽的设备
+//
         //map.put("imei", "867140036608871")//862387039569262  864566039449389 35460207860591
 
 //        val genType = javaClass.genericSuperclass

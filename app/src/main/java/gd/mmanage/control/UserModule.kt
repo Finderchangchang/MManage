@@ -82,7 +82,7 @@ class UserModule : BaseModule {
                 accountObject = JSONObject(accountStr)
                 accountArray.put(i, accountObject)
             } catch (e: JSONException) {
-
+                var s = ""
             }
         }
         map.put("files", accountArray.toString())

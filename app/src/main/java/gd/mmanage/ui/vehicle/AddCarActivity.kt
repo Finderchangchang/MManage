@@ -178,7 +178,7 @@ class AddCarActivity : BaseActivity<ActivityAddCarBinding>(), AbsModule.OnCallba
                         dialog!!.show()
                     }
                 }
-                dialog!!.dismiss()
+                dialog?.dismiss()
             }
             command.car_manage + 10 -> {
                 success as NormalRequest<*>

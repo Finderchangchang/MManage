@@ -73,7 +73,7 @@ class UserFragment : BaseFragment<FragUserBinding>(), AbsModule.OnCallback {
         if (Utils.getCache(sp.can_update) == "0") {
             update_iv.visibility = View.VISIBLE
         } else {
-            update_iv.visibility = View.GONE
+            update_iv.visibility = View.VISIBLE
         }
         update_iv.setOnClickListener {
             startActivityForResult(Intent(HomeActivity.context, UpdateCompanyActivity::class.java).putExtra("model", binding.model), 1)

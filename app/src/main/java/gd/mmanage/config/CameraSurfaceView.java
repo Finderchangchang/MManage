@@ -210,6 +210,7 @@ public class CameraSurfaceView extends SurfaceView implements SurfaceHolder.Call
         // 根据选出的PictureSize重新设置SurfaceView大小
         float w = picSize.width;
         float h = picSize.height;
+        Log.i("99999999", "AAA" + picSize.width + "---" + picSize.height);
 
         parameters.setPictureSize(picSize.width, picSize.height);
 
@@ -227,6 +228,7 @@ public class CameraSurfaceView extends SurfaceView implements SurfaceHolder.Call
 //            if (preSize.width < 400) {
 //                parameters.setPreviewSize(preSize.width * 3, preSize.height * 3);
 //            } else {
+            Log.i("99999999", "preSize.width, preSize.height" + preSize.width + "---" + preSize.height);
             parameters.setPreviewSize(preSize.width, preSize.height);
 //            }
         }
@@ -264,14 +266,14 @@ public class CameraSurfaceView extends SurfaceView implements SurfaceHolder.Call
             for (Camera.Size size : pictureSizeList) {
                 Log.i("TAG---", size.width + "--" + size.height);
                 //if()
-//                float curRatio = ((float) size.width) / size.height;
-//                if (curRatio == 4f / 3 && size.width > 600) {// 默认w:h = 4:3
-//                    result = size;
-//                    break;
-//                } else if (curRatio == 16f / 9) {
-//                    result = size;
-//                    break;
-//                }
+                float curRatio = ((float) size.width) / size.height;
+                if (curRatio == 4f / 3 && size.width > 640) {// 默认w:h = 4:3
+                    result = size;
+                    break;
+                } else if (curRatio == 16f / 9) {
+                    result = size;
+                    break;
+                }
 //                }else  if(curRatio==)
             }
         }
