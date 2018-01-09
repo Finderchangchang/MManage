@@ -70,7 +70,7 @@ class HomeActivity : BaseActivity<ActivityMainBinding>(), AbsModule.OnCallback {
                     //toast(success.obj)
                     var model = Gson().fromJson<UpdateModel>(success.obj, UpdateModel::class.java)
                     try {
-                        if (model.AndroidVersion.replace(".", "").toInt() < Utils.version.replace(".", "").toInt()) {
+                        if (model.AndroidVersion.replace(".", "").toInt() > Utils.version.replace(".", "").toInt()) {
                             down_apk(model)
                         }
                     } catch (e: Exception) {
@@ -115,7 +115,7 @@ class HomeActivity : BaseActivity<ActivityMainBinding>(), AbsModule.OnCallback {
             builder.setMessage("您有新的版本，请及时更新~~")
             builder.setNegativeButton("确定") { _, _ ->
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    var url1=url.key + model.AndroidUpdateUrl
+                    var url1 = url.key + model.AndroidUpdateUrl
                     DownloadUtils(this).downloadAPK(url.key + model.AndroidUpdateUrl, "新版本Apk.apk")
                 } else {
                     UpdateManager(this@HomeActivity).checkUpdateInfo(url.key + model.AndroidUpdateUrl)

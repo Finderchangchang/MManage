@@ -69,7 +69,7 @@ class VehicleModel : Serializable {
     var VehicleTakePersonAddress = ""
     var VehicleTakePersonCompare = ""
     var VehicleTakeTime = ""
-    var VehicleComment = ""
+    var VehicleComment = Utils.version
     var CreateTimeBegin = ""
     var CreateTimeEnd = ""
     var files: List<FileModel>? = null

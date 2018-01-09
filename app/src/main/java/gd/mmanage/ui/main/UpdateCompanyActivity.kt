@@ -89,15 +89,20 @@ class UpdateCompanyActivity : BaseActivity<ActivityUpdateCompanyBinding>(), AbsM
             mLqrPhotoSelectUtils!!.takePhoto()
         }
         save_btn.setOnClickListener {
-            if (left_bitmap == null || right_bitmap == null) {
-                toast("请将照片补充完整")
-            } else {
-                dialog!!.show()
-                model = binding.model
-                model.files.add(FileModel(ImgUtils().Only_bitmapToBase64(left_bitmap), "工商营业执照", "A1", model.EnterpriseId))
-                model.files.add(FileModel(ImgUtils().Only_bitmapToBase64(right_bitmap), "法人身份证", "A2", model.EnterpriseId))
-                getModule(UserModule::class.java, this).update_company_details(binding.model)
+            builder.setTitle("提示")
+            builder.setMessage("企业信息只可修改一次，请认真填写每项")
+            builder.setPositiveButton("确定") { a, b ->
+                if (left_bitmap == null || right_bitmap == null) {
+                    toast("请将照片补充完整")
+                } else {
+                    dialog!!.show()
+                    model = binding.model
+                    model.files.add(FileModel(ImgUtils().Only_bitmapToBase64(left_bitmap), "工商营业执照", "A1", model.EnterpriseId))
+                    model.files.add(FileModel(ImgUtils().Only_bitmapToBase64(right_bitmap), "法人身份证", "A2", model.EnterpriseId))
+                    getModule(UserModule::class.java, this).update_company_details(binding.model)
+                }
             }
+            builder.setNeutralButton("取消") { a, b -> }
         }
     }
 
